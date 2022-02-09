@@ -87,6 +87,7 @@ export class App {
       }
 
     } catch (err) {
+      $("#balance-token").html('')
       console.error('error:', err);
     }
 
