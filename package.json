@@ -4,6 +4,7 @@
   "description": "A boilerplate app for creating a DApp using Taquito",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "watch": "parcel src/index.html",
     "clean": "rm -rf dist",
     "build": "npm run clean && parcel build ./src/index.html",
@@ -31,6 +32,7 @@
   },
   "dependencies": {
     "@taquito/taquito": "^10.2.0",
-    "@temple-wallet/dapp": "^6.1.0"
+    "@temple-wallet/dapp": "^6.1.0",
+    "express": "^4.17.2"
   }
 }
