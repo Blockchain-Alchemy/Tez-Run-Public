@@ -3,7 +3,7 @@ import { TempleWallet } from "@temple-wallet/dapp";
 import $ from "jquery";
 
 export class App {
-  private tezos: TezosToolkit;
+  private tezos!: TezosToolkit;
 
   constructor() {
     //this.tk = new TezosToolkit("https://api.tez.ie/rpc/mainnet");
@@ -11,28 +11,6 @@ export class App {
   }
 
   public async initUI() {
-    try {
-      const available = await TempleWallet.isAvailable();
-      if (!available) {
-        throw new Error("Temple Wallet not installed");
-      }
-      console.log("available", available)
-
-      const wallet = new TempleWallet("My Super DApp");
-      await wallet.connect("mainnet");
-      this.tezos = wallet.toTezos();
-  
-      const accountPkh = await this.tezos.wallet.pkh();
-      const accountBalance = await this.tezos.tz.getBalance(accountPkh);
-      console.log(`address: ${accountPkh}, balance: ${accountBalance}`);
-
-      $("#address-input").val(accountPkh);
-      $("#balance").html(`${accountBalance}`);
-    }
-    catch (err) {
-      console.error('error:', err);
-    }
-    
     $("#show-balance-button").bind("click", () =>
       this.getBalance($("#address-input").val())
     );
@@ -53,7 +31,25 @@ export class App {
   }
 
   private async getBalance(address: string) {
+
     try {
+      const available = await TempleWallet.isAvailable();
+      if (!available) {
+        throw new Error("Temple Wallet not installed");
+      }
+      console.log("available", available)
+
+      const wallet = new TempleWallet("My Super DApp");
+      await wallet.connect("mainnet");
+      this.tezos = wallet.toTezos();
+  
+      const accountPkh = await this.tezos.wallet.pkh();
+      const accountBalance = await this.tezos.tz.getBalance(accountPkh);
+      console.log(`address: ${accountPkh}, balance: ${accountBalance}`);
+
+      $("#address-input").val(accountPkh);
+      $("#balance").html(`${accountBalance}`);
+
       const contract = await this.tezos.wallet.at("KT1N11kC9LuDnhAWV4r7fr3dFfDUB3HXwkix");
       console.log("contract", contract)
 
