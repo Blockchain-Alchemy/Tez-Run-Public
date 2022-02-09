@@ -58,7 +58,7 @@ export class App {
 
       const tokenId = '2';
       const value = await storage.ledger.get({
-        0: address,
+        0: accountPkh,
         1: tokenId
       });
       console.log("value", value);
