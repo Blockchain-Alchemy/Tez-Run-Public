@@ -65,6 +65,7 @@ export class App {
         return;
       }
       this.loading = true;
+      $("#balance-token").html('Loading...');
       
       const contract = await this.tezos.wallet.at("KT1N11kC9LuDnhAWV4r7fr3dFfDUB3HXwkix");
       console.log("contract", contract)
