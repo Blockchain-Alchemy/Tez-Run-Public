@@ -10,7 +10,7 @@ export class App {
   private loading: boolean = false;
 
   constructor() {
-    //this.tk = new TezosToolkit("https://api.tez.ie/rpc/mainnet");
+    this.tezos = new TezosToolkit("https://mainnet.api.tez.ie");
     //this.tk = new TezosToolkit('https://hangzhounet.api.tez.ie');
   }
 
