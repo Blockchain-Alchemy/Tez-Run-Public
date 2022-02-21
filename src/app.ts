@@ -1,7 +1,6 @@
-import { DAppClientOptions, RequestPermissionInput, NetworkType } from '@airgap/beacon-sdk';
+import { NetworkType } from '@airgap/beacon-sdk';
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-//import { TempleWallet } from "@temple-wallet/dapp";
 import $ from "jquery";
 
 export class App {
@@ -27,7 +26,6 @@ export class App {
     try {
       const options = {
         name: 'MyAwesomeDapp',
-        iconUrl: 'https://tezostaquito.io/img/favicon.png',
         preferredNetwork: NetworkType.MAINNET,
         eventHandlers: {
           PERMISSION_REQUEST_SUCCESS: {
@@ -38,7 +36,6 @@ export class App {
         },
       };
       const wallet = new BeaconWallet(options);
-      console.log("wallet", wallet);
 
       await wallet.requestPermissions({
         network: {
@@ -46,12 +43,16 @@ export class App {
         },
       });
 
-      console.log("permsion-ok");
+      this.tezos?.setWalletProvider(wallet);
 
       const userAddress = await wallet.getPKH();
-      console.log("userAddress", userAddress);
-      
-      this.tezos?.setWalletProvider(wallet);
+      console.log("Address", userAddress);
+
+      const accountBalance = await this.tezos?.tz.getBalance(userAddress);
+      console.log(`Bbalance: ${accountBalance}`);
+
+      $("#address-input").val(userAddress);
+      $("#balance").html(`${accountBalance}`);
 
     } catch (error) {
       console.log(error);
