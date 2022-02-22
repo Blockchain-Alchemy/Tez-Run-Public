@@ -2,6 +2,7 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import $ from "jquery";
+const moment = require('moment');
 
 export class App {
   private tezos: TezosToolkit | undefined;
@@ -20,6 +21,10 @@ export class App {
     /*$("#show-balance-button").bind("click", () =>
       this.getBalance($("#address-input").val())
     );*/
+    setInterval(() => {
+      console.log("interval")
+      $("#race-start-time").html(moment().format("hh:mm:ss"));
+    }, 1000)
   }
 
   private async initWallet() {
