@@ -9,9 +9,12 @@ export class App {
 
   private loading: boolean = false;
 
+  private timer: any;
+
   constructor() {
     this.tezos = new TezosToolkit("https://mainnet.api.tez.ie");
     //this.tk = new TezosToolkit('https://hangzhounet.api.tez.ie');
+    this.timer = moment();
   }
 
   public async initUI() {
@@ -22,8 +25,8 @@ export class App {
       this.getBalance($("#address-input").val())
     );*/
     setInterval(() => {
-      console.log("interval")
-      $("#race-start-time").html(moment().format("hh:mm:ss"));
+      this.timer.add(-1, 's')
+      $("#race-start-time").html(this.timer.format("hh:mm:ss"));
     }, 1000)
   }
 
