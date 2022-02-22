@@ -153,21 +153,29 @@ export class App {
     .then(() => {
       this.horses = [1,2,3,4,5,6].map(index => {
         return {
+          id: index,
           name: `Horse ${index}`,
           win: index,
           loss: 1,
         }
       })
-      console.log(this.horses)
       this.initHorseList();
     });
   }
 
   private initHorseList() {
+    const firstLabel = $("#horse-list").children().first();
+    const firstOption = $("#select-horse").children().first();
+
     this.horses.forEach(horse => {
-      const ptag = $("#horse-list").children().first().clone().removeClass('hidden');
+      const ptag = firstLabel.clone().removeClass('hidden');
       ptag.html(`${horse.name} - ${horse.win}:${horse.loss}`);
       $("#horse-list").append(ptag);
+
+      const option = firstOption.clone().removeAttr('selected').removeAttr('disabled');
+      option.val(horse.id);
+      option.html(horse.name);
+      $("#select-horse").append(option);
     })
   }
 }
