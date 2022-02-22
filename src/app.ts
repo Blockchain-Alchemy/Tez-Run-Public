@@ -11,6 +11,8 @@ export class App {
 
   private timer: any;
 
+  private horses: any[] = [];
+
   constructor() {
     this.tezos = new TezosToolkit("https://mainnet.api.tez.ie");
     //this.tk = new TezosToolkit('https://hangzhounet.api.tez.ie');
@@ -28,6 +30,8 @@ export class App {
       this.timer.add(-1, 's')
       $("#race-start-time").html(this.timer.format("hh:mm:ss"));
     }, 1000)
+
+    this.getHorseList();
   }
 
   private async initWallet() {
@@ -138,5 +142,32 @@ export class App {
     }
 
     this.loading = false;
+  }
+
+  private async getHorseList() {
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('foo');
+      }, 1000);
+    })
+    .then(() => {
+      this.horses = [1,2,3,4,5,6].map(index => {
+        return {
+          name: `Horse ${index}`,
+          win: index,
+          loss: 1,
+        }
+      })
+      console.log(this.horses)
+      this.initHorseList();
+    });
+  }
+
+  private initHorseList() {
+    this.horses.forEach(horse => {
+      const ptag = $("#horse-list").children().first().clone().removeClass('hidden');
+      ptag.html(`${horse.name} - ${horse.win}:${horse.loss}`);
+      $("#horse-list").append(ptag);
+    })
   }
 }
