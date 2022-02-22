@@ -40,7 +40,7 @@
     <div class="container mx-auto">
       <div class="container-odd">
         <div class="grid grid-cols-12 gap-4">
-          <div class="col-span-2">
+          <div id="odd-card" class="col-span-2">
             <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
               <div class="px-6">
                 <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Odds</h3>
@@ -50,7 +50,11 @@
               </div>
             </div>
           </div>
-          <div class="col-start-11 col-span-2">
+          <div id="race-footage" class="col-start-3 col-span-8">
+            <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl h-full">
+            </div>
+          </div>
+          <div id="race-state-card" class="col-start-11 col-span-2">
             <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
               <div class="px-6 text-center">
                 <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Race Starts in:</h3>
@@ -60,7 +64,7 @@
           </div>
         </div>
         <div class="grid grid-cols-12 gap-4 mt-4 pt-4">
-          <div class="col-span-3">
+          <div id="place-bet-card" class="col-span-3">
             <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl mr-4">
               <div class="px-6 text-center">
                 <h3 class="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
@@ -94,7 +98,7 @@
               </div>
             </div>
           </div>
-          <div class="col-span-2">
+          <div class="col-start-4 col-span-2">
             <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
               <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Bet Ticket</h3>
               <p class="text-slate-500 dark:text-slate-400 mt-2">Horse 1</p>

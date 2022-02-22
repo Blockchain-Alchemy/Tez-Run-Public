@@ -33,7 +33,7 @@ export class App {
 
     setInterval(() => {
       this.updateRaceState();
-    }, 2000)
+    }, 5000)
 
     this.getHorseList();
   }
@@ -185,5 +185,12 @@ export class App {
 
   private updateRaceState() {
     this.raceState = 'playing';
+
+    console.log("updateRaceState", this.raceState);
+    if (this.raceState === 'playing') {
+      $("#odd-card").hide();
+      $("#race-state-card").hide();
+      $("#place-bet-card").hide();
+    }
   }
 }
