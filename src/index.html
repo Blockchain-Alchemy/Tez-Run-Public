@@ -36,69 +36,76 @@
       </div>
       </div>
     </nav>
-  
+
     <div class="container mx-auto">
       <div class="container-odd">
-        <div class="flex flex-row justify-between">
-          <div class="bg-white dark:bg-slate-900 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-2">
+            <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
               <div class="px-6">
                 <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Odds</h3>
                 <div id="horse-list">
                   <p class="text-slate-500 dark:text-slate-400 mt-2 hidden"></p>
                 </div>
               </div>
+            </div>
           </div>
-          <div class="bg-white dark:bg-slate-900 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
-            <div class="px-6 text-center">
-              <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Race Starts in:</h3>
-              <p id="race-start-time"class="text-slate-500 dark:text-slate-400 mt-2"></p>
+          <div class="col-start-11 col-span-2">
+            <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
+              <div class="px-6 text-center">
+                <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Race Starts in:</h3>
+                <p id="race-start-time"class="text-slate-500 dark:text-slate-400 mt-2"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-12 gap-4 mt-4 pt-4">
+          <div class="col-span-3">
+            <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl mr-4">
+              <div class="px-6 text-center">
+                <h3 class="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
+                
+                <div class="w-full py-1.5">
+                  <select id="select-horse" class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
+                    <option selected disabled>Select Horse</option>
+                  </select>
+                </div>
+    
+                <div class="w-full py-1.5">
+                  <input type="number" min="0" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleFormControlInput1" placeholder="Bet Amount" />
+                </div>
+                
+                <div class="w-full py-1.5">
+                  <select class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
+                    <option selected disabled>To Win</option>
+                    <option value="1">Win</option>
+                    <option value="2">Place</option>
+                    <option value="3">Show</option>
+                  </select>
+                </div>
+    
+                <div class="w-full py-1.5">
+                  <input type="number" min="0" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleFormControlInput1" placeholder="Place Bet" />
+                </div>
+              </div>
+  
+              <div class="flex justify-center w-full py-1.5 mt-2">
+                <a href="#" id="connect-wallet-button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Bet</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-2">
+            <div class="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
+              <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Bet Ticket</h3>
+              <p class="text-slate-500 dark:text-slate-400 mt-2">Horse 1</p>
+              <p class="text-slate-500 dark:text-slate-400 mt-2">To Win</p>
+              <p class="text-slate-500 dark:text-slate-400 mt-2">Bet Placed:</p>
+              <p class="text-slate-500 dark:text-slate-400 mt-2">100 uUSD:</p>
+              <p class="text-slate-500 dark:text-slate-400 mt-2">Will Win:</p>
+              <p class="text-slate-500 dark:text-slate-400 mt-2">200 uUSD</p>
             </div>
           </div>
         </div>
-
-        <div class="flex flex-row mt-4 pt-4 gap-4">
-          <div class="bg-white dark:bg-slate-900 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl mr-4">
-            <h3 class="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
-            
-            <div class="w-48 py-1.5">
-              <select id="select-horse" class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
-                <option selected disabled>Select Horse</option>
-              </select>
-            </div>
-
-            <div class="w-48 py-1.5">
-              <input type="number" min="0" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleFormControlInput1" placeholder="Bet Amount" />
-            </div>
-            
-            <div class="w-48 py-1.5">
-              <select class="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
-                <option selected disabled>To Win</option>
-                <option value="1">Win</option>
-                <option value="2">Place</option>
-                <option value="3">Show</option>
-              </select>
-            </div>
-
-            <div class="w-48 py-1.5">
-              <input type="number" min="0" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" id="exampleFormControlInput1" placeholder="Place Bet" />
-            </div>
-
-            <div class="flex justify-center w-48 py-1.5 mt-2">
-              <a href="#" id="connect-wallet-button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Bet</button>
-            </div>
-          </div>
-
-          <div class="bg-white dark:bg-slate-900 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
-            <h3 class="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Bet Ticket</h3>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">Horse 1</p>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">To Win</p>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">Bet Placed:</p>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">100 uUSD:</p>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">Will Win:</p>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">200 uUSD</p>
-          </div>
-        </div>
-        
       </div>
     </div>
 
