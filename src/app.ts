@@ -14,12 +14,13 @@ export class App {
   }
 
   public async initUI() {
-    $("#sync-button").bind("click", () => {
+    console.log("AAAAAAAAAAAAAAAA")
+    $("#connect-wallet-button").bind("click", () => {
       this.initWallet(); //this.syncWallet();
     })
-    $("#show-balance-button").bind("click", () =>
+    /*$("#show-balance-button").bind("click", () =>
       this.getBalance($("#address-input").val())
-    );
+    );*/
   }
 
   private async initWallet() {
