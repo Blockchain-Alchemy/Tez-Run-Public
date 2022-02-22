@@ -6,12 +6,11 @@ const moment = require('moment');
 
 export class App {
   private tezos: TezosToolkit | undefined;
-
   private loading: boolean = false;
 
   private timer: any;
-
   private horses: any[] = [];
+  private raceState: 'waiting' | 'playing' | 'finished' = 'waiting';
 
   constructor() {
     this.tezos = new TezosToolkit("https://mainnet.api.tez.ie");
@@ -26,10 +25,15 @@ export class App {
     /*$("#show-balance-button").bind("click", () =>
       this.getBalance($("#address-input").val())
     );*/
+
     setInterval(() => {
       this.timer.add(-1, 's')
       $("#race-start-time").html(this.timer.format("hh:mm:ss"));
     }, 1000)
+
+    setInterval(() => {
+      this.updateRaceState();
+    }, 2000)
 
     this.getHorseList();
   }
@@ -177,5 +181,9 @@ export class App {
       option.html(horse.name);
       $("#select-horse").append(option);
     })
+  }
+
+  private updateRaceState() {
+    this.raceState = 'playing';
   }
 }
