@@ -22,9 +22,10 @@ export class App {
     $("#connect-wallet-button").bind("click", () => {
       this.initWallet(); //this.syncWallet();
     })
-    /*$("#show-balance-button").bind("click", () =>
+    
+    $("#show-balance-button").bind("click", () =>
       this.getBalance($("#address-input").val())
-    );*/
+    );
 
     setInterval(() => {
       this.timer.add(-1, 's')
