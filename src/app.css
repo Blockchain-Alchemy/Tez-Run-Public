@@ -111,3 +111,8 @@ h1 {
 .dropdown:hover .dropdown-menu {
   display: block;
 }
+
+.container-odd {
+  padding: 0 200px;
+  margin: 60px 0;
+}
