@@ -14,7 +14,6 @@ export class App {
   }
 
   public async initUI() {
-    console.log("AAAAAAAAAAAAAAAA")
     $("#connect-wallet-button").bind("click", () => {
       this.initWallet(); //this.syncWallet();
     })
