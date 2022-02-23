@@ -1,6 +1,7 @@
 import { NetworkType } from '@airgap/beacon-sdk';
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
+import Unity, { UnityContext } from "react-unity-webgl";
 import $ from "jquery";
 const moment = require('moment');
 
@@ -11,6 +12,13 @@ export class App {
   private timer: any;
   private horses: any[] = [];
   private raceState: 'waiting' | 'playing' | 'finished' = 'waiting';
+
+  private const unityContext = new UnityContext({
+    loaderUrl: "build/1.loader.js",
+    dataUrl: "build/1.data",
+    frameworkUrl: "build/1.framework.js",
+    codeUrl: "build/1.wasm",
+  });
 
   constructor() {
     this.tezos = new TezosToolkit("https://mainnet.api.tez.ie");
