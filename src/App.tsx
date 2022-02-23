@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { NetworkType } from '@airgap/beacon-sdk';
+import { TezosToolkit } from "@taquito/taquito";
+import { BeaconWallet } from "@taquito/beacon-wallet";
 import './App.css';
 
 const defaultHorses = [
@@ -16,13 +19,42 @@ function App() {
   const [betAmount, setBetAmount] = useState(0);
   const [selectedPlace, setSelectedPlace] = useState('');
   const [placeAmount, setPlaceAmount] = useState(0);
+  const [tezos, setTeozos] = useState<TezosToolkit | undefined>(undefined);
 
   useEffect(() => {
-
+    if (tezos == null) {
+      setTeozos(new TezosToolkit("https://mainnet.api.tez.ie"));
+    }
   })
 
-  const connectWallet = () => {
+  const connectWallet = async () => {
     console.log("connectWallet");
+    const options = {
+      name: 'MyAwesomeDapp',
+      preferredNetwork: NetworkType.MAINNET,
+      eventHandlers: {
+        PERMISSION_REQUEST_SUCCESS: {
+          handler: async (data) => {
+            console.log('permission data:', data);
+          },
+        },
+      },
+    };
+    const wallet = new BeaconWallet(options);
+
+    await wallet.requestPermissions({
+      network: {
+        type: NetworkType.MAINNET,
+      },
+    });
+
+    tezos?.setWalletProvider(wallet);
+
+    const userAddress = await wallet.getPKH();
+    console.log("Address", userAddress);
+
+    const accountBalance = await tezos?.tz.getBalance(userAddress);
+    console.log(`Bbalance: ${accountBalance}`);
   }
 
   return (
