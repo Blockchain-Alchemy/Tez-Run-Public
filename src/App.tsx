@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { NetworkType } from '@airgap/beacon-sdk';
+import React, { useState } from 'react';
 import { TezosToolkit } from "@taquito/taquito";
-import { BeaconWallet } from "@taquito/beacon-wallet";
+import ConnectButton from "./components/ConnectWallet";
+import Unity, { UnityContext } from "react-unity-webgl";
 import './App.css';
 
 const defaultHorses = [
@@ -14,47 +14,39 @@ const defaultHorses = [
 ];
 
 function App() {
+  const [Tezos, setTeozos] = useState(new TezosToolkit("https://mainnet.api.tez.ie"));
+  const [contract, setContract] = useState<any>(undefined);
+  const [publicToken, setPublicToken] = useState<string | null>("");
+  const [wallet, setWallet] = useState<any>(null);
+  const [userAddress, setUserAddress] = useState<string>("");
+  const [userBalance, setUserBalance] = useState<number>(0);
+  const [storage, setStorage] = useState<number>(0);
+  const [copiedPublicToken, setCopiedPublicToken] = useState<boolean>(false);
+  const [beaconConnection, setBeaconConnection] = useState<boolean>(false);
+  const contractAddress: string = "KT1WiPWNcBMcXJButkkvroRGkzs45n3iZ13c";
+  
   const [horses, setHorses] = useState(defaultHorses);
   const [selectedHorse, setSelectedHorse] = useState('');
   const [betAmount, setBetAmount] = useState(0);
   const [selectedPlace, setSelectedPlace] = useState('');
   const [placeAmount, setPlaceAmount] = useState(0);
-  const [tezos, setTeozos] = useState<TezosToolkit | undefined>(undefined);
 
-  useEffect(() => {
-    if (tezos == null) {
-      setTeozos(new TezosToolkit("https://mainnet.api.tez.ie"));
-    }
-  })
 
-  const connectWallet = async () => {
-    console.log("connectWallet");
-    const options = {
-      name: 'MyAwesomeDapp',
-      preferredNetwork: NetworkType.MAINNET,
-      eventHandlers: {
-        PERMISSION_REQUEST_SUCCESS: {
-          handler: async (data) => {
-            console.log('permission data:', data);
-          },
-        },
-      },
-    };
-    const wallet = new BeaconWallet(options);
+  const unityContext = new UnityContext({
+    loaderUrl: "./build/1.loader.js",
+    dataUrl: "./build/1.data",
+    frameworkUrl: "./build/1.framework.js",
+    codeUrl: "./build/1.wasm",
+  });
 
-    await wallet.requestPermissions({
-      network: {
-        type: NetworkType.MAINNET,
-      },
+  const handleBet = () => {
+    console.log("handleBet");
+
+    unityContext.on("FinishedRace", (HorseName, time) => {
+      console.log("FinishedRace", HorseName, time);
     });
 
-    tezos?.setWalletProvider(wallet);
-
-    const userAddress = await wallet.getPKH();
-    console.log("Address", userAddress);
-
-    const accountBalance = await tezos?.tz.getBalance(userAddress);
-    console.log(`Bbalance: ${accountBalance}`);
+    unityContext.send("GameController", "StartRace", 192301923123);
   }
 
   return (
@@ -66,11 +58,18 @@ function App() {
             <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white">Hackathon</span>
         </a>
         <div className="flex md:order-2">
-          <button
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={connectWallet}
-          >Connect Wallet
-          </button>
+          {/* <ConnectButton
+            Tezos={Tezos}
+            setContract={setContract}
+            setPublicToken={setPublicToken}
+            setWallet={setWallet}
+            setUserAddress={setUserAddress}
+            setUserBalance={setUserBalance}
+            setStorage={setStorage}
+            contractAddress={contractAddress}
+            setBeaconConnection={setBeaconConnection}
+            wallet={wallet}
+          /> */}
         </div>
         <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">
           <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
@@ -108,6 +107,7 @@ function App() {
             </div>
             <div id="race-footage" className="col-start-3 col-span-8">
               <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl h-full">
+                <Unity unityContext={unityContext} />
               </div>
             </div>
             <div id="race-state-card" className="col-start-11 col-span-2">
@@ -176,7 +176,10 @@ function App() {
                 </div>
     
                 <div className="flex justify-center w-full py-1.5 mt-2">
-                  <a href="#" id="connect-wallet-button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Bet</a>
+                  <button 
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={handleBet}
+                  >Bet</button>
                 </div>
               </div>
             </div>
@@ -194,22 +197,6 @@ function App() {
           </div>
         </div>
       </div>
-
-      {/* <div id="dialog">
-        <div id="header">Show Balance</div>
-        <div id="content">
-          <div id="balance-form">
-            <input id="address-input" type="text" id="address" placeholder="Enter wallet address" />
-            <a id="show-balance-button" href="#">Show</a>
-          </div>
-          <div id="error-message" className="hide"></div>
-          <div id="balance-output" className="show">Balance: <span id="balance">0</span>ꜩ</div>
-          <div id="balance-output" className="show"><span id="balance-token"></span></div>
-        </div>
-      </div>
-      <div id="footer">
-        <img src="../assets/built-with-taquito.png" />
-      </div> */}
     </div>
   );
 }
