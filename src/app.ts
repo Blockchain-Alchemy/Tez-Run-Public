@@ -150,7 +150,17 @@ export class App {
   }
 
   private async getHorseList() {
-    await new Promise((resolve, reject) => {
+    this.horses = ['Hottez', 'Snazzy Fukr', 'Neonz', 'Hic et Equum', 'Breitmare', 'Mandala'].map((name, index) => {
+      return {
+        id: index + 1,
+        name,
+        win: index,
+        loss: 1,
+      }
+    })
+    this.initHorseList();
+
+    /*await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve('foo');
       }, 1000);
@@ -165,7 +175,7 @@ export class App {
         }
       })
       this.initHorseList();
-    });
+    });*/
   }
 
   private initHorseList() {
@@ -185,7 +195,7 @@ export class App {
   }
 
   private updateRaceState() {
-    this.raceState = 'playing';
+    //this.raceState = 'playing';
 
     console.log("updateRaceState", this.raceState);
     if (this.raceState === 'playing') {
