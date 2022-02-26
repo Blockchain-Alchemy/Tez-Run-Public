@@ -3,6 +3,10 @@ import { TezosToolkit } from "@taquito/taquito";
 import ConnectButton from "../../components/ConnectWallet";
 //import Unity, { UnityContext } from "react-unity-webgl";
 import Network from "../../network"
+import HorseOdds from './components/HorseOdds';
+import RaceTimer from './components/RaceTimer';
+import PlaceBet from './components/PlaceBet';
+import BetTicket from './components/BetTicket';
 
 const defaultHorses = [
   'Hottez',
@@ -31,24 +35,9 @@ function Home() {
   const [selectedPlace, setSelectedPlace] = useState('');
   const [placeAmount, setPlaceAmount] = useState(0);
 
-  console.log("userAddress", userAddress)
-
-
-  /*const unityContext = new UnityContext({
-    loaderUrl: "./Build/1.loader.js",
-    dataUrl: "./Build/1.data",
-    frameworkUrl: "./Build/1.framework.js",
-    codeUrl: "./Build/1.wasm",
-  });*/
 
   const handleBet = () => {
     console.log("handleBet");
-
-    /*unityContext.on("FinishedRace", (HorseName, time) => {
-      console.log("FinishedRace", HorseName, time);
-    });
-
-    unityContext.send("GameController", "StartRace", 192301923123);*/
   }
 
   return (
@@ -95,107 +84,17 @@ function Home() {
       <div className="container mx-auto">
         <div className="container-odd">
           <div className="grid grid-cols-12 gap-4">
-            <div id="odd-card" className="col-span-2">
-              <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
-                <div className="px-2">
-                  <h3 className="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Odds</h3>
-                  { horses.map((horse, index) => (
-                    <p key={index} className="text-slate-500 dark:text-slate-400 mt-2">
-                      { horse } - 1: 20
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <HorseOdds></HorseOdds>
             <div id="race-footage" className="col-start-3 col-span-8">
               <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl h-full">
                 {/* <Unity unityContext={unityContext} /> */}
               </div>
             </div>
-            <div id="race-state-card" className="col-start-11 col-span-2">
-              <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
-                <div className="px-6 text-center">
-                  <h3 className="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Race Starts in:</h3>
-                  <p id="race-start-time"className="text-slate-500 dark:text-slate-400 mt-2"></p>
-                </div>
-              </div>
-            </div>
+            <RaceTimer></RaceTimer>
           </div>
           <div className="grid grid-cols-12 gap-4 mt-4 pt-4">
-            <div id="place-bet-card" className="col-span-3">
-              <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl mr-4">
-                <div className="px-6 text-center">
-                  <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
-                  
-                  <div className="w-full py-1.5">
-                    <select
-                      className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"
-                      defaultValue={selectedHorse}
-                      onChange={(e) => setSelectedHorse(e.target.value)}
-                    >
-                      <option disabled value="">Select Horse</option>
-                      { horses.map((horse, index) => (
-                        <option key={index} value={horse}>{horse}</option>
-                      ))}
-                    </select>
-                  </div>
-      
-                  <div className="w-full py-1.5">
-                    <input
-                      type="number"
-                      min="0"
-                      className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                      placeholder="Bet Amount"
-                      value={betAmount}
-                      onChange={e => setBetAmount(Number(e.target.value))}
-                    />
-                  </div>
-                  
-                  <div className="w-full py-1.5">
-                    <select 
-                      className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                      aria-label="Default select example"
-                      defaultValue={selectedPlace}
-                      onChange={(e) => setSelectedPlace(e.target.value)}
-                    >
-                      <option value="" disabled>To Win</option>
-                      <option value="win">Win</option>
-                      <option value="place">Place</option>
-                      <option value="show">Show</option>
-                    </select>
-                  </div>
-      
-                  <div className="w-full py-1.5">
-                    <input
-                      type="number"
-                      min="0"
-                      className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                      placeholder="Place Bet"
-                      value={placeAmount}
-                      onChange={e => setPlaceAmount(Number(e.target.value))}
-                    />
-                  </div>
-                </div>
-    
-                <div className="flex justify-center w-full py-1.5 mt-2">
-                  <button 
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    onClick={handleBet}
-                  >Bet</button>
-                </div>
-              </div>
-            </div>
-            <div className="col-start-4 col-span-2">
-              <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
-                <h3 className="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Bet Ticket</h3>
-                <p className="text-slate-500 dark:text-slate-400 mt-2">Horse 1</p>
-                <p className="text-slate-500 dark:text-slate-400 mt-2">To Win</p>
-                <p className="text-slate-500 dark:text-slate-400 mt-2">Bet Placed:</p>
-                <p className="text-slate-500 dark:text-slate-400 mt-2">100 uUSD:</p>
-                <p className="text-slate-500 dark:text-slate-400 mt-2">Will Win:</p>
-                <p className="text-slate-500 dark:text-slate-400 mt-2">200 uUSD</p>
-              </div>
-            </div>
+            <PlaceBet></PlaceBet>
+            <BetTicket></BetTicket>
           </div>
         </div>
       </div>
