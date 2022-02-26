@@ -63,7 +63,6 @@ const ConnectButton = ({
 
   useEffect(() => {
     if (!wallet) {
-      console.log("useEffect");
       (async () => {
         // creates a wallet instance
         const beaconWallet = new BeaconWallet({
