@@ -2,10 +2,10 @@ import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import {
-  NetworkType,
   BeaconEvent,
   defaultEventCallbacks
 } from "@airgap/beacon-sdk";
+import Network from "../network";
 
 type ButtonProps = {
   Tezos: TezosToolkit;
@@ -48,8 +48,8 @@ const ConnectButton = ({
     try {
       await wallet.requestPermissions({
         network: {
-          type: NetworkType.HANGZHOUNET,
-          rpcUrl: "https://hangzhounet.api.tez.ie"
+          type: Network.networkType,
+          rpcUrl: Network.rpcUrl,
         }
       });
       // gets user's address
@@ -62,32 +62,35 @@ const ConnectButton = ({
   };
 
   useEffect(() => {
-    (async () => {
-      // creates a wallet instance
-      const wallet = new BeaconWallet({
-        name: "Taquito Boilerplate",
-        preferredNetwork: NetworkType.HANGZHOUNET,
-        disableDefaultEvents: true, // Disable all events / UI. This also disables the pairing alert.
-        eventHandlers: {
-          // To keep the pairing alert, we have to add the following default event handlers back
-          [BeaconEvent.PAIR_INIT]: {
-            handler: defaultEventCallbacks.PAIR_INIT
-          },
-          [BeaconEvent.PAIR_SUCCESS]: {
-            handler: data => setPublicToken(data.publicKey)
+    if (!wallet) {
+      console.log("useEffect");
+      (async () => {
+        // creates a wallet instance
+        const beaconWallet = new BeaconWallet({
+          name: "Teo Run",
+          preferredNetwork: Network.networkType,
+          disableDefaultEvents: true, // Disable all events / UI. This also disables the pairing alert.
+          eventHandlers: {
+            // To keep the pairing alert, we have to add the following default event handlers back
+            [BeaconEvent.PAIR_INIT]: {
+              handler: defaultEventCallbacks.PAIR_INIT
+            },
+            [BeaconEvent.PAIR_SUCCESS]: {
+              handler: data => setPublicToken(data.publicKey)
+            }
           }
+        });
+        Tezos.setWalletProvider(beaconWallet);
+        setWallet(beaconWallet);
+        // checks if wallet was connected before
+        const activeAccount = await beaconWallet.client.getActiveAccount();
+        if (activeAccount) {
+          const userAddress = await beaconWallet.getPKH();
+          await setup(userAddress);
+          setBeaconConnection(true);
         }
-      });
-      Tezos.setWalletProvider(wallet);
-      setWallet(wallet);
-      // checks if wallet was connected before
-      const activeAccount = await wallet.client.getActiveAccount();
-      if (activeAccount) {
-        const userAddress = await wallet.getPKH();
-        await setup(userAddress);
-        setBeaconConnection(true);
-      }
-    })();
+      })();
+    }
   });
 
   return (

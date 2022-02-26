@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TezosToolkit } from "@taquito/taquito";
 import ConnectButton from "./components/ConnectWallet";
 import Unity, { UnityContext } from "react-unity-webgl";
+import Network from "./network"
 import './App.css';
 
 const defaultHorses = [
@@ -14,7 +15,7 @@ const defaultHorses = [
 ];
 
 function App() {
-  const [Tezos, setTeozos] = useState(new TezosToolkit("https://mainnet.api.tez.ie"));
+  const [Tezos, setTeozos] = useState(new TezosToolkit(Network.rpcUrl));
   const [contract, setContract] = useState<any>(undefined);
   const [publicToken, setPublicToken] = useState<string | null>("");
   const [wallet, setWallet] = useState<any>(null);
@@ -31,22 +32,24 @@ function App() {
   const [selectedPlace, setSelectedPlace] = useState('');
   const [placeAmount, setPlaceAmount] = useState(0);
 
+  console.log("userAddress", userAddress)
 
-  const unityContext = new UnityContext({
-    loaderUrl: "./build/1.loader.js",
-    dataUrl: "./build/1.data",
-    frameworkUrl: "./build/1.framework.js",
-    codeUrl: "./build/1.wasm",
-  });
+
+  /*const unityContext = new UnityContext({
+    loaderUrl: "./Build/1.loader.js",
+    dataUrl: "./Build/1.data",
+    frameworkUrl: "./Build/1.framework.js",
+    codeUrl: "./Build/1.wasm",
+  });*/
 
   const handleBet = () => {
     console.log("handleBet");
 
-    unityContext.on("FinishedRace", (HorseName, time) => {
+    /*unityContext.on("FinishedRace", (HorseName, time) => {
       console.log("FinishedRace", HorseName, time);
     });
 
-    unityContext.send("GameController", "StartRace", 192301923123);
+    unityContext.send("GameController", "StartRace", 192301923123);*/
   }
 
   return (
@@ -58,7 +61,7 @@ function App() {
             <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white">Hackathon</span>
         </a>
         <div className="flex md:order-2">
-          {/* <ConnectButton
+          { <ConnectButton
             Tezos={Tezos}
             setContract={setContract}
             setPublicToken={setPublicToken}
@@ -69,7 +72,7 @@ function App() {
             contractAddress={contractAddress}
             setBeaconConnection={setBeaconConnection}
             wallet={wallet}
-          /> */}
+          /> }
         </div>
         <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">
           <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
@@ -107,7 +110,7 @@ function App() {
             </div>
             <div id="race-footage" className="col-start-3 col-span-8">
               <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl h-full">
-                <Unity unityContext={unityContext} />
+                {/* <Unity unityContext={unityContext} /> */}
               </div>
             </div>
             <div id="race-state-card" className="col-start-11 col-span-2">
