@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import Home from "./views/Home"
 import './App.css';
+import Home from "./views/Home"
+import Menu from './components/Menu';
+
 
 function App() {
   return (
     <>
-      <Home></Home>
+      <Menu>
+        <Home></Home>
+      </Menu>
     </>
   )
 }
