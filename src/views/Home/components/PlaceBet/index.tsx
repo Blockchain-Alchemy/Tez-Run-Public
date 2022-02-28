@@ -1,3 +1,4 @@
+import { useContract } from 'hooks/useContract';
 import React, { useState } from 'react';
 
 const defaultHorses = [
@@ -9,21 +10,79 @@ const defaultHorses = [
   'Mandala',
 ];
 
-function PlaceBet() {
+function PlaceBet() {  
   const [horses, setHorses] = useState(defaultHorses);
   const [selectedHorse, setSelectedHorse] = useState('');
   const [betAmount, setBetAmount] = useState(0);
   const [selectedPlace, setSelectedPlace] = useState('');
   const [placeAmount, setPlaceAmount] = useState(0);
+  const { contract } = useContract();
+
+  const startRace = () => {
+    if (contract) {
+      contract.methods
+        .startRace()
+        .send()
+        .then(result => {
+          console.log('result', result);
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+    }
+  }
+
+  const placeBet = () => {
+    if (contract) {
+      /*const methods = contract.parameterSchema.ExtractSignatures();
+      console.log(JSON.stringify(methods, null, 2));
+
+      const incrementParams = contract.methods.placeBet(1, 0, 2).toTransferParams();
+      console.log(JSON.stringify(incrementParams, null, 2));*/
+
+      contract.methods
+        .placeBet(1, 0, 2)
+        .send({ amount: 0.1 })
+        .then(result => {
+          console.log('result', result);
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+    }
+  }
+
+  const finishBet = () => {
+    if (contract) {
+      contract.methods
+        .takeReward()
+        .send()
+        .then(result => {
+          console.log('result', result);
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+    }
+  }
+
+  const takeReward = () => {
+    if (contract) {
+      contract.methods
+        .takeReward()
+        .send()
+        .then(result => {
+          console.log('result', result);
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+    }
+  }
 
   const handleBet = () => {
     console.log("handleBet");
-
-    /*unityContext.on("FinishedRace", (HorseName, time) => {
-      console.log("FinishedRace", HorseName, time);
-    });
-
-    unityContext.send("GameController", "StartRace", 192301923123);*/
+    startRace();
   }
 
   return (  

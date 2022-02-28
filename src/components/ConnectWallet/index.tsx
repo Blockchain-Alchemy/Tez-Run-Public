@@ -3,7 +3,7 @@ import Network from "network";
 import useBeacon from "hooks/useBeacon";
 
 const ConnectButton = (): JSX.Element => {
-  const { wallet, setUserAddress, connected, setConnected } = useBeacon();
+  const { wallet, connected, setConnected } = useBeacon();
 
   console.log("ConnectButton", wallet, connected)
 
@@ -20,10 +20,7 @@ const ConnectButton = (): JSX.Element => {
           rpcUrl: Network.rpcUrl,
         }
       });
-
-      // gets user's address
-      const userAddress = await wallet.getPKH();
-      setUserAddress(userAddress);
+      
       setConnected(true);
     }
     catch (error) {
@@ -32,15 +29,12 @@ const ConnectButton = (): JSX.Element => {
   };
 
   const disconnectWallet = async (): Promise<void> => {
-    //window.localStorage.clear();
-    setUserAddress("");
-    setConnected(false);
-    console.log("disconnecting wallet");
     if (wallet) {
       await wallet.client.removeAllAccounts();
       await wallet.client.removeAllPeers();
       await wallet.client.destroy();
     }
+    setConnected(false);
   };
 
   return (
