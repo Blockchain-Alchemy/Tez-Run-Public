@@ -3,8 +3,7 @@ import './App.css';
 import Home from "./views/Home"
 import Menu from './components/Menu';
 
-
-function App() {
+const App: React.FC = () => {
   return (
     <>
       <Menu>

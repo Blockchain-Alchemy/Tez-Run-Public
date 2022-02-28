@@ -1,20 +1,8 @@
-import React, { useState } from 'react';
-import { TezosToolkit } from "@taquito/taquito";
-import Network from '../../network';
-import ConnectButton from '../ConnectWallet';
+import React from 'react';
+import ConnectButton from 'components/ConnectWallet';
 
 const Menu = ({ children }): JSX.Element => {
-  const [Tezos, setTeozos] = useState(new TezosToolkit(Network.rpcUrl));
-  const [contract, setContract] = useState<any>(undefined);
-  const [publicToken, setPublicToken] = useState<string | null>("");
-  const [wallet, setWallet] = useState<any>(null);
-  const [userAddress, setUserAddress] = useState<string>("");
-  const [userBalance, setUserBalance] = useState<number>(0);
-  const [storage, setStorage] = useState<number>(0);
-  const [copiedPublicToken, setCopiedPublicToken] = useState<boolean>(false);
-  const [beaconConnection, setBeaconConnection] = useState<boolean>(false);
-  const contractAddress: string = "KT1WiPWNcBMcXJButkkvroRGkzs45n3iZ13c";
-
+  
   return (
     <div className="bg-white dark:bg-black h-full">
       <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-800">
@@ -24,18 +12,7 @@ const Menu = ({ children }): JSX.Element => {
             <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white">Hackathon</span>
         </a>
         <div className="flex md:order-2">
-          { <ConnectButton
-            Tezos={Tezos}
-            setContract={setContract}
-            setPublicToken={setPublicToken}
-            setWallet={setWallet}
-            setUserAddress={setUserAddress}
-            setUserBalance={setUserBalance}
-            setStorage={setStorage}
-            contractAddress={contractAddress}
-            setBeaconConnection={setBeaconConnection}
-            wallet={wallet}
-          /> }
+          <ConnectButton></ConnectButton>
         </div>
         <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">
           <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
