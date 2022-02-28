@@ -164,11 +164,6 @@ input[type="number"] {
   display: block;
 }
 
-.container-odd {
-  padding: 0 150px;
-  margin: 60px 0;
-}
-
 #race-footage {
   min-height: 320px;
 }
