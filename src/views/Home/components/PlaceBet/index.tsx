@@ -14,7 +14,7 @@ function PlaceBet() {
   const [horses, setHorses] = useState(defaultHorses);
   const [horseId, setHorseId] = useState(0);
   const [betAmount, setBetAmount] = useState(0.01);
-  const [selectedPlace, setSelectedPlace] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState('win');
   const [payout, setPayout] = useState(1);
 
   const { toastError } = useToast()
@@ -35,11 +35,15 @@ function PlaceBet() {
 
   return (  
     <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl lg:mr-4">
-      <div className="px-8 text-center">
-        <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
+      <div className="px-8">
+        <div className="w-100 text-center">
+          <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
+        </div>
 
         <div className="w-full py-1.5">
+          <label htmlFor="selectHorse" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Select Horse:</label>
           <select
+            id="selectHorse"
             className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"
             defaultValue={horseId}
             onChange={(e) => setHorseId(Number(e.target.value))}
@@ -52,7 +56,9 @@ function PlaceBet() {
         </div>
 
         <div className="w-full py-1.5">
+          <label htmlFor="betAmount" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Bet Amount:</label>
           <input
+            id="betAmount"
             type="number"
             min="0"
             className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
@@ -63,7 +69,9 @@ function PlaceBet() {
         </div>
         
         <div className="w-full py-1.5">
+          <label htmlFor="selectPlace" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Select Place:</label>
           <select 
+            id="selectPlace"
             className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             aria-label="Default select example"
             defaultValue={selectedPlace}
@@ -77,7 +85,9 @@ function PlaceBet() {
         </div>
 
         <div className="w-full py-1.5">
+          <label htmlFor="payout" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Payout:</label>
           <input
+            id="payout"
             type="number"
             min="0"
             className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
