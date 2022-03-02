@@ -20,7 +20,7 @@
     "styled-components": "^5.3.3"
   },
   "scripts": {
-    "start": "set PORT=3004 && concurrently \"npm run tailwind-watch\" \"react-scripts start\"",
+    "start": "set PORT=3004 && concurrently \"react-scripts start\" \"npm run tailwind-watch\"",
     "build": "npm run tailwind && react-scripts build",
     "tailwind": "tailwind -i ./src/assets/tailwind.css -c tailwind.config.js -o ./src/assets/styles.css --watch",
     "tailwind-watch": "npm run tailwind --watch",

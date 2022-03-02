@@ -18,6 +18,20 @@ function PlaceBet() {
   const [placeAmount, setPlaceAmount] = useState(0);
   const { contract } = useContract();
 
+  const readyRace = () => {
+    if (contract) {
+      contract.methods
+        .readyRace(1)
+        .send()
+        .then(result => {
+          console.log('result', result);
+        })
+        .catch(error => {
+          console.log('error', error);
+        })
+    }
+  }
+
   const startRace = () => {
     if (contract) {
       contract.methods
@@ -82,7 +96,7 @@ function PlaceBet() {
 
   const handleBet = () => {
     console.log("handleBet");
-    startRace();
+    readyRace();
   }
 
   return (  

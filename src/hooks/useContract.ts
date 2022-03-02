@@ -54,18 +54,8 @@ export const useContract = () => {
   return { contract, storage }
 }
 
-export const usePlaceBet = (raceId, horseId, payout, amount) => {
-  const { contract } = useContract();
-
-  contract?.methods
-    .placeBet(raceId, horseId, payout)
-    .send({ amount })
-    .then(result => {
-      console.log('result', result);
-    })
-    .catch(error => {
-      console.log('error', error);
-    })
+export const useRaceState = () => {
+  const { storage } = useContract();
 
   return 0;
 }
