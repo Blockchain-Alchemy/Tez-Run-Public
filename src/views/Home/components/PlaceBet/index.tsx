@@ -1,23 +1,36 @@
 import { useState } from 'react';
+import useToast from 'hooks/useToast'
 
 const defaultHorses = [
-  'Hottez',
-  'Snazzy Fukr',
-  'Neonz',
-  'Hic et Equum',
-  'Breitmare',
-  'Mandala',
+  { id: 1, name: 'Hottez' },
+  { id: 1, name: 'Snazzy Fukr' },
+  { id: 1, name: 'Neonz' },
+  { id: 1, name: 'Hic et Equum' },
+  { id: 1, name: 'Breitmare' },
+  { id: 1, name: 'Mandala' },
 ];
 
 function PlaceBet() {  
   const [horses, setHorses] = useState(defaultHorses);
-  const [selectedHorse, setSelectedHorse] = useState('');
-  const [betAmount, setBetAmount] = useState(0);
+  const [horseId, setHorseId] = useState(0);
+  const [betAmount, setBetAmount] = useState(0.01);
   const [selectedPlace, setSelectedPlace] = useState('');
-  const [placeAmount, setPlaceAmount] = useState(0);
+  const [payout, setPayout] = useState(1);
+
+  const { toastError } = useToast()
 
   const handleBet = () => {
     console.log("handleBet");
+    if (horseId === 0) {
+      toastError('Validation Error', 'Please select horse');
+      return;
+    }
+    if (betAmount === 0) {
+
+    }
+    if (payout === 0) {
+
+    }
   }
 
   return (  
@@ -28,12 +41,12 @@ function PlaceBet() {
         <div className="w-full py-1.5">
           <select
             className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"
-            defaultValue={selectedHorse}
-            onChange={(e) => setSelectedHorse(e.target.value)}
+            defaultValue={horseId}
+            onChange={(e) => setHorseId(Number(e.target.value))}
           >
             <option disabled value="">Select Horse</option>
             { horses.map((horse, index) => (
-              <option key={index} value={horse}>{horse}</option>
+              <option key={index} value={horse.id}>{horse.name}</option>
             ))}
           </select>
         </div>
@@ -58,8 +71,8 @@ function PlaceBet() {
           >
             <option value="" disabled>To Win</option>
             <option value="win">Win</option>
-            <option value="place">Place</option>
-            <option value="show">Show</option>
+            <option value="place" disabled>Place</option>
+            <option value="show" disabled>Show</option>
           </select>
         </div>
 
@@ -69,8 +82,8 @@ function PlaceBet() {
             min="0"
             className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             placeholder="Place Bet"
-            value={placeAmount}
-            onChange={e => setPlaceAmount(Number(e.target.value))}
+            value={payout}
+            onChange={e => setPayout(Number(e.target.value))}
           />
         </div>
       </div>

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
+import { ToastListener } from './contexts/ToastsContext'
 import Home from "./views/Home"
 import Menu from './components/Menu';
 
@@ -8,6 +9,7 @@ const App: React.FC = () => {
     <>
       <Menu>
         <Home></Home>
+        <ToastListener />
       </Menu>
     </>
   )
