@@ -22,7 +22,7 @@ function PlaceBet() {
 
   return (  
     <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl lg:mr-4">
-      <div className="px-3 text-center">
+      <div className="px-8 text-center">
         <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
 
         <div className="w-full py-1.5">
@@ -77,7 +77,7 @@ function PlaceBet() {
 
       <div className="flex justify-center w-full py-1.5 mt-2">
         <button 
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
           onClick={handleBet}
         >Bet</button>
       </div>

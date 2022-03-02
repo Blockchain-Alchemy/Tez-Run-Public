@@ -562,6 +562,22 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 100%;
 }
 
+.w-80 {
+  width: 20rem;
+}
+
+.w-60 {
+  width: 15rem;
+}
+
+.w-40 {
+  width: 10rem;
+}
+
+.w-36 {
+  width: 9rem;
+}
+
 .grid-cols-12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
@@ -694,6 +710,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .pr-4 {
@@ -1006,5 +1027,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .lg\:mr-4 {
     margin-right: 1rem;
+  }
+
+  .lg\:pr-4 {
+    padding-right: 1rem;
+  }
+
+  .lg\:pr-6 {
+    padding-right: 1.5rem;
+  }
+
+  .lg\:pr-12 {
+    padding-right: 3rem;
   }
 }
