@@ -118,18 +118,19 @@ export const useMethod = () => {
     [contract]
   );
 
-  const placeBet = useCallback(() => {
+  const placeBet = useCallback((raceId, horseId, payout, amount) => {
     /*if (contract) {
       const methods = contract.parameterSchema.ExtractSignatures();
       console.log(JSON.stringify(methods, null, 2));
 
-      const incrementParams = contract.methods.placeBet(1, 0, 2).toTransferParams();
+      const incrementParams = contract.methods.placeBet(raceId, horseId, payout).toTransferParams();
       console.log(JSON.stringify(incrementParams, null, 2));
     }*/
+    console.log("placeBet", raceId, horseId, payout, amount)
 
     return contract?.methods
-      .placeBet(1, 0, 2)
-      .send({ amount: 0.1 })
+      .placeBet(horseId, payout, raceId)
+      .send({ amount: amount })
       .then((result) => {
         console.info("placeBet", result);
         return result;
