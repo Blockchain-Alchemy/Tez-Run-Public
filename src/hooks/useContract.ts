@@ -1,61 +1,160 @@
-import { useEffect, useState } from 'react';
-import { ContractAbstraction, Wallet } from '@taquito/taquito';
-import network from 'network';
-import useBeacon from './useBeacon';
+import { useCallback, useEffect, useState } from "react";
+import { ContractAbstraction, Wallet } from "@taquito/taquito";
+import network from "network";
+import useBeacon from "./useBeacon";
 
 export const useAddress = () => {
-  const { wallet } = useBeacon()
-  const [address, setAddress] = useState('')
+  const { wallet } = useBeacon();
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
-    wallet?.getPKH()
-      .then(address => setAddress(address))
-      .catch(console.error)
-  }, [wallet])
+    wallet
+      ?.getPKH()
+      .then((address) => setAddress(address))
+      .catch(console.error);
+  }, [wallet]);
 
-  return { address }
-}
+  return { address };
+};
 
 export const useBalace = () => {
-  const { Tezos } = useBeacon()
-  const { address } = useAddress()
-  const [ balance, setBalance ] = useState<number>(0)
+  const { Tezos } = useBeacon();
+  const { address } = useAddress();
+  const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {
     if (address) {
-      Tezos.tz.getBalance(address)
-        .then(balance => setBalance(balance.toNumber()))
-        .catch(console.error)
+      Tezos.tz
+        .getBalance(address)
+        .then((balance) => setBalance(balance.toNumber()))
+        .catch(console.error);
     }
-  }, [Tezos, address])
+  }, [Tezos, address]);
 
-  return { balance }
-}
+  return { balance };
+};
 
 export const useContract = () => {
-  const { Tezos, connected } = useBeacon()
-  const [ contract, setContract ] = useState<ContractAbstraction<Wallet> | undefined>(undefined)
-  const [ storage, setStorage ] = useState<unknown>(undefined)
+  const { Tezos, connected } = useBeacon();
+  const [contract, setContract] = useState<
+    ContractAbstraction<Wallet> | undefined
+  >(undefined);
 
   useEffect(() => {
-    console.log("useContract", connected);
     if (connected) {
-      Tezos.wallet.at(network.contractAddress)
-        .then(contract => {
-          console.log("contract", contract)
+      Tezos.wallet
+        .at(network.contractAddress)
+        .then((contract) => {
+          console.log("contract", contract);
           setContract(contract);
-          return contract.storage();
+          return contract;
         })
-        .then(storage => setStorage(storage))
-        .catch(console.error)
+        .catch(console.error);
     }
-  }, [Tezos, connected])
+  }, [Tezos, connected]);
 
-  return { contract, storage }
-}
+  return { contract };
+};
 
-export const useRaceState = () => {
-  const { storage } = useContract();
+export const useAdminMethod = () => {
+  const { contract } = useContract();
 
-  return 0;
-}
+  const readyRace = useCallback(() => {
+    return contract?.methods
+      .readyRace(60)
+      .send()
+      .then((result) => {
+        console.info("readyRace", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("readyRace", error);
+      });
+  }, [contract]);
+
+  const startRace = useCallback(() => {
+    return contract?.methods
+      .startRace()
+      .send()
+      .then((result) => {
+        console.info("startRace", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("startRace", error);
+      });
+  }, [contract]);
+
+  const finishRace = useCallback(() => {
+    return contract?.methods
+      .takeReward()
+      .send()
+      .then((result) => {
+        console.info("finishRace", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("finishRace", error);
+      });
+  }, [contract]);
+
+  return {
+    readyRace,
+    startRace,
+    finishRace,
+  };
+};
+
+export const useMethod = () => {
+  const { contract } = useContract();
+
+  const getStorage = useCallback(
+    (setStorage) => {
+      return contract?.storage().then((storage) => {
+        console.log("storage", storage);
+        setStorage(storage);
+      });
+    },
+    [contract]
+  );
+
+  const placeBet = useCallback(() => {
+    /*if (contract) {
+      const methods = contract.parameterSchema.ExtractSignatures();
+      console.log(JSON.stringify(methods, null, 2));
+
+      const incrementParams = contract.methods.placeBet(1, 0, 2).toTransferParams();
+      console.log(JSON.stringify(incrementParams, null, 2));
+    }*/
+
+    return contract?.methods
+      .placeBet(1, 0, 2)
+      .send({ amount: 0.1 })
+      .then((result) => {
+        console.info("placeBet", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+  }, [contract]);
+
+  const takeReward = useCallback(() => {
+    return contract?.methods
+      .takeReward()
+      .send()
+      .then((result) => {
+        console.info("takeReward", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+  }, [contract]);
+
+  return {
+    getStorage,
+    placeBet,
+    takeReward,
+  };
+};

@@ -1,5 +1,5 @@
-import { useContract } from 'hooks/useContract';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useMethod } from 'hooks/useContract';
 
 const defaultHorses = [
   'Hottez',
@@ -16,94 +16,31 @@ function PlaceBet() {
   const [betAmount, setBetAmount] = useState(0);
   const [selectedPlace, setSelectedPlace] = useState('');
   const [placeAmount, setPlaceAmount] = useState(0);
-  const { contract } = useContract();
+  const [storage, setStorage] = useState<any>({});
+  
+  const { getStorage } = useMethod();
 
-  const readyRace = () => {
-    if (contract) {
-      contract.methods
-        .readyRace(1)
-        .send()
-        .then(result => {
-          console.log('result', result);
-        })
-        .catch(error => {
-          console.log('error', error);
-        })
-    }
-  }
-
-  const startRace = () => {
-    if (contract) {
-      contract.methods
-        .startRace()
-        .send()
-        .then(result => {
-          console.log('result', result);
-        })
-        .catch(error => {
-          console.log('error', error);
-        })
-    }
-  }
-
-  const placeBet = () => {
-    if (contract) {
-      /*const methods = contract.parameterSchema.ExtractSignatures();
-      console.log(JSON.stringify(methods, null, 2));
-
-      const incrementParams = contract.methods.placeBet(1, 0, 2).toTransferParams();
-      console.log(JSON.stringify(incrementParams, null, 2));*/
-
-      contract.methods
-        .placeBet(1, 0, 2)
-        .send({ amount: 0.1 })
-        .then(result => {
-          console.log('result', result);
-        })
-        .catch(error => {
-          console.log('error', error);
-        })
-    }
-  }
-
-  const finishBet = () => {
-    if (contract) {
-      contract.methods
-        .takeReward()
-        .send()
-        .then(result => {
-          console.log('result', result);
-        })
-        .catch(error => {
-          console.log('error', error);
-        })
-    }
-  }
-
-  const takeReward = () => {
-    if (contract) {
-      contract.methods
-        .takeReward()
-        .send()
-        .then(result => {
-          console.log('result', result);
-        })
-        .catch(error => {
-          console.log('error', error);
-        })
-    }
-  }
+  useEffect(() => {
+    console.log("updateStorage")
+    getStorage(setStorage);
+  }, [getStorage])
 
   const handleBet = () => {
     console.log("handleBet");
-    readyRace();
   }
 
   return (  
     <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl lg:mr-4">
       <div className="px-3 text-center">
         <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
-        
+
+        { storage && (
+            <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">
+              {storage.raceState?.toNumber()}
+            </h3>
+          )
+        }
+       
         <div className="w-full py-1.5">
           <select
             className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"
