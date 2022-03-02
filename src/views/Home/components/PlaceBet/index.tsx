@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useToast from 'hooks/useToast'
-import { useAdminMethod, useMethod } from 'hooks/useContract';
+import { useMethod } from 'hooks/useContract';
+import useBeacon from 'hooks/useBeacon';
 
 const defaultHorses = [
   { id: 1, name: 'Hottez' },
@@ -12,9 +13,9 @@ const defaultHorses = [
 ];
 
 function PlaceBet() {
+  const { connected } = useBeacon();
   const { toastError } = useToast();
   const { placeBet } = useMethod();
-  const { startRace } = useAdminMethod();
 
   const [horses, setHorses] = useState(defaultHorses);
   const [horseId, setHorseId] = useState(0);
@@ -23,7 +24,11 @@ function PlaceBet() {
   const [payout, setPayout] = useState(1);
 
   const handleBet = async () => {
-    console.log("handleBet");
+    console.log("handleBet", connected);
+    if (!connected) {
+      toastError("Validation Error", "Please Connect Your Wallet");
+      return;
+    }
 
     if (horseId === 0) {
       toastError("Validation Error", "Please select horse");
