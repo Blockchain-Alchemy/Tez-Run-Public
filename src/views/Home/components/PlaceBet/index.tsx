@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useMethod } from 'hooks/useContract';
+import { useState } from 'react';
 
 const defaultHorses = [
   'Hottez',
@@ -16,14 +15,6 @@ function PlaceBet() {
   const [betAmount, setBetAmount] = useState(0);
   const [selectedPlace, setSelectedPlace] = useState('');
   const [placeAmount, setPlaceAmount] = useState(0);
-  const [storage, setStorage] = useState<any>({});
-  
-  const { getStorage } = useMethod();
-
-  useEffect(() => {
-    console.log("updateStorage")
-    getStorage(setStorage);
-  }, [getStorage])
 
   const handleBet = () => {
     console.log("handleBet");
@@ -34,13 +25,6 @@ function PlaceBet() {
       <div className="px-3 text-center">
         <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">Place Bet</h3>
 
-        { storage && (
-            <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">
-              {storage.raceState?.toNumber()}
-            </h3>
-          )
-        }
-       
         <div className="w-full py-1.5">
           <select
             className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"

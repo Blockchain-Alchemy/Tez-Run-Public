@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useMethod } from 'hooks/useContract';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
 import BetTicket from './components/BetTicket';
 
 function Home(props) {
+  const [storage, setStorage] = useState<any>({});
+  const { getStorage } = useMethod();
+
+  useEffect(() => {
+    getStorage(setStorage);
+  }, [getStorage])
 
   return (
     <div className="container mx-auto">
@@ -19,7 +26,7 @@ function Home(props) {
             </div>
           </div>
           <div id="race-state-card" className="col-span-12 lg:col-start-11 lg:col-span-2">
-            <RaceTimer></RaceTimer>
+            <RaceTimer storage={storage}></RaceTimer>
           </div>
         </div>
       </div>
