@@ -1,17 +1,34 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useMethod } from 'hooks/useContract';
+import { useAddress, useMethod } from 'hooks/useContract';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
 import BetTicket from './components/BetTicket';
+import { MichelsonMap } from '@taquito/taquito';
 
 function Home(props) {
   const [storage, setStorage] = useState<any>({});
   const { getStorage } = useMethod();
+  const userAddress = useAddress();
 
   useEffect(() => {
     getStorage(setStorage);
   }, [getStorage])
+
+  useEffect(() => {
+    if (storage && userAddress) {
+      console.log("userAddress", userAddress)
+
+      storage.bets?.get(userAddress)
+        .then((userBets: MichelsonMap<string, any>) => {
+          console.log("userBets", userBets)
+          return userBets.get('1');
+        })
+        .then(raceBets => {
+          console.log("raceBets", raceBets)
+        })
+    }
+  }, [storage, userAddress])
 
   return (
     <div className="container mx-auto">

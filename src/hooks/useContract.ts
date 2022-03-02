@@ -14,13 +14,13 @@ export const useAddress = () => {
       .catch(console.error);
   }, [wallet]);
 
-  return { address };
+  return address;
 };
 
 export const useBalace = () => {
-  const { Tezos } = useBeacon();
-  const { address } = useAddress();
+  const {Tezos} = useBeacon();
   const [balance, setBalance] = useState<number>(0);
+  const address = useAddress();
 
   useEffect(() => {
     if (address) {
@@ -31,7 +31,7 @@ export const useBalace = () => {
     }
   }, [Tezos, address]);
 
-  return { balance };
+  return balance;
 };
 
 export const useContract = () => {
