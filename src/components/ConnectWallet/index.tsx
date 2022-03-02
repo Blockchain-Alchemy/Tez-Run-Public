@@ -29,12 +29,12 @@ const ConnectButton = (): JSX.Element => {
   };
 
   const disconnectWallet = async (): Promise<void> => {
+    setConnected(false);
     if (wallet) {
       await wallet.client.removeAllAccounts();
       await wallet.client.removeAllPeers();
       await wallet.client.destroy();
     }
-    setConnected(false);
   };
 
   return (
