@@ -78,6 +78,11 @@ export const BeaconProvider: React.FC = ({ children }) => {
   const disconnectWallet = async (): Promise<void> => {
     setConnected(false);
     setPublicKey('');
+    /*if (wallet) {
+      await wallet.client.removeAllAccounts();
+      await wallet.client.removeAllPeers();
+      await wallet.client.destroy();
+    }*/
   };
 
   return (
