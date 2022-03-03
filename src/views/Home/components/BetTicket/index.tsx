@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MichelsonMap } from '@taquito/taquito';
 import BetTicket from './BetTicket'
+import { defaultHorses } from 'hourse'
 
 function BetTicketCard({ storage, userAddress }) {
   const [betTickes, setBetTickets] = useState([]);
@@ -17,19 +18,33 @@ function BetTicketCard({ storage, userAddress }) {
         })
         .then(raceBets => {
           console.log("raceBets", raceBets)
-          setBetTickets(raceBets);
+          return raceBets.map((ticket: any) => ({
+            horseId: ticket.horseId.toNumber(),
+            horseName: getHorseName(ticket.horseId.toNumber()),
+            betAmount: convertTezos(ticket.amount.toNumber()),
+            payout: ticket.payout.toNumber(),
+          }))
+        })
+        .then(tickets => {
+          console.log("tickets", tickets)
+          setBetTickets(tickets)
         })
     }
   }, [storage, userAddress])
 
+  const getHorseName = (horseId) => {
+    const horse = defaultHorses.find(it => it.id === horseId);
+    return horse?.name;
+  }
+
+  const convertTezos = (mutez) => {
+    return mutez / 1000000;
+  }
+
   return (
     <div className="flex gap-4">
       { betTickes.map((ticket: any) => (
-        <BetTicket
-          horseId={ticket.horseId.toNumber()}
-          payout={ticket.payout.toNumber()}
-          betAmount={ticket.amount.toNumber()}
-        ></BetTicket>
+        <BetTicket {...ticket}></BetTicket>
       ))}
     </div>
   );
