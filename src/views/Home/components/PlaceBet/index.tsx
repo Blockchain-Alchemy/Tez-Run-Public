@@ -13,7 +13,7 @@ function PlaceBet() {
   const [horseId, setHorseId] = useState(0);
   const [betAmount, setBetAmount] = useState(0.01);
   const [selectedPlace, setSelectedPlace] = useState("win");
-  const [payout, setPayout] = useState(1);
+  const [payout, setPayout] = useState(0);
 
   const handleBet = async () => {
     console.log("handleBet", connected);
@@ -38,6 +38,24 @@ function PlaceBet() {
     await placeBet(1, horseId, payout, betAmount);
   };
 
+  const onChangeHorseId = (horseId) => {
+    setHorseId(horseId);
+
+    const horse = horses.find(it => it.id === horseId)
+    if (horse) {
+      setPayout(horse.payout * betAmount);
+    }
+  }
+
+  const onChangeBetAmount = (betAmount) => {
+    setBetAmount(betAmount);
+
+    const horse = horses.find(it => it.id === horseId)
+    if (horse) {
+      setPayout(horse.payout * betAmount);
+    }
+  }
+
   return (
     <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl lg:mr-4">
       <div className="px-8">
@@ -59,7 +77,7 @@ function PlaceBet() {
             className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border  border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             aria-label="Default select example"
             defaultValue={horseId}
-            onChange={(e) => setHorseId(Number(e.target.value))}
+            onChange={(e) => onChangeHorseId(Number(e.target.value))}
           >
             <option disabled value="0">Select Horse</option>
             {horses.map((horse, index) => (
@@ -75,7 +93,7 @@ function PlaceBet() {
             htmlFor="betAmount"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            Bet Amount:
+            Bet Amount (ꜩ):
           </label>
           <input
             id="betAmount"
@@ -84,7 +102,7 @@ function PlaceBet() {
             className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             placeholder="Bet Amount"
             value={betAmount}
-            onChange={(e) => setBetAmount(Number(e.target.value))}
+            onChange={(e) => onChangeBetAmount(Number(e.target.value))}
           />
         </div>
 
@@ -114,7 +132,7 @@ function PlaceBet() {
             htmlFor="payout"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            Payout:
+            Payout (ꜩ):
           </label>
           <input
             id="payout"
@@ -122,8 +140,8 @@ function PlaceBet() {
             min="0"
             className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             placeholder="Place Bet"
+            readOnly={true}
             value={payout}
-            onChange={(e) => setPayout(Number(e.target.value))}
           />
         </div>
       </div>
