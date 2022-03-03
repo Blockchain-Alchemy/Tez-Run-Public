@@ -3,7 +3,7 @@ import { useAddress, useMethod } from 'hooks/useContract';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
-import BetTicket from './components/BetTicket';
+import BetTicketCard from './components/BetTicket';
 import { MichelsonMap } from '@taquito/taquito';
 
 function Home(props) {
@@ -14,21 +14,6 @@ function Home(props) {
   useEffect(() => {
     getStorage(setStorage);
   }, [getStorage])
-
-  useEffect(() => {
-    if (storage && userAddress) {
-      console.log("userAddress", userAddress)
-
-      storage.bets?.get(userAddress)
-        .then((userBets: MichelsonMap<string, any>) => {
-          console.log("userBets", userBets)
-          return userBets.get('1');
-        })
-        .then(raceBets => {
-          console.log("raceBets", raceBets)
-        })
-    }
-  }, [storage, userAddress])
 
   return (
     <div className="container mx-auto">
@@ -52,8 +37,11 @@ function Home(props) {
           <div id="place-bet-card" className="col-span-12 md-col-span-6 lg:col-span-3">
             <PlaceBet></PlaceBet>
           </div>
-          <div className="col-span-12 lg:col-start-4 md-col-span-6 lg:col-span-2">
-            <BetTicket></BetTicket>
+          <div className="col-span-12 md-col-span-6 lg:col-start-4 lg:col-span-9">
+            <BetTicketCard
+              storage={storage}
+              userAddress={userAddress}
+            ></BetTicketCard>
           </div>
         </div>
       </div>

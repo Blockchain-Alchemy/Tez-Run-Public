@@ -26,7 +26,7 @@
     "start": "set PORT=3004 && concurrently \"react-scripts start\" \"npm run tailwind-watch\"",
     "build": "npm run tailwind && react-scripts build",
     "tailwind": "tailwind -i ./src/assets/tailwind.css -c tailwind.config.js -o ./src/assets/styles.css",
-    "tailwind-watch": "npm run tailwind --watch",
+    "tailwind-watch": "tailwind -i ./src/assets/tailwind.css -c tailwind.config.js -o ./src/assets/styles.css --watch",
     "heroku": "node ./server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

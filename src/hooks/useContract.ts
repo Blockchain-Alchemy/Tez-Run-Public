@@ -10,7 +10,10 @@ export const useAddress = () => {
   useEffect(() => {
     wallet
       ?.getPKH()
-      .then((address) => setAddress(address))
+      .then((address) => {
+        console.log("userAddress", address)
+        setAddress(address)
+      })
       .catch(console.error);
   }, [wallet]);
 
