@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react'
-import { TezosToolkit } from '@taquito/taquito';
+import { ContractAbstraction, TezosToolkit, Wallet } from '@taquito/taquito';
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import {
   BeaconEvent,
@@ -13,9 +13,12 @@ const Tezos = new TezosToolkit(Network.rpcUrl)
 export const BeaconContext = createContext<BeaconContextApi>({} as BeaconContextApi)
 
 export const BeaconProvider: React.FC = ({ children }) => {
+  const [loading, setLoading] = useState(false);
   const [wallet, setWallet] = useState<BeaconWallet | undefined>(undefined);
   const [publicKey, setPublicKey] = useState<string>('');
+  const [address, setAddress] = useState<string | undefined>(undefined);
   const [connected, setConnected] = useState<boolean>(false);
+  const [contract, setContract] = useState<ContractAbstraction<Wallet> | undefined>(undefined);
 
   useEffect(() => {
     if (!wallet)  {
@@ -39,8 +42,60 @@ export const BeaconProvider: React.FC = ({ children }) => {
     }
   }, [wallet, setWallet, setPublicKey])
 
+  const connectWallet = async (): Promise<void> => {
+    try {
+      if (!wallet) {
+        return;
+      }
+      setLoading(true);
+
+      await wallet.requestPermissions({
+        network: {
+          type: Network.networkType,
+          rpcUrl: Network.rpcUrl,
+        }
+      });
+
+      const address = await wallet.getPKH()
+      console.log("userAddress", address)
+      setAddress(address)
+
+      const contract = await Tezos.wallet.at(Network.contractAddress)
+      console.log("contract", contract);
+      setContract(contract);
+      
+      setConnected(true);
+    }
+    catch (error) {
+      console.log(error);
+      setConnected(false);
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
+  const disconnectWallet = async (): Promise<void> => {
+    setConnected(false);
+    if (wallet) {
+      await wallet.client.removeAllAccounts();
+      await wallet.client.removeAllPeers();
+      await wallet.client.destroy();
+      setPublicKey('');
+    }
+  };
+
   return (
-    <BeaconContext.Provider value={{ Tezos, wallet, publicKey, connected, setConnected }}>
+    <BeaconContext.Provider value={{
+      Tezos,
+      wallet,
+      loading,
+      connected,
+      address,
+      contract,
+      connectWallet,
+      disconnectWallet
+    }}>
       {children}
     </BeaconContext.Provider>
   )

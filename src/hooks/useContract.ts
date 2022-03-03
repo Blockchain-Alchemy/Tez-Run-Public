@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { ContractAbstraction, Wallet } from "@taquito/taquito";
-import network from "network";
 import useBeacon from "./useBeacon";
 
 export const useAddress = () => {
@@ -22,9 +20,8 @@ export const useAddress = () => {
 };
 
 export const useBalace = () => {
-  const {Tezos} = useBeacon();
+  const {Tezos, address} = useBeacon();
   const [balance, setBalance] = useState<number>(0);
-  const address = useAddress();
 
   useEffect(() => {
     if (address) {
@@ -38,30 +35,8 @@ export const useBalace = () => {
   return balance;
 };
 
-export const useContract = () => {
-  const { Tezos, connected } = useBeacon();
-  const [contract, setContract] = useState<
-    ContractAbstraction<Wallet> | undefined
-  >(undefined);
-
-  useEffect(() => {
-    if (connected) {
-      Tezos.wallet
-        .at(network.contractAddress)
-        .then((contract) => {
-          console.log("contract", contract);
-          setContract(contract);
-          return contract;
-        })
-        .catch(console.error);
-    }
-  }, [Tezos, connected]);
-
-  return { contract };
-};
-
 export const useAdminMethod = () => {
-  const { contract } = useContract();
+  const { contract } = useBeacon();
 
   const readyRace = useCallback(() => {
     return contract?.methods
@@ -110,7 +85,7 @@ export const useAdminMethod = () => {
 };
 
 export const useMethod = () => {
-  const { contract } = useContract();
+  const { contract } = useBeacon();
 
   const getStorage = useCallback(
     (setStorage) => {

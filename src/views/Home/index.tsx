@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useAddress, useMethod } from 'hooks/useContract';
+import { useMethod } from 'hooks/useContract';
+import useBeacon from 'hooks/useBeacon';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
 import BetTicketCard from './components/BetTicket';
+import Loader from 'components/Loader';
 
 const Home = () => {
   const [storage, setStorage] = useState<any>({});
   const { getStorage } = useMethod();
-  const userAddress = useAddress();
+  const { loading, address } = useBeacon();
 
   useEffect(() => {
     getStorage(setStorage);
@@ -16,6 +18,9 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
+      {loading && (
+        <Loader />
+      )}      
       <div className="px-4 mt-4 md:mt-8">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 lg:col-span-2">
@@ -39,7 +44,7 @@ const Home = () => {
           <div className="col-span-12 md-col-span-6 lg:col-start-4 lg:col-span-9">
             <BetTicketCard
               storage={storage}
-              userAddress={userAddress}
+              userAddress={address}
             ></BetTicketCard>
           </div>
         </div>

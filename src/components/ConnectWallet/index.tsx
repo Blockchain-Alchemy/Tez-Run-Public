@@ -1,42 +1,9 @@
 import React from "react";
-import Network from "network";
 import useBeacon from "hooks/useBeacon";
 
 const ConnectButton = (): JSX.Element => {
-  const { wallet, connected, setConnected } = useBeacon();
-
-  console.log("ConnectButton", wallet, connected)
-
-  const connectWallet = async (): Promise<void> => {
-    try {
-      if (!wallet) {
-        console.error("Beacon initialization")
-        return;
-      }
-
-      await wallet.requestPermissions({
-        network: {
-          type: Network.networkType,
-          rpcUrl: Network.rpcUrl,
-        }
-      });
-      
-      setConnected(true);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  };
-
-  const disconnectWallet = async (): Promise<void> => {
-    setConnected(false);
-    if (wallet) {
-      await wallet.client.removeAllAccounts();
-      await wallet.client.removeAllPeers();
-      await wallet.client.destroy();
-    }
-  };
-
+  const { connected, connectWallet, disconnectWallet } = useBeacon();
+  
   return (
     <>
       {!connected? (

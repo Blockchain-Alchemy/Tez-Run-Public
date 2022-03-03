@@ -1,10 +1,13 @@
-import { TezosToolkit } from "@taquito/taquito";
+import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 
 export interface BeaconContextApi {
   Tezos: TezosToolkit
   wallet: BeaconWallet | undefined
+  loading: boolean
   connected: boolean
-  publicKey: string
-  setConnected: (connected: boolean) => void
+  address: string | undefined
+  contract: ContractAbstraction<Wallet> | undefined
+  connectWallet: () => Promise<void>
+  disconnectWallet: () => Promise<void>
 }
