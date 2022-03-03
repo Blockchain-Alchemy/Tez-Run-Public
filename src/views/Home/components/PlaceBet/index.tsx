@@ -2,15 +2,7 @@ import { useState } from 'react';
 import useToast from 'hooks/useToast'
 import { useMethod } from 'hooks/useContract';
 import useBeacon from 'hooks/useBeacon';
-
-const defaultHorses = [
-  { id: 1, name: 'Hottez' },
-  { id: 2, name: 'Snazzy Fukr' },
-  { id: 3, name: 'Neonz' },
-  { id: 4, name: 'Hic et Equum' },
-  { id: 5, name: 'Breitmare' },
-  { id: 6, name: 'Mandala' },
-];
+import { defaultHorses } from 'hourse';
 
 function PlaceBet() {
   const { connected } = useBeacon();
