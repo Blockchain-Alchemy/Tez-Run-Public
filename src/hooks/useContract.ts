@@ -8,6 +8,7 @@ export const useAddress = () => {
   const [address, setAddress] = useState("");
 
   useEffect(() => {
+    setAddress("");
     wallet
       ?.getPKH()
       .then((address) => {

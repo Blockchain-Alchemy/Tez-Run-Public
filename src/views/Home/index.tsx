@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAddress, useMethod } from 'hooks/useContract';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
 import BetTicketCard from './components/BetTicket';
-import { MichelsonMap } from '@taquito/taquito';
 
-function Home(props) {
+const Home = () => {
   const [storage, setStorage] = useState<any>({});
   const { getStorage } = useMethod();
   const userAddress = useAddress();
