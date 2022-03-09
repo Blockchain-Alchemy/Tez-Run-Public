@@ -78,7 +78,7 @@ const Home = () => {
           </div>
           <div id="race-footage" className="col-span-12 lg:col-start-3 lg:col-span-8">
             <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl h-full">
-              {/* <Unity className="w-full" unityContext={unityContext} /> */}
+              <Unity className="w-full" unityContext={unityContext} />
             </div>
           </div>
           <div id="race-state-card" className="col-span-12 lg:col-start-11 lg:col-span-2">
