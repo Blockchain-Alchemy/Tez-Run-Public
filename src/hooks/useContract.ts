@@ -35,6 +35,25 @@ export const useBalace = () => {
   return balance;
 };
 
+export const useRandomNumber = () => {
+  const { Tezos } = useBeacon();
+  const [randomNumber, setRandomNumber] = useState<number>(0);
+
+  useEffect(() => {
+    Tezos.wallet.at("KT18hPvyyVF86AHLkMBKPPHXZb8TFogphbxi")
+      .then(contract => {
+        console.log("contract2", contract);
+        return contract.storage();
+      })
+      .then((storage: any) => {
+        console.log("storage2", storage);
+        setRandomNumber(storage.toNumber());
+      })
+  }, [Tezos]);
+
+  return randomNumber;
+};
+
 export const useAdminMethod = () => {
   const { contract } = useBeacon();
 
