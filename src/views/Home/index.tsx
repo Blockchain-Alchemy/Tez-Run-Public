@@ -6,6 +6,7 @@ import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
 import BetTicketCard from './components/BetTicket';
+import RacePanel from './components/RacePanel';
 import Loader from 'components/Loader';
 
 const unityContext = new UnityContext({
@@ -19,44 +20,10 @@ const Home = () => {
   const [storage, setStorage] = useState<any>({});
   const { getStorage } = useMethod();
   const { loading, address } = useBeacon();
-  const randomNumber = useRandomNumber();
 
   useEffect(() => {
     getStorage(setStorage);
   }, [getStorage])
-
-  useEffect(function () {
-    console.log("useEffect");
-    unityContext.on("loaded", function () {
-      console.log("loaded")
-    });
-
-    unityContext.on("progress", function (progression) {
-      console.log("progression", progression)
-      //setProgression(progression);
-    });
-
-    unityContext.on("GameOver", function (userName, score) {
-      console.log("GameOver", userName, score)
-    });
-
-    unityContext.on("FinishRace", function (horse: string, time: string) {
-      console.log("FinishRace", horse, time)
-    });
-  }, []);
-
-  const startRace = () => {
-    console.log("startRace")
-    unityContext.send("GameController", "StartRaceNow", 45);
-  }
-
-  const buttonStyle = useMemo(() => {
-    if (!randomNumber) {
-      return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
-    } else {
-      return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
-    }
-  }, [randomNumber])
 
   return (
     <div className="container mx-auto">
@@ -67,14 +34,6 @@ const Home = () => {
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 lg:col-span-2">
             <HorseOdds></HorseOdds>
-            <button
-              type="button"
-              className={buttonStyle}
-              onClick={startRace}
-              disabled={!randomNumber}
-            >
-              Start Race
-            </button>
           </div>
           <div id="race-footage" className="col-span-12 lg:col-start-3 lg:col-span-8">
             <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl h-full">
@@ -83,6 +42,7 @@ const Home = () => {
           </div>
           <div id="race-state-card" className="col-span-12 lg:col-start-11 lg:col-span-2">
             <RaceTimer storage={storage}></RaceTimer>
+            <RacePanel unityContext={unityContext}></RacePanel>
           </div>
         </div>
       </div>
