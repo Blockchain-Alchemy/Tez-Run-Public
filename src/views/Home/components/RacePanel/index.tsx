@@ -4,7 +4,7 @@ import useBeacon from 'hooks/useBeacon';
 import useToast from 'hooks/useToast';
 
 const RacePanel = ({ unityContext }) => {
-  const [raceFinished, setRaceFinished] = useState<boolean>(false);
+  const [ raceState, setRaceState] = useState(0);
   const { connected } = useBeacon();
   const { takeReward } = useMethod();
   const { toastError, toastSuccess } = useToast();
@@ -14,26 +14,26 @@ const RacePanel = ({ unityContext }) => {
     if (randomNumber) {
       unityContext.on("FinishRace", function (horse: string, time: string) {
         console.log("FinishRace", horse, time)
-        setRaceFinished(true);
+        setRaceState(2);
       });
     }
   }, [unityContext, randomNumber]);
 
   const startButtonStyle = useMemo(() => {
-    if (!randomNumber) {
+    if (!randomNumber || raceState === 1) {
       return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
     } else {
       return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
     }
-  }, [randomNumber]);
+  }, [randomNumber, raceState]);
 
   const rewardButtonStyle = useMemo(() => {
-    if (!raceFinished) {
+    if (raceState !== 2) {
       return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
     } else {
       return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
     }
-  }, [raceFinished]);
+  }, [raceState]);
 
   const handleStartRace = () => {
     console.log("startRace")
@@ -42,12 +42,12 @@ const RacePanel = ({ unityContext }) => {
       return;
     }
     
-    setRaceFinished(false);
+    setRaceState(1);
     unityContext.send("GameController", "StartRaceNow", 45);
   }
 
   const handleTakeReward = async () => {
-    if (!raceFinished) {
+    if (raceState !== 2) {
       return;
     }
 
