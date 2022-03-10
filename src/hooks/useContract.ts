@@ -106,15 +106,12 @@ export const useAdminMethod = () => {
 export const useMethod = () => {
   const { contract } = useBeacon();
 
-  const getStorage = useCallback(
-    (setStorage) => {
-      return contract?.storage().then((storage) => {
-        console.log("storage", storage);
-        setStorage(storage);
-      });
-    },
-    [contract]
-  );
+  const getStorage = useCallback((setStorage) => {
+    return contract?.storage().then((storage) => {
+      console.log("storage", storage);
+      setStorage(storage);
+    });
+  }, [contract]);
 
   const placeBet = useCallback((raceId, horseId, payout, amount) => {
     /*if (contract) {

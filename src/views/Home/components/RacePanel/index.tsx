@@ -1,8 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useRandomNumber } from 'hooks/useContract';
+import { useMethod, useRandomNumber } from 'hooks/useContract';
+import useBeacon from 'hooks/useBeacon';
+import useToast from 'hooks/useToast';
 
 const RacePanel = ({ unityContext }) => {
   const [raceFinished, setRaceFinished] = useState<boolean>(false);
+  const { connected } = useBeacon();
+  const { takeReward } = useMethod();
+  const { toastError, toastSuccess } = useToast();
   const randomNumber = useRandomNumber();
 
   useEffect(() => {
@@ -30,10 +35,24 @@ const RacePanel = ({ unityContext }) => {
     }
   }, [raceFinished]);
 
-  const startRace = () => {
+  const handleStartRace = () => {
     console.log("startRace")
+    if (!connected) {
+      toastError("Error", "Please Connect Your Wallet");
+      return;
+    }
+    
     setRaceFinished(false);
     unityContext.send("GameController", "StartRaceNow", 45);
+  }
+
+  const handleTakeReward = async () => {
+    if (!raceFinished) {
+      return;
+    }
+
+    await takeReward();
+    toastSuccess("Success", "You got reward successfully");
   }
 
   return (
@@ -41,7 +60,7 @@ const RacePanel = ({ unityContext }) => {
       <button
         type="button"
         className={startButtonStyle}
-        onClick={startRace}
+        onClick={handleStartRace}
         disabled={!randomNumber}
       >
         Start Race
@@ -49,7 +68,7 @@ const RacePanel = ({ unityContext }) => {
       <button
         type="button"
         className={rewardButtonStyle + " mt-4"}
-        onClick={startRace}
+        onClick={handleTakeReward}
         disabled={!randomNumber}
       >
         Take Reward
