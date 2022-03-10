@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Unity, { UnityContext } from "react-unity-webgl";
-import { useMethod, useRandomNumber } from 'hooks/useContract';
+import { useMethod } from 'hooks/useContract';
 import useBeacon from 'hooks/useBeacon';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
