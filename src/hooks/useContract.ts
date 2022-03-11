@@ -59,7 +59,7 @@ export const useAdminMethod = () => {
 
   const readyRace = useCallback(() => {
     return contract?.methods
-      .readyRace(60)
+      .readyRace(5)
       .send()
       .then((result) => {
         console.info("readyRace", result);
