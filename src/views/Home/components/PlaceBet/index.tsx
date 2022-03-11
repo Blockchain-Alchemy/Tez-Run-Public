@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import Switch from 'components/Switch'
 import useToast from 'hooks/useToast'
-import { useMethod } from 'hooks/useContract';
 import useBeacon from 'hooks/useBeacon';
+import { useMethod } from 'hooks/useContract';
 import { defaultHorses } from 'hourse';
 
 function PlaceBet() {
@@ -10,6 +11,7 @@ function PlaceBet() {
   const { placeBet } = useMethod();
 
   const [horses, setHorses] = useState(defaultHorses);
+  const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
   const [betAmount, setBetAmount] = useState(0.8);
   const [selectedPlace, setSelectedPlace] = useState("win");
@@ -63,6 +65,15 @@ function PlaceBet() {
           <h3 className="flex text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">
             Place Bet
           </h3>
+        </div>
+
+        <div className="w-full py-1.5">
+          <Switch
+            toggle={nativeToken}
+            setToggle={setNativeToken}
+            labelOff="uUSD"
+            labelOn="Tezos"
+          ></Switch>
         </div>
 
         <div className="w-full py-1.5">
