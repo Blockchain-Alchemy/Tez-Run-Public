@@ -3,7 +3,7 @@ const Switch = ({ labelOff, labelOn, toggle, setToggle }) => {
   return (
     <>
       <div className="flex flex-row justify-center items-center my-2">
-        <label className="block text-md font-medium text-gray-900 dark:text-gray-300 mr-4">
+        <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mr-2">
           { labelOff }
         </label>
         <div
@@ -17,7 +17,7 @@ const Switch = ({ labelOff, labelOn, toggle, setToggle }) => {
             }
           ></div>
         </div>
-        <label className="block text-md font-medium text-gray-900 dark:text-gray-300 ml-4">
+        <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 ml-2">
           { labelOn }
         </label>
       </div>

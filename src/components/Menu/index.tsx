@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ConnectButton from 'components/ConnectWallet';
+import Switch from 'components/Switch'
+import network from 'network'
 
 const Menu = ({ children }): JSX.Element => {
+  const [testNet, setTestNet] = useState(true);
+  const [rpcList, setRpcList] = useState(network.hangzhounetRpcList);
+  const [selectedRpc, setSelectedRpc] = useState(network.rpcUrl);
   
+  const handleChangeNet = (value) => {
+    console.log("handleChangeNet", value)
+    setTestNet(value);
+
+    const rpcs = value ? network.hangzhounetRpcList : network.mainnetRpcList;
+    setRpcList(rpcs);
+
+    setSelectedRpc(rpcs[0]);
+  }
+
   return (
     <div className="bg-white dark:bg-black h-full">
       <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-800">
@@ -12,6 +27,31 @@ const Menu = ({ children }): JSX.Element => {
             <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white">TezRun</span>
         </a>
         <div className="flex md:order-2">
+          <div className="mr-6">
+            <Switch
+              toggle={testNet}
+              setToggle={(e) => handleChangeNet(e)}
+              labelOff="MainNet"
+              labelOn="TestNet"            
+            ></Switch>
+          </div>
+          <div className="mr-6">
+            <select
+              className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              aria-label="Default select example"
+              defaultValue={selectedRpc}
+              onChange={(e) => {
+                console.log("select-change", e.target.value)
+                setSelectedRpc(e.target.value)
+              }}
+            >
+              {rpcList.map((rpc, index) => (
+                <option key={index} value={rpc}>
+                  {rpc}
+                </option>
+              ))}
+            </select>
+          </div>
           <ConnectButton></ConnectButton>
         </div>
         <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="mobile-menu-4">
