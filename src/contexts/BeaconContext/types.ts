@@ -10,4 +10,5 @@ export interface BeaconContextApi {
   contract: ContractAbstraction<Wallet> | undefined
   connectWallet: () => Promise<void>
   disconnectWallet: () => Promise<void>
+  setLoading: (loading: boolean) => void
 }

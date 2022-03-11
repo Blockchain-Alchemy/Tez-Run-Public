@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { MichelsonMap } from '@taquito/taquito';
+import React, { useEffect, useState, useCallback } from 'react';
 import BetTicket from './BetTicket'
 import { defaultHorses } from 'hourse'
+import { useInterval } from "hooks/useInterval"
 
 function BetTicketCard({ storage, userAddress }) {
   const [betTickes, setBetTickets] = useState([]);
 
-  useEffect(() => {
-    console.log("BetTicketCard", storage)
+  const updateTickets = useCallback(() => {
     if (storage && userAddress) {
-      console.log("userAddress", userAddress)
-
       storage.bets?.get(userAddress)
         /*.then((userBets: MichelsonMap<string, any>) => {
           console.log("userBets", userBets)
@@ -30,7 +27,11 @@ function BetTicketCard({ storage, userAddress }) {
           tickets && setBetTickets(tickets)
         })
     }
-  }, [storage, userAddress])
+  }, [storage, userAddress, setBetTickets])
+
+  useInterval(() => {
+    updateTickets()
+  }, 2000)
 
   const getHorseName = (horseId) => {
     const horse = defaultHorses.find(it => it.id === horseId);

@@ -104,7 +104,7 @@ export const useAdminMethod = () => {
 };
 
 export const useMethod = () => {
-  const { contract } = useBeacon();
+  const { contract, setLoading } = useBeacon();
 
   const getStorage = useCallback((setStorage) => {
     return contract?.storage().then((storage) => {
@@ -123,6 +123,8 @@ export const useMethod = () => {
     }*/
     console.log("placeBet", raceId, horseId, payout, amount)
 
+    setLoading(true);
+
     return contract?.methods
       .placeBet(horseId, payout, raceId)
       .send({ amount: amount })
@@ -132,10 +134,15 @@ export const useMethod = () => {
       })
       .catch((error) => {
         console.error("error", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, [contract]);
+  }, [contract, setLoading]);
 
   const takeReward = useCallback(() => {
+    setLoading(true);
+
     return contract?.methods
       .takeReward()
       .send()
@@ -145,8 +152,11 @@ export const useMethod = () => {
       })
       .catch((error) => {
         console.error("error", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, [contract]);
+  }, [contract, setLoading]);
 
   return {
     getStorage,

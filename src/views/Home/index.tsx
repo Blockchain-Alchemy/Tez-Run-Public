@@ -25,7 +25,7 @@ const Home = () => {
 
   useEffect(() => {
     getStorage(setStorage);
-  }, [getStorage])
+  }, [getStorage, setStorage])
 
   /*const handleStartRace = async () => {
     await startRace();

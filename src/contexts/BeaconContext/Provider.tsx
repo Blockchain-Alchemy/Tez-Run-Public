@@ -94,7 +94,8 @@ export const BeaconProvider: React.FC = ({ children }) => {
       address,
       contract,
       connectWallet,
-      disconnectWallet
+      disconnectWallet,
+      setLoading,
     }}>
       {children}
     </BeaconContext.Provider>
