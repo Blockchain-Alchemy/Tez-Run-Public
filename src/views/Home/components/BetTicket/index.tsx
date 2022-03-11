@@ -12,10 +12,10 @@ function BetTicketCard({ storage, userAddress }) {
       console.log("userAddress", userAddress)
 
       storage.bets?.get(userAddress)
-        .then((userBets: MichelsonMap<string, any>) => {
+        /*.then((userBets: MichelsonMap<string, any>) => {
           console.log("userBets", userBets)
           return userBets?.get('1');
-        })
+        })*/
         .then(raceBets => {
           console.log("raceBets", raceBets)
           return raceBets?.map((ticket: any) => ({
