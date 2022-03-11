@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
+import { NetworkType } from "@airgap/beacon-sdk";
 import ConnectButton from 'components/ConnectWallet';
 import Switch from 'components/Switch'
 import network from 'network'
+import useBeacon from 'hooks/useBeacon';
 
 const Menu = ({ children }): JSX.Element => {
   const [testNet, setTestNet] = useState(true);
   const [rpcList, setRpcList] = useState(network.hangzhounetRpcList);
-  const [selectedRpc, setSelectedRpc] = useState(network.rpcUrl);
+  const {rpcUrl, setRpcUrl, setNetworkType} = useBeacon();
   
-  const handleChangeNet = (value) => {
-    console.log("handleChangeNet", value)
-    setTestNet(value);
+  const changeNetwork = (isTestnet) => {
+    console.log("handleChangeNet", isTestnet)
 
-    const rpcs = value ? network.hangzhounetRpcList : network.mainnetRpcList;
+    setTestNet(isTestnet);
+    setNetworkType(isTestnet ? NetworkType.HANGZHOUNET : NetworkType.MAINNET);
+
+    const rpcs = getRpcList(isTestnet);
     setRpcList(rpcs);
 
-    setSelectedRpc(rpcs[0]);
+    setRpcUrl(rpcs[0]);
+  }
+
+  const getRpcList = (isTestnet) => {
+    return isTestnet ? network.hangzhounetRpcList : network.mainnetRpcList; 
   }
 
   return (
@@ -26,11 +34,11 @@ const Menu = ({ children }): JSX.Element => {
           <svg className="mr-3 h-10" viewBox="0 0 52 72" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.87695 53H28.7791C41.5357 53 51.877 42.7025 51.877 30H24.9748C12.2182 30 1.87695 40.2975 1.87695 53Z" fill="#76A9FA"/><path d="M0.000409561 32.1646L0.000409561 66.4111C12.8618 66.4111 23.2881 55.9849 23.2881 43.1235L23.2881 8.87689C10.9966 8.98066 1.39567 19.5573 0.000409561 32.1646Z" fill="#A4CAFE"/><path d="M50.877 5H23.9748C11.2182 5 0.876953 15.2975 0.876953 28H27.7791C40.5357 28 50.877 17.7025 50.877 5Z" fill="#1C64F2"/></svg>
             <span className="self-center text-lg font-semibold whitespace-nowrap dark:text-white">TezRun</span>
         </a>
-        <div className="flex md:order-2">
+        <div className="flex md:order-2 items-center">
           <div className="mr-6">
             <Switch
               toggle={testNet}
-              setToggle={(e) => handleChangeNet(e)}
+              setToggle={e => changeNetwork(e)}
               labelOff="MainNet"
               labelOn="TestNet"            
             ></Switch>
@@ -39,11 +47,8 @@ const Menu = ({ children }): JSX.Element => {
             <select
               className="form-select block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               aria-label="Default select example"
-              defaultValue={selectedRpc}
-              onChange={(e) => {
-                console.log("select-change", e.target.value)
-                setSelectedRpc(e.target.value)
-              }}
+              defaultValue={rpcUrl}
+              onChange={e => setRpcUrl(e.target.value)}
             >
               {rpcList.map((rpc, index) => (
                 <option key={index} value={rpc}>

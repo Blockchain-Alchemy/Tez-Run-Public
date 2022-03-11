@@ -20,27 +20,27 @@ export const useAddress = () => {
 };
 
 export const useBalace = () => {
-  const {Tezos, address} = useBeacon();
+  const {tezos, address} = useBeacon();
   const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {
-    if (address) {
-      Tezos.tz
+    if (tezos && address) {
+      tezos.tz
         .getBalance(address)
         .then((balance) => setBalance(balance.toNumber()))
         .catch(console.error);
     }
-  }, [Tezos, address]);
+  }, [tezos, address]);
 
   return balance;
 };
 
 export const useRandomNumber = () => {
-  const { Tezos } = useBeacon();
+  const { tezos } = useBeacon();
   const [randomNumber, setRandomNumber] = useState<number>(0);
 
   useEffect(() => {
-    Tezos.wallet.at("KT18hPvyyVF86AHLkMBKPPHXZb8TFogphbxi")
+    tezos?.wallet.at("KT18hPvyyVF86AHLkMBKPPHXZb8TFogphbxi")
       .then(contract => {
         console.log("contract2", contract);
         return contract.storage();
@@ -49,7 +49,7 @@ export const useRandomNumber = () => {
         console.log("storage2", storage);
         setRandomNumber(storage.toNumber());
       })
-  }, [Tezos]);
+  }, [tezos]);
 
   return randomNumber;
 };
