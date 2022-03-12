@@ -57,6 +57,19 @@ export const useRandomNumber = () => {
 export const useAdminMethod = () => {
   const { contract } = useBeacon();
 
+  const mint = useCallback(() => {
+    return contract?.methods
+      .mint("tz1NvdDA5jtTNmRZD94ZUWP7dBwARStrQcFM", 100000)
+      .send()
+      .then((result) => {
+        console.info("mint", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("mint", error);
+      });
+  }, [contract]);
+
   const readyRace = useCallback(() => {
     return contract?.methods
       .readyRace(5)
@@ -97,6 +110,7 @@ export const useAdminMethod = () => {
   }, [contract]);
 
   return {
+    mint,
     readyRace,
     startRace,
     finishRace,
@@ -136,6 +150,7 @@ export const useMethod = () => {
         console.error("error", error);
       })
       .finally(() => {
+        console.error("finally");
         setLoading(false);
       });
   }, [contract, setLoading]);

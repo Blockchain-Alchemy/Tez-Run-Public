@@ -14,7 +14,7 @@ function BetTicketCard({ storage, userAddress }) {
           return userBets?.get('1');
         })*/
         .then(raceBets => {
-          console.log("raceBets", raceBets)
+          //console.log("raceBets", raceBets)
           return raceBets?.map((ticket: any) => ({
             horseId: ticket.horseId.toNumber(),
             horseName: getHorseName(ticket.horseId.toNumber()),
@@ -23,7 +23,7 @@ function BetTicketCard({ storage, userAddress }) {
           }))
         })
         .then(tickets => {
-          console.log("tickets", tickets)
+          //console.log("tickets", tickets)
           tickets && setBetTickets(tickets)
         })
     }

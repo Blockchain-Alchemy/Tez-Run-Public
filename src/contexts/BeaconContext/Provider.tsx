@@ -24,7 +24,7 @@ export const BeaconProvider: React.FC = ({ children }) => {
   const [contract, setContract] = useState<ContractAbstraction<Wallet> | undefined>(undefined);
 
   useEffect(() => {
-    console.log("create toolkit")
+    console.log("create toolkit", rpcUrl)
     setWallet(undefined);
     setAddress(undefined);
     setConnected(false);
@@ -33,9 +33,9 @@ export const BeaconProvider: React.FC = ({ children }) => {
   }, [rpcUrl, setTezos])
 
   useEffect(() => {
-    if (!wallet)  {
-      console.log("create wallet")
-      const wallet = new BeaconWallet({
+    if (tezos)  {
+      console.log("create wallet", networkType)
+      const _wallet = new BeaconWallet({
         name: "Teo Run",
         preferredNetwork: networkType,
         disableDefaultEvents: true, // Disable all events / UI. This also disables the pairing alert.
@@ -49,11 +49,11 @@ export const BeaconProvider: React.FC = ({ children }) => {
           }
         }
       });
-      console.log("Tezos.setWalletProvider", wallet);
-      tezos?.setWalletProvider(wallet);
-      setWallet(wallet);
+      tezos?.setWalletProvider(_wallet);
+      setWallet(_wallet);
+      console.log("Tezos.setWalletProvider", _wallet, tezos);
     }
-  }, [wallet, setWallet, tezos, networkType])
+  }, [tezos, networkType, setWallet])
 
   const connectWallet = async (): Promise<void> => {
     try {
@@ -62,6 +62,7 @@ export const BeaconProvider: React.FC = ({ children }) => {
       }
       setLoading(true);
 
+      console.log("Request Permission", networkType, rpcUrl, tezos);
       await wallet.requestPermissions({
         network: {
           type: networkType,
