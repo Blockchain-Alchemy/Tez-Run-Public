@@ -1,3 +1,4 @@
+import Network from "network";
 import { useCallback, useEffect, useState } from "react";
 import useBeacon from "./useBeacon";
 
@@ -59,7 +60,7 @@ export const useAdminMethod = () => {
 
   const mint = useCallback(() => {
     return contract?.methods
-      .mint("tz1NvdDA5jtTNmRZD94ZUWP7dBwARStrQcFM", 100000)
+      .mint("tz1hmPbNNcaH91bkrYDeyAbUmYzjbPtJjPQR", 500000)
       .send()
       .then((result) => {
         console.info("mint", result);
@@ -118,7 +119,7 @@ export const useAdminMethod = () => {
 };
 
 export const useMethod = () => {
-  const { contract, setLoading } = useBeacon();
+  const { tezos, contract, setLoading } = useBeacon();
 
   const getStorage = useCallback((setStorage) => {
     return contract?.storage().then((storage) => {
@@ -126,6 +127,27 @@ export const useMethod = () => {
       setStorage(storage);
     });
   }, [contract]);
+
+  const approve = useCallback(() => {
+    console.log("approve")
+    setLoading(true);
+
+    return tezos?.wallet.at(Network.uUSD)
+      .then(contract => {
+        console.info("uUSD.contract", contract);
+        return contract?.methods.approve(Network.contractAddress, 1000000).send()
+      })
+      .then(result => {
+        console.info("approve", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("error", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [tezos, setLoading]);
 
   const placeBet = useCallback((raceId, horseId, payout, amount) => {
     /*if (contract) {
@@ -177,5 +199,6 @@ export const useMethod = () => {
     getStorage,
     placeBet,
     takeReward,
+    approve,
   };
 };
