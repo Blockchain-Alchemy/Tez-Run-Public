@@ -18,7 +18,8 @@ const Network = {
     "https://testnet-tezos.giganode.io"
   ],
 
-  contractAddress: "KT1VStRf2D1hDyWru4mkVdnBjo3VNsW64AQn",
+  contractAddress: "KT1AqeeD6fWCqq6gBnCJXqDRnMZtQSto1JUM",
+    //"KT1VStRf2D1hDyWru4mkVdnBjo3VNsW64AQn",
     //"KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4",
     //"KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4", //"KT1PMZpsAPt3kYPshKmvrU4gve5vXpg1uNit", //"KT1J2UrLek8rXkWPAqR7KSBpRF4Bk13wgLAF",
 
