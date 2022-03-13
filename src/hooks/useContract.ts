@@ -119,7 +119,7 @@ export const useAdminMethod = () => {
 };
 
 export const useMethod = () => {
-  const { tezos, contract, setLoading } = useBeacon();
+  const { tezos, contract, address, setLoading } = useBeacon();
 
   const getStorage = useCallback((setStorage) => {
     return contract?.storage().then((storage) => {
@@ -127,6 +127,32 @@ export const useMethod = () => {
       setStorage(storage);
     });
   }, [contract]);
+
+
+  const getApproval = useCallback(() => {
+    setLoading(true);
+
+    return tezos?.wallet.at(Network.uUSD)
+      .then(contract => {
+        return contract.storage()
+      })
+      .then((storage: any) => {
+        return storage.balances.get(address)
+      })
+      .then(balance => {
+        return balance.approvals.get(Network.contractAddress);
+      })
+      .then(approvals => {
+        return approvals.toNumber();
+      })
+      .catch((error) => {
+        console.error("error", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [tezos, address, setLoading])
+
 
   const approve = useCallback(() => {
     console.log("approve")
@@ -148,6 +174,7 @@ export const useMethod = () => {
         setLoading(false);
       });
   }, [tezos, setLoading]);
+
 
   const placeBet = useCallback((raceId, horseId, payout, amount) => {
     /*if (contract) {
@@ -172,10 +199,10 @@ export const useMethod = () => {
         console.error("error", error);
       })
       .finally(() => {
-        console.error("finally");
         setLoading(false);
       });
   }, [contract, setLoading]);
+
 
   const takeReward = useCallback(() => {
     setLoading(true);
@@ -195,10 +222,12 @@ export const useMethod = () => {
       });
   }, [contract, setLoading]);
 
+
   return {
     getStorage,
     placeBet,
     takeReward,
+    getApproval,
     approve,
   };
 };

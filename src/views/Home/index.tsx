@@ -21,7 +21,7 @@ const Home = () => {
   const { getStorage } = useMethod();
   const { loading, address } = useBeacon();
 
-  const { approve, /*readyRace, startRace*/ } = useMethod();
+  const { getApproval, /*readyRace, startRace*/ } = useMethod();
 
   useEffect(() => {
     getStorage(setStorage);
@@ -29,7 +29,8 @@ const Home = () => {
 
   const handleStartRace = async () => {
     //await startRace();
-    await approve();
+    const approval = await getApproval();
+    console.log("approveState-result", approval);
   }
 
   return (
