@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useState, useCallback} from 'react';
 import BetTicket from './BetTicket'
-import { defaultHorses } from 'hourse'
-import { useInterval } from "hooks/useInterval"
+import {defaultHorses} from 'hourse'
+import {useInterval} from "hooks/useInterval"
 
 function BetTicketCard({ storage, userAddress }) {
   const [betTickes, setBetTickets] = useState([]);

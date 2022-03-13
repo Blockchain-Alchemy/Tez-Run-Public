@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Unity, { UnityContext } from "react-unity-webgl";
-import { useAdminMethod, useMethod } from 'hooks/useContract';
 import useBeacon from 'hooks/useBeacon';
+import useTezrun from 'hooks/useTezrun';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
@@ -18,20 +18,12 @@ const unityContext = new UnityContext({
 
 const Home = () => {
   const [storage, setStorage] = useState<any>({});
-  const { getStorage } = useMethod();
-  const { loading, address } = useBeacon();
-
-  const { getApproval, /*readyRace, startRace*/ } = useMethod();
+  const {getStorage} = useTezrun();
+  const {loading, address} = useBeacon();
 
   useEffect(() => {
     getStorage(setStorage);
   }, [getStorage, setStorage])
-
-  const handleStartRace = async () => {
-    //await startRace();
-    const approval = await getApproval();
-    console.log("approveState-result", approval);
-  }
 
   return (
     <div className="container mx-auto">
@@ -42,13 +34,6 @@ const Home = () => {
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 lg:col-span-2">
             <HorseOdds></HorseOdds>
-            { <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
-              onClick={handleStartRace}
-            >
-              Mint
-            </button>}
           </div>
           <div id="race-footage" className="col-span-12 lg:col-start-3 lg:col-span-8">
             <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl h-full">

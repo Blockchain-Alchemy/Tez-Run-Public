@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useMethod, useRandomNumber } from 'hooks/useContract';
+import useTezrun from 'hooks/useTezrun';
+import {useRandomNumber} from 'hooks/useOracle';
 import useBeacon from 'hooks/useBeacon';
 import useToast from 'hooks/useToast';
 
 const RacePanel = ({ unityContext }) => {
-  const [ raceState, setRaceState] = useState(0);
-  const { connected } = useBeacon();
-  const { takeReward } = useMethod();
-  const { toastError, toastSuccess } = useToast();
+  const [raceState, setRaceState] = useState(0);
+  const {connected} = useBeacon();
+  const {takeReward} = useTezrun();
+  const {toastError, toastSuccess} = useToast();
   const randomNumber = useRandomNumber();
 
   useEffect(() => {

@@ -2,13 +2,13 @@ import { useState } from 'react';
 import Switch from 'components/Switch'
 import useToast from 'hooks/useToast'
 import useBeacon from 'hooks/useBeacon';
-import { useMethod } from 'hooks/useContract';
+import useTezrun from 'hooks/useTezrun';
 import { defaultHorses } from 'hourse';
 
 function PlaceBet() {
-  const { connected } = useBeacon();
-  const { toastError } = useToast();
-  const { placeBet } = useMethod();
+  const {connected} = useBeacon();
+  const {placeBet} = useTezrun();
+  const {toastError} = useToast();
 
   const [horses, setHorses] = useState(defaultHorses);
   const [nativeToken, setNativeToken] = useState(true);
