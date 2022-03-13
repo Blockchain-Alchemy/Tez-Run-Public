@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Switch from 'components/Switch'
 import useToast from 'hooks/useToast'
 import useBeacon from 'hooks/useBeacon';
@@ -7,7 +7,7 @@ import { defaultHorses } from 'hourse';
 
 function PlaceBet() {
   const {connected} = useBeacon();
-  const {placeBet} = useTezrun();
+  const {placeBet, placeBetByToken, getApproval, approve} = useTezrun();
   const {toastError} = useToast();
 
   const [horses, setHorses] = useState(defaultHorses);
@@ -37,7 +37,21 @@ function PlaceBet() {
       return;
     }
 
-    await placeBet(1, horseId, payout, betAmount);
+    console.log("nativeToken", nativeToken)
+    if (!nativeToken) {
+      const approval = await getApproval();
+      if (!approval) {
+        const approved = await approve();
+        if (!approved) {
+          toastError("Validation Error", "Failed to approve");
+          return;
+        }
+      }
+      await placeBetByToken(1, horseId, payout, betAmount);
+    }
+    else {
+      await placeBet(1, horseId, payout, betAmount);
+    }
   };
 
   const onChangeHorseId = (horseId) => {
@@ -57,6 +71,10 @@ function PlaceBet() {
       setPayout(horse.payout * betAmount);
     }
   }
+
+  const tokenName = useMemo(() => {
+    return nativeToken ? 'ꜩ' : 'uUSD';
+  }, [nativeToken])
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl lg:mr-4">
@@ -104,7 +122,7 @@ function PlaceBet() {
             htmlFor="betAmount"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            Bet Amount (ꜩ):
+            Bet Amount ({tokenName}):
           </label>
           <input
             id="betAmount"
@@ -143,7 +161,7 @@ function PlaceBet() {
             htmlFor="payout"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            Payout (ꜩ):
+            Payout ({tokenName}):
           </label>
           <input
             id="payout"

@@ -72,7 +72,27 @@ const useTezrun = () => {
         return result;
       })
       .catch((error) => {
-        console.error("error", error);
+        console.error("placeBet-error", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [contract, setLoading]);
+
+
+  const placeBetByToken = useCallback((raceId, horseId, payout, amount) => {
+    console.log("placeBetByToken", raceId, horseId, payout, amount)
+    setLoading(true);
+
+    return contract?.methods
+      .placeBet(horseId, payout, raceId, 1, amount)
+      .send()
+      .then((result) => {
+        console.info("placeBetByToken", result);
+        return result;
+      })
+      .catch((error) => {
+        console.error("placeBetByToken-error", error);
       })
       .finally(() => {
         setLoading(false);
@@ -102,6 +122,7 @@ const useTezrun = () => {
   return {
     getStorage,
     placeBet,
+    placeBetByToken,
     takeReward,
     getApproval,
     approve,
