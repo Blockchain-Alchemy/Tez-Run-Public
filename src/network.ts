@@ -2,21 +2,29 @@ import { NetworkType } from "@airgap/beacon-sdk";
 
 const Network = {
   networkType: NetworkType.HANGZHOUNET,
+
   rpcUrl: "https://hangzhounet.smartpy.io",//"https://hangzhounet.api.tez.ie",
-  contractAddress: "KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4",
-    //"KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4", //"KT1PMZpsAPt3kYPshKmvrU4gve5vXpg1uNit", //"KT1J2UrLek8rXkWPAqR7KSBpRF4Bk13wgLAF",
-  uUSD: "KT1QEzbqE3pdb1G7TzV3P7gs1A8YtMvdNLWU",
+
   mainnetRpcList: [
     "https://mainnet.api.tez.ie",
     "https://mainnet.smartpy.io",
     "https://rpc.tzbeta.net",
     "https://teznode.letzbake.com",
   ],
+
   hangzhounetRpcList: [
     "https://hangzhounet.smartpy.io",
     "https://hangzhounet.api.tez.ie",
     "https://testnet-tezos.giganode.io"
-  ]
+  ],
+
+  contractAddress: "KT1VStRf2D1hDyWru4mkVdnBjo3VNsW64AQn",
+    //"KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4",
+    //"KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4", //"KT1PMZpsAPt3kYPshKmvrU4gve5vXpg1uNit", //"KT1J2UrLek8rXkWPAqR7KSBpRF4Bk13wgLAF",
+
+  uUSD: "KT1QEzbqE3pdb1G7TzV3P7gs1A8YtMvdNLWU", //"KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW"
+
+  tokenId: 1,
 }
 
 export default Network;

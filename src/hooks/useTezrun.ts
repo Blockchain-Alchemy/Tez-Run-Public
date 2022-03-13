@@ -1,9 +1,10 @@
 import Network from "network";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useBeacon from "./useBeacon";
 
 const useTezrun = () => {
-  const { tezos, contract, address, setLoading } = useBeacon();
+  const {tezos, contract, address, setLoading} = useBeacon();
+  const [approval, setApproval] = useState(undefined);
 
   const getStorage = useCallback((setStorage) => {
     return contract?.storage().then((storage) => {
@@ -16,6 +17,10 @@ const useTezrun = () => {
   const getApproval = useCallback(() => {
     setLoading(true);
 
+    if (approval) {
+      return new Promise(resolve => resolve(approval));
+    }
+
     return tezos?.wallet.at(Network.uUSD)
       .then(contract => {
         return contract.storage()
@@ -26,8 +31,10 @@ const useTezrun = () => {
       .then(balance => {
         return balance.approvals.get(Network.contractAddress);
       })
-      .then(approvals => {
-        return approvals.toNumber();
+      .then(approv => {
+        const result = approv?.toNumber();
+        setApproval(result);
+        return result;
       })
       .catch((error) => {
         console.error("error", error);
@@ -35,7 +42,7 @@ const useTezrun = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [tezos, address, setLoading])
+  }, [tezos, address, approval, setLoading, setApproval])
 
 
   const approve = useCallback(() => {
@@ -62,11 +69,14 @@ const useTezrun = () => {
 
   const placeBet = useCallback((raceId, horseId, payout, amount) => {
     console.log("placeBet", raceId, horseId, payout, amount)
+    console.log("placeBet-contract", contract)
     setLoading(true);
 
     return contract?.methods
-      .placeBet(horseId, payout, raceId)
-      .send({ amount: amount })
+      .placeBet(Number(horseId), Number(payout), Number(raceId))
+      .send({
+        amount: amount,
+      })
       .then((result) => {
         console.info("placeBet", result);
         return result;
@@ -85,7 +95,7 @@ const useTezrun = () => {
     setLoading(true);
 
     return contract?.methods
-      .placeBet(horseId, payout, raceId, 1, amount)
+      .placeBetByToken(amount, horseId, payout, raceId, Network.tokenId)
       .send()
       .then((result) => {
         console.info("placeBetByToken", result);
@@ -111,7 +121,7 @@ const useTezrun = () => {
         return result;
       })
       .catch((error) => {
-        console.error("error", error);
+        console.error("takeReward-error", error);
       })
       .finally(() => {
         setLoading(false);

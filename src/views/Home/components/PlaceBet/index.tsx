@@ -7,7 +7,7 @@ import { defaultHorses } from 'hourse';
 
 function PlaceBet() {
   const {connected} = useBeacon();
-  const {placeBet, placeBetByToken, getApproval, approve} = useTezrun();
+  const {placeBet, takeReward, placeBetByToken, getApproval, approve} = useTezrun();
   const {toastError} = useToast();
 
   const [horses, setHorses] = useState(defaultHorses);
@@ -37,6 +37,11 @@ function PlaceBet() {
       return;
     }
 
+    const horse = horses.find(it => it.id === horseId)
+    if (!horse) {
+      return;
+    }
+
     console.log("nativeToken", nativeToken)
     if (!nativeToken) {
       const approval = await getApproval();
@@ -47,10 +52,10 @@ function PlaceBet() {
           return;
         }
       }
-      await placeBetByToken(1, horseId, payout, betAmount);
+      await placeBetByToken(1, horseId, horse.payout, betAmount);
     }
     else {
-      await placeBet(1, horseId, payout, betAmount);
+      await placeBet(1, horseId, horse.payout, betAmount); //await takeReward();
     }
   };
 

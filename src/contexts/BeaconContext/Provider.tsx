@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react'
 import { ContractAbstraction, TezosToolkit, Wallet } from '@taquito/taquito';
 import { BeaconWallet } from "@taquito/beacon-wallet";
+import { PermissionScope } from "@airgap/beacon-sdk";
 import {
   NetworkType,
   BeaconEvent,
@@ -11,6 +12,11 @@ import { BeaconContextApi } from './types'
 import { useEffect } from 'react';
 
 export const BeaconContext = createContext<BeaconContextApi>({} as BeaconContextApi)
+
+const scopes: PermissionScope[] = [
+  PermissionScope.OPERATION_REQUEST,
+  PermissionScope.SIGN,
+];
 
 export const BeaconProvider: React.FC = ({ children }) => {
   const [tezos, setTezos] = useState<TezosToolkit | undefined>(undefined)
@@ -63,11 +69,12 @@ export const BeaconProvider: React.FC = ({ children }) => {
       setLoading(true);
 
       console.log("Request Permission", networkType, rpcUrl, tezos);
-      await wallet.requestPermissions({
+      await wallet.client.requestPermissions({
         network: {
           type: networkType,
           rpcUrl: rpcUrl,
-        }
+        },
+        scopes
       });
 
       const address = await wallet.getPKH()

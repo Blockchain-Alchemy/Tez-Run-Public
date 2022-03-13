@@ -29,9 +29,9 @@ function BetTicketCard({ storage, userAddress }) {
     }
   }, [storage, userAddress, setBetTickets])
 
-  useInterval(() => {
+  /*useInterval(() => {
     updateTickets()
-  }, 2000)
+  }, 5000)*/
 
   const getHorseName = (horseId) => {
     const horse = defaultHorses.find(it => it.id === horseId);
