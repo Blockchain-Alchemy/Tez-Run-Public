@@ -23,13 +23,15 @@ function BetTicketCard({ userAddress }) {
       })
       .then(raceBets => {
         //console.log("raceBets", raceBets)
-        return raceBets?.map((ticket: any) => ({
-          horseId: ticket.horseId.toNumber(),
-          horseName: getHorseName(ticket.horseId.toNumber()),
-          betAmount: convertTezos(ticket.amount.toNumber()),
-          payout: ticket.payout.toNumber(),
-          token: ticket.token.toNumber(),
-        }))
+        return raceBets
+          ?.filter((ticket: any) => !ticket.rewarded)
+          .map((ticket: any) => ({
+            horseId: ticket.horseId.toNumber(),
+            horseName: getHorseName(ticket.horseId.toNumber()),
+            betAmount: convertTezos(ticket.amount.toNumber()),
+            payout: ticket.payout.toNumber(),
+            token: ticket.token.toNumber(),
+          }))
       })
       .then(tickets => {
         console.log("tickets", tickets)
