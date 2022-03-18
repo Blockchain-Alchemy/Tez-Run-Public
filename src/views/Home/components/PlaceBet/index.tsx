@@ -3,9 +3,10 @@ import Switch from 'components/Switch'
 import useToast from 'hooks/useToast'
 import useBeacon from 'hooks/useBeacon';
 import useTezrun from 'hooks/useTezrun';
-import { defaultHorses } from 'hourse';
+import {defaultHorses} from 'hourse';
+import {RaceState} from 'config';
 
-function PlaceBet() {
+function PlaceBet({ raceState }) {
   const {connected} = useBeacon();
   const {placeBet, takeReward, placeBetByToken, getApproval, approve} = useTezrun();
   const {toastError} = useToast();
@@ -76,6 +77,14 @@ function PlaceBet() {
       setPayout(horse.payout * betAmount);
     }
   }
+
+  const betButtonStyle = useMemo(() => {
+    if (raceState !== RaceState.Ready) {
+      return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
+    } else {
+      return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
+    }
+  }, [raceState]);
 
   const tokenName = useMemo(() => {
     return nativeToken ? 'ꜩ' : 'uUSD';
@@ -182,7 +191,8 @@ function PlaceBet() {
 
       <div className="flex justify-center w-full py-1.5 mt-2">
         <button
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
+          className={betButtonStyle}
+          disabled={raceState !== RaceState.Ready}
           onClick={handleBet}
         >
           Bet

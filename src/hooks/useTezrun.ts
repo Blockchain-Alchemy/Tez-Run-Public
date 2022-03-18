@@ -1,17 +1,15 @@
-import Network from "network";
-import { useCallback, useState } from "react";
+import Network from "config";
+import {useCallback, useState} from "react";
 import useBeacon from "./useBeacon";
 
 const useTezrun = () => {
   const {tezos, contract, address, setLoading} = useBeacon();
   const [approval, setApproval] = useState(undefined);
 
-  const getStorage = useCallback((setStorage) => {
-    return contract?.storage().then((storage) => {
-      console.log("storage", storage);
-      setStorage(storage);
-    });
-  }, [contract]);
+
+  const getStorage = useCallback(() => {
+    return contract?.storage();
+  }, [contract])
 
 
   const getApproval = useCallback(() => {
@@ -129,13 +127,22 @@ const useTezrun = () => {
   }, [contract, setLoading]);
 
 
+  const getWinner = useCallback(() => {
+    return contract?.storage().then((storage: any) => {
+      //console.log("storage", storage);
+      return storage.winner?.toNumber();
+    });
+  }, [contract])
+
+
   return {
-    getStorage,
     placeBet,
     placeBetByToken,
     takeReward,
     getApproval,
     approve,
+    getStorage,
+    getWinner,
   };
 };
 

@@ -8,10 +8,10 @@ export const useRandomNumber = () => {
   useEffect(() => {
     tezos?.wallet.at("KT18hPvyyVF86AHLkMBKPPHXZb8TFogphbxi")
       .then(contract => {
-        return contract.storage();
+        return contract?.storage();
       })
       .then((storage: any) => {
-        setRandomNumber(storage.toNumber());
+        setRandomNumber(storage?.toNumber());
       })
   }, [tezos]);
 

@@ -46,9 +46,10 @@ const useAdmin = () => {
   }, [contract]);
 
 
-  const finishRace = useCallback(() => {
+  const finishRace = useCallback((winner) => {
+    console.log("finishRace:winner=", winner)
     return contract?.methods
-      .takeReward()
+      .finishRace(winner)
       .send()
       .then((result) => {
         console.info("finishRace", result);

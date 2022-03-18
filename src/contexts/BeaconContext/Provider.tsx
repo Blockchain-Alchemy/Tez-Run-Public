@@ -7,7 +7,7 @@ import {
   BeaconEvent,
   defaultEventCallbacks
 } from "@airgap/beacon-sdk";
-import Network from "network";
+import Network from "config";
 import { BeaconContextApi } from './types'
 import { useEffect } from 'react';
 

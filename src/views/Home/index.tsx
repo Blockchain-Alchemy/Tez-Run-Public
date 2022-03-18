@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Unity, { UnityContext } from "react-unity-webgl";
+import {RaceState} from 'config';
 import useBeacon from 'hooks/useBeacon';
-import useTezrun from 'hooks/useTezrun';
 import HorseOdds from './components/HorseOdds';
 import RaceTimer from './components/RaceTimer';
 import PlaceBet from './components/PlaceBet';
@@ -17,13 +17,8 @@ const unityContext = new UnityContext({
 });
 
 const Home = () => {
-  const [storage, setStorage] = useState<any>({});
-  const {getStorage} = useTezrun();
   const {loading, address} = useBeacon();
-
-  useEffect(() => {
-    getStorage(setStorage);
-  }, [getStorage, setStorage])
+  const [raceState, setRaceState] = useState(RaceState.Ready);
 
   return (
     <div className="container mx-auto">
@@ -41,21 +36,22 @@ const Home = () => {
             </div>
           </div>
           <div id="race-state-card" className="col-span-12 lg:col-start-11 lg:col-span-2">
-            <RaceTimer storage={storage}></RaceTimer>
-            <RacePanel unityContext={unityContext}></RacePanel>
+            <RaceTimer></RaceTimer>
+            <RacePanel
+              unityContext={unityContext}
+              raceState={raceState}
+              setRaceState={setRaceState}
+            ></RacePanel>
           </div>
         </div>
       </div>
       <div className="px-4 my-4 md:mt-8">
         <div className="grid grid-cols-12 gap-4">
           <div id="place-bet-card" className="col-span-12 md-col-span-6 lg:col-span-3">
-            <PlaceBet></PlaceBet>
+            <PlaceBet raceState={raceState}></PlaceBet>
           </div>
           <div className="col-span-12 md-col-span-6 lg:col-start-4 lg:col-span-9">
-            <BetTicketCard
-              storage={storage}
-              userAddress={address}
-            ></BetTicketCard>
+            <BetTicketCard userAddress={address}></BetTicketCard>
           </div>
         </div>
       </div>

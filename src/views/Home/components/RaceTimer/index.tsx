@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import useTezrun from 'hooks/useTezrun';
 
-function RaceTimer({ storage }) {
+function RaceTimer() {
   const [remainTime, setRemainTime] = useState(0);
+  const {getStorage} = useTezrun();
 
   useEffect(() => {
-    if (storage) {
+    getStorage()?.then((storage: any) => {
       const { startTime } = storage;
       if (startTime) {
         console.log("startTime", moment(startTime).format("YYYY-MM-DD HH:mm:ss"))
         const time = moment(startTime).diff(moment(), 'seconds');
         setRemainTime(time > 0 ? time : 0);
       }
-    }
-  }, [storage])
+    })
+  }, [getStorage])
 
   // Start timer
   setTimeout(() => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NetworkType } from "@airgap/beacon-sdk";
 import ConnectButton from 'components/ConnectWallet';
 import Switch from 'components/Switch'
-import network from 'network'
+import network from 'config'
 import useBeacon from 'hooks/useBeacon';
 
 const Menu = ({ children }): JSX.Element => {
