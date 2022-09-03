@@ -5,6 +5,7 @@ import useBeacon from 'hooks/useBeacon';
 import useTezrun from 'hooks/useTezrun';
 import {defaultHorses} from 'hourse';
 import {RaceState} from 'config';
+import {updateBetting} from 'services';
 
 function PlaceBet({ raceState }) {
   const {connected} = useBeacon();
@@ -43,6 +44,7 @@ function PlaceBet({ raceState }) {
       return;
     }
 
+    const raceId = 1;
     console.log("nativeToken", nativeToken)
     if (!nativeToken) {
       const approval = await getApproval();
@@ -53,11 +55,13 @@ function PlaceBet({ raceState }) {
           return;
         }
       }
-      await placeBetByToken(1, horseId, horse.payout, betAmount);
+      await placeBetByToken(raceId, horseId, horse.payout, betAmount);
     }
     else {
-      await placeBet(1, horseId, horse.payout, betAmount); //await takeReward();
+      await placeBet(raceId, horseId, horse.payout, betAmount); //await takeReward();
     }
+
+    await updateBetting(raceId, horseId, horse.payout, betAmount)
   };
 
   const onChangeHorseId = (horseId) => {

@@ -1,5 +1,7 @@
 import { NetworkType } from "@airgap/beacon-sdk";
 
+export const API_BASE_URL = "http://localhost:8080";
+
 export const RaceState = {
   None: 0,
   Ready: 1,
