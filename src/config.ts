@@ -8,9 +8,9 @@ export const RaceState = {
 }
 
 const Network = {
-  networkType: NetworkType.HANGZHOUNET,
+  networkType: NetworkType.JAKARTANET,
 
-  rpcUrl: "https://hangzhounet.smartpy.io",//"https://hangzhounet.api.tez.ie",
+  rpcUrl: "https://jakartanet.tezos.marigold.dev",
 
   mainnetRpcList: [
     "https://mainnet.api.tez.ie",
@@ -20,19 +20,12 @@ const Network = {
   ],
 
   hangzhounetRpcList: [
-    "https://hangzhounet.smartpy.io",
-    "https://hangzhounet.api.tez.ie",
-    "https://testnet-tezos.giganode.io"
+    "https://jakartanet.tezos.marigold.dev",
   ],
 
-  contractAddress: "KT1X1vmBrGb4YHNSDPzYX5QGmNDkTrfeQmH1",
-    //"KT1BsUwGoXZ16m3ssHgR8tKmcJdpYVk2ypvS",
-    //"KT1AqeeD6fWCqq6gBnCJXqDRnMZtQSto1JUM",
-    //"KT1VStRf2D1hDyWru4mkVdnBjo3VNsW64AQn",
-    //"KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4",
-    //"KT18feYwzdedqF3pxv6RGNrnCjqbgkTjM1Y4", //"KT1PMZpsAPt3kYPshKmvrU4gve5vXpg1uNit", //"KT1J2UrLek8rXkWPAqR7KSBpRF4Bk13wgLAF",
+  contractAddress: "KT1RkJcLoyLEfvt58dCDswae18naGBXo3XqK",
 
-  uUSD: "KT1QEzbqE3pdb1G7TzV3P7gs1A8YtMvdNLWU", //"KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW"
+  uUSD: "KT1Xf83TTyDDxYxr1x2jKFjHXcCsD4RSnaE5",
 
   tokenId: 1,
 }

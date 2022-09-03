@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
 import useTezrun from 'hooks/useTezrun';
-import {useRandomNumber} from 'hooks/useOracle';
 import useBeacon from 'hooks/useBeacon';
 import useAdmin from 'hooks/useAdmin';
 import useToast from 'hooks/useToast';
@@ -14,7 +13,6 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
   const {startRace, finishRace} = useAdmin();
   const {takeReward} = useTezrun();
   const {toastError, toastSuccess} = useToast();
-  const randomNumber = useRandomNumber();
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const [finished, setFinished] = useState(false);
   const [winner, setWinner] = useState<undefined | number>(undefined);
@@ -42,22 +40,20 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
   };
 
   useEffect(() => {
-    if (randomNumber) {
-      console.log("Initialize Unity Events")
-      unityContext.on("FinishedRace", function (horse: string, time: string) {
-        handleFinishRace(horse, time);
-      });
-    }
+    console.log("Initialize Unity Events")
+    unityContext.on("FinishedRace", function (horse: string, time: string) {
+      handleFinishRace(horse, time);
+    });
   });
   
 
   const startButtonStyle = useMemo(() => {
-    if (!randomNumber || raceState === RaceState.Started) {
+    if (raceState === RaceState.Started) {
       return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
     } else {
       return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
     }
-  }, [randomNumber, raceState]);
+  }, [raceState]);
 
   const rewardButtonStyle = useMemo(() => {
     if (raceState !== RaceState.Finished) {
@@ -110,7 +106,7 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
         type="button"
         className={startButtonStyle}
         onClick={handleStartRace}
-        disabled={!randomNumber}
+        disabled={false}
       >
         Start Race
       </button>
@@ -118,7 +114,7 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
         type="button"
         className={rewardButtonStyle + " mt-4"}
         onClick={handleTakeReward}
-        disabled={!randomNumber}
+        disabled={false}
       >
         Take Reward
       </button>
