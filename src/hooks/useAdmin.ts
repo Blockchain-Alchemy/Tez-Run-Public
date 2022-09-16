@@ -20,7 +20,7 @@ const useAdmin = () => {
   
   const readyRace = useCallback(() => {
     return contract?.methods
-      .readyRace(5)
+      .ready_race(5)
       .send()
       .then((result) => {
         console.info("readyRace", result);
@@ -34,7 +34,7 @@ const useAdmin = () => {
 
   const startRace = useCallback(() => {
     return contract?.methods
-      .startRace()
+      .start_race(0)
       .send()
       .then((result) => {
         console.info("startRace", result);

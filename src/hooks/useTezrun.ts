@@ -71,7 +71,7 @@ const useTezrun = () => {
     setLoading(true);
 
     return contract?.methods
-      .placeBet(Number(horseId), Number(payout), Number(raceId))
+      .betting(Number(horseId), Number(payout), Number(raceId))
       .send({
         amount: amount,
       })

@@ -10,7 +10,7 @@ import {defaultHorses} from 'hourse';
 
 const RacePanel = ({ unityContext, raceState, setRaceState }) => {  
   const {connected} = useBeacon();
-  const {startRace, finishRace} = useAdmin();
+  const {readyRace, startRace, finishRace} = useAdmin();
   const {takeReward} = useTezrun();
   const {toastError, toastSuccess} = useToast();
   const [resultHorses, setResultHorses] = useState<any[]>([]);
@@ -63,6 +63,16 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
     }
   }, [raceState]);
 
+  const handleReadyRace = async () => {
+    console.log("readyRace")
+    if (!connected) {
+      toastError("Error", "Please Connect Your Wallet");
+      return;
+    }
+
+    console.log("call ready race contract");
+    await readyRace();
+  }
 
   const handleStartRace = async () => {
     console.log("startRace")
@@ -102,6 +112,14 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
 
   return (
     <div className="text-center mt-6">
+      <button
+        type="button"
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
+        onClick={handleReadyRace}
+        disabled={false}
+      >
+        Ready Race
+      </button>
       <button
         type="button"
         className={startButtonStyle}
