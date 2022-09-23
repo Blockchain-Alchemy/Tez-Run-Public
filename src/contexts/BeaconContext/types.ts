@@ -10,6 +10,7 @@ export interface BeaconContextApi {
   address: string | undefined
   contract: ContractAbstraction<Wallet> | undefined
   rpcUrl: string
+  networkType: NetworkType
   connectWallet: () => Promise<void>
   disconnectWallet: () => Promise<void>
   setLoading: (loading: boolean) => void
