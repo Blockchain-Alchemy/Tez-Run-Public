@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { NetworkType } from "@airgap/beacon-sdk";
 import ConnectButton from 'components/ConnectWallet';
 import Switch from 'components/Switch'
-import network from 'config'
+import { Mainnet, Testnet } from 'config'
 import useBeacon from 'hooks/useBeacon';
 
 const Menu = ({ children }): JSX.Element => {
   const [testNet, setTestNet] = useState(true);
-  const [rpcList, setRpcList] = useState(network.hangzhounetRpcList);
+  const [rpcList, setRpcList] = useState(Testnet.RpcList);
   const {rpcUrl, setRpcUrl, setNetworkType} = useBeacon();
   
   const changeNetwork = (isTestnet) => {
@@ -23,7 +23,7 @@ const Menu = ({ children }): JSX.Element => {
   }
 
   const getRpcList = (isTestnet) => {
-    return isTestnet ? network.hangzhounetRpcList : network.mainnetRpcList; 
+    return isTestnet ? Testnet.RpcList : Mainnet.RpcList; 
   }
 
   return (

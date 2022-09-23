@@ -26,7 +26,6 @@ export const BeaconProvider: React.FC = ({ children }) => {
     Testnet.NetworkType
   );
   const [rpcUrl, setRpcUrl] = useState(Testnet.RpcUrl);
-
   const [loading, setLoading] = useState(false);
   const [wallet, setWallet] = useState<BeaconWallet | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
