@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 function BetTicket({ winner, ticket }) {
 
   const unitName = useMemo(() => {
-    console.log("ticket", ticket)
     return (ticket?.token === 0) ? 'ꜩ' : 'uUSD'
   }, [ticket])
 

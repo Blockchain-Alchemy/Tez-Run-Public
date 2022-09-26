@@ -19,18 +19,17 @@ function BetTicketCard({ userAddress }) {
         return getStorage();
       })
       .then((storage: any) => {
-        return storage?.bets?.get(userAddress);
+        return storage?.race.bets;
       })
       .then(raceBets => {
-        //console.log("raceBets", raceBets)
         return raceBets
-          ?.filter((ticket: any) => !ticket.rewarded)
+          ?.filter((ticket: any) => ticket.address === userAddress)
           .map((ticket: any) => ({
-            horseId: ticket.horseId.toNumber(),
-            horseName: getHorseName(ticket.horseId.toNumber()),
+            horseId: ticket.horse_id.toNumber(),
+            horseName: getHorseName(ticket.horse_id.toNumber()),
             betAmount: convertTezos(ticket.amount.toNumber()),
             payout: ticket.payout.toNumber(),
-            token: ticket.token.toNumber(),
+            token: 0,//ticket.token.toNumber(),
           }))
       })
       .then(tickets => {
