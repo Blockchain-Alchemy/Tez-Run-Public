@@ -13,12 +13,8 @@ function BetTicketCard({ userAddress }) {
     if (!userAddress) {
       return
     }
-    return getWinner()
-      ?.then(winner => {
-        winner && setWinner(winner);
-        return getStorage();
-      })
-      .then((storage: any) => {
+    return getStorage()
+      ?.then((storage: any) => {
         return storage?.race.bets;
       })
       .then(raceBets => {
@@ -33,12 +29,10 @@ function BetTicketCard({ userAddress }) {
           }))
       })
       .then(tickets => {
-        console.log("tickets", tickets)
         tickets && setBetTickets(tickets)
         return getWinner();
       })
       .then(winner => {
-        console.log("winner:", winner)
         setWinner(winner);
       })
   }, [userAddress, getStorage, setBetTickets, getWinner, setWinner])
