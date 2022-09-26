@@ -3,7 +3,7 @@ import { BeaconWallet } from "@taquito/beacon-wallet";
 import { NetworkType } from "@airgap/beacon-sdk";
 
 export interface BeaconContextApi {
-  tezos: TezosToolkit | undefined
+  tezos: TezosToolkit
   wallet: BeaconWallet | undefined
   loading: boolean
   connected: boolean
@@ -11,7 +11,7 @@ export interface BeaconContextApi {
   contract: ContractAbstraction<Wallet> | undefined
   rpcUrl: string
   networkType: NetworkType
-  connectWallet: () => Promise<void>
+  connectWallet: () => void
   disconnectWallet: () => Promise<void>
   setLoading: (loading: boolean) => void
   setNetworkType: (networkType: NetworkType) => void

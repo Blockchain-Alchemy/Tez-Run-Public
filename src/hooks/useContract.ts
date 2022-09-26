@@ -24,7 +24,7 @@ export const useBalace = () => {
   const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {
-    if (tezos && address) {
+    if (address) {
       tezos.tz
         .getBalance(address)
         .then((balance) => setBalance(balance.toNumber()))

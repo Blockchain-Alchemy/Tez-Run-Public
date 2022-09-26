@@ -14,7 +14,7 @@ const Menu = ({ children }): JSX.Element => {
     console.log("handleChangeNet", isTestnet)
 
     setTestNet(isTestnet);
-    setNetworkType(isTestnet ? NetworkType.HANGZHOUNET : NetworkType.MAINNET);
+    setNetworkType(isTestnet ? Testnet.NetworkType : Mainnet.NetworkType);
 
     const rpcs = getRpcList(isTestnet);
     setRpcList(rpcs);

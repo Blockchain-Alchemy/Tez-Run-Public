@@ -1,12 +1,8 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useCallback } from "react";
 import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import { PermissionScope } from "@airgap/beacon-sdk";
-import {
-  NetworkType,
-  BeaconEvent,
-  defaultEventCallbacks,
-} from "@airgap/beacon-sdk";
+import { BeaconEvent, defaultEventCallbacks } from "@airgap/beacon-sdk";
 import { Testnet, Mainnet } from "config";
 import { BeaconContextApi } from "./types";
 import { useEffect } from "react";
@@ -21,10 +17,10 @@ const scopes: PermissionScope[] = [
 ];
 
 export const BeaconProvider: React.FC = ({ children }) => {
-  const [tezos, setTezos] = useState<TezosToolkit | undefined>(undefined);
-  const [networkType, setNetworkType] = useState<NetworkType>(
-    Testnet.NetworkType
+  const [tezos, setTezos] = useState<TezosToolkit>(
+    new TezosToolkit(Testnet.RpcUrl)
   );
+  const [networkType, setNetworkType] = useState(Testnet.NetworkType);
   const [rpcUrl, setRpcUrl] = useState(Testnet.RpcUrl);
   const [loading, setLoading] = useState(false);
   const [wallet, setWallet] = useState<BeaconWallet | undefined>(undefined);
@@ -35,8 +31,6 @@ export const BeaconProvider: React.FC = ({ children }) => {
   >(undefined);
 
   useEffect(() => {
-    console.log("create toolkit", rpcUrl);
-    setWallet(undefined);
     setAddress(undefined);
     setConnected(false);
     setContract(undefined);
@@ -44,8 +38,12 @@ export const BeaconProvider: React.FC = ({ children }) => {
   }, [rpcUrl, setTezos]);
 
   useEffect(() => {
-    if (tezos) {
-      console.log("Create Wallet", networkType);
+    const createWallet = async () => {
+      if (wallet) {
+        await wallet.client.destroy();
+        await wallet.disconnect();
+      }
+
       const _wallet = new BeaconWallet({
         name: "Teo Run",
         preferredNetwork: networkType,
@@ -60,54 +58,65 @@ export const BeaconProvider: React.FC = ({ children }) => {
           },
         },
       });
-      tezos?.setWalletProvider(_wallet);
+
+      tezos.setWalletProvider(_wallet);
       setWallet(_wallet);
-      console.log("Tezos.setWalletProvider", _wallet, tezos);
-    }
-  }, [tezos, networkType, setWallet]);
+    };
+    createWallet();
+  }, [tezos]);
 
-  const connectWallet = async (): Promise<void> => {
-    try {
-      if (!wallet || !tezos) {
-        return;
+  useEffect(() => {
+    const getContracts = async () => {
+      if (connected) {
+        const contractAddress =
+          networkType === Testnet.NetworkType ? Testnet.TezRun : Mainnet.TezRun;
+        const contract = await tezos.wallet.at(contractAddress);
+        console.log("TezRun Contract", contract);
+        setContract(contract);
       }
-      setLoading(true);
+    };
+    getContracts();
+  }, [tezos, connected]);
 
-      console.log("Request Permission", networkType, rpcUrl, tezos);
-      await wallet.client.requestPermissions({
-        network: {
-          type: networkType,
-          rpcUrl: rpcUrl,
-        },
-        scopes,
-      });
+  const connectWallet = useCallback(() => {
+    const connect = async () => {
+      if (wallet) {
+        try {
+          setLoading(true);
 
-      const address = await wallet.getPKH();
-      console.log("userAddress", address);
-      setAddress(address);
+          console.log("Request Permission", networkType, rpcUrl);
+          await wallet.client.requestPermissions({
+            network: {
+              type: networkType,
+              rpcUrl: rpcUrl,
+            },
+            scopes,
+          });
 
-      const contractAddress =
-        networkType === Testnet.NetworkType ? Testnet.TezRun : Mainnet.TezRun;
-      const contract = await tezos.wallet.at(contractAddress);
-      console.log("TezRun Contract", contract);
-      setContract(contract);
+          const address = await wallet.getPKH();
+          console.log("userAddress", address);
+          setAddress(address);
 
-      setConnected(true);
-    } catch (error) {
-      console.log(error);
-      setConnected(false);
-    } finally {
-      setLoading(false);
-    }
-  };
+          setConnected(true);
+        } catch (error) {
+          console.error(error);
+          setConnected(false);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    connect();
+  }, [tezos, wallet, networkType, rpcUrl]);
 
   const disconnectWallet = async (): Promise<void> => {
     setConnected(false);
-    /*if (wallet) {
-      await wallet.client.removeAllAccounts();
-      await wallet.client.removeAllPeers();
+    if (wallet) {
+      //await wallet.client.removeAllAccounts();
+      //await wallet.client.removeAllPeers();
       await wallet.client.destroy();
-    }*/
+      await wallet.disconnect();
+    }
   };
 
   return (
