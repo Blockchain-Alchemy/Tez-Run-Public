@@ -30,6 +30,6 @@ export const Testnet = {
   RpcList: [
     "https://jakartanet.tezos.marigold.dev"
   ],
-  TezRun: "KT1LkXjxtjBGhy6GxikbFxtWeB6djjMh9nsW",
+  TezRun: "KT1KLyMmk1NG9KhyDmU8TTvebcLTXw16ykuE",
   uUSD: "KT1Xf83TTyDDxYxr1x2jKFjHXcCsD4RSnaE5",
 };

@@ -48,19 +48,21 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
   
 
   const startButtonStyle = useMemo(() => {
-    if (raceState === RaceState.Started) {
+    return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36";
+    /*if (raceState === RaceState.Started) {
       return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
     } else {
       return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
-    }
+    }*/
   }, [raceState]);
 
   const rewardButtonStyle = useMemo(() => {
-    if (raceState !== RaceState.Finished) {
+    return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
+    /*if (raceState !== RaceState.Finished) {
       return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
     } else {
       return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
-    }
+    }*/
   }, [raceState]);
 
   const handleReadyRace = async () => {
@@ -109,9 +111,9 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
   }
 
   const handleTakeReward = async () => {
-    if (raceState !== RaceState.Finished) {
-      return;
-    }
+    //if (raceState !== RaceState.Finished) {
+    //  return;
+    //}
 
     console.log("TakeReward", winner)
     if (winner) {

@@ -15,7 +15,7 @@ function PlaceBet({ raceState }) {
   const [horses, setHorses] = useState(defaultHorses);
   const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
-  const [betAmount, setBetAmount] = useState(0.8);
+  const [betAmount, setBetAmount] = useState(50);
   const [selectedPlace, setSelectedPlace] = useState("win");
   const [payout, setPayout] = useState(0);
 
@@ -58,7 +58,7 @@ function PlaceBet({ raceState }) {
       await placeBetByToken(raceId, horseId, horse.payout, betAmount);
     }
     else {
-      await placeBet(raceId, horseId, horse.payout, betAmount); //await takeReward();
+      await placeBet(raceId, horseId, horse.payout, 0.05);
     }
 
     await updateBetting(raceId, horseId, horse.payout, betAmount)
@@ -83,11 +83,12 @@ function PlaceBet({ raceState }) {
   }
 
   const betButtonStyle = useMemo(() => {
-    if (raceState !== RaceState.Ready) {
+    return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36";
+    /*if (raceState !== RaceState.Ready) {
       return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
     } else {
       return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
-    }
+    }*/
   }, [raceState]);
 
   const tokenName = useMemo(() => {
