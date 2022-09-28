@@ -17,7 +17,7 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
   const [finished, setFinished] = useState(false);
   const [winner, setWinner] = useState<undefined | number>(undefined);
  
-  const handleFinishRace = async (name: string, time: string) => {
+  const onFinishRace = async (name: string, time: string) => {
     setRaceState(RaceState.Finished);
     
     const index = resultHorses.findIndex(h => h.name === name);
@@ -42,7 +42,7 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
   useEffect(() => {
     console.log("Initialize Unity Events")
     unityContext.on("FinishedRace", function (horse: string, time: string) {
-      handleFinishRace(horse, time);
+      //onFinishRace(horse, time);
     });
   });
   
@@ -93,17 +93,32 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
     setRaceState(RaceState.Started);
   }
 
+  const handleFinishRace = async () => {
+    console.log("finishRace")
+    if (!connected) {
+      toastError("Error", "Please Connect Your Wallet");
+      return;
+    }
+
+    console.log("call finish race contract");
+    await finishRace(3);
+
+    setFinished(true);
+    setWinner(3);
+    setRaceState(RaceState.Finished);
+  }
+
   const handleTakeReward = async () => {
     if (raceState !== RaceState.Finished) {
       return;
     }
 
-    //console.log("~~~~~~~~~~~~~winner", winner)
+    console.log("TakeReward", winner)
     if (winner) {
-      if (!finished) {
-        setFinished(true);
-        await finishRace(winner);
-      }
+      // if (!finished) {
+      //   setFinished(true);
+      //   await finishRace(winner);
+      // }
 
       await takeReward();
       toastSuccess("Success", "You got reward successfully");
@@ -127,6 +142,14 @@ const RacePanel = ({ unityContext, raceState, setRaceState }) => {
         disabled={false}
       >
         Start Race
+      </button>
+      <button
+        type="button"
+        className={startButtonStyle + " mt-4"}
+        onClick={handleFinishRace}
+        disabled={false}
+      >
+        Finish Race
       </button>
       <button
         type="button"

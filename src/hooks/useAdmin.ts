@@ -49,7 +49,7 @@ const useAdmin = () => {
   const finishRace = useCallback((winner) => {
     console.log("finishRace:winner=", winner)
     return contract?.methods
-      .finishRace(winner)
+      .finish_race(winner)
       .send()
       .then((result) => {
         console.info("finishRace", result);
