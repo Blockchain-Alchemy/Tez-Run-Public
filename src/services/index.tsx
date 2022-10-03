@@ -30,7 +30,7 @@ export const getTickets = (address: string) => {
   });
 }
 
-export const finshRace = () => {
+export const finishRace = () => {
   const url = `${API_BASE_URL}/api/v1/tezrun/race/finish`;
   return axios.get(url).then((res) => {
     return res.data;

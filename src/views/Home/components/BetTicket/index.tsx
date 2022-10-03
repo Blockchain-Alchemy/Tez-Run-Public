@@ -5,10 +5,18 @@ import { useInterval } from "hooks/useInterval";
 import { getTickets } from "services";
 import useTezrun from "hooks/useTezrun";
 
+const getHorseName = (horseId) => {
+  const horse = defaultHorses.find((it) => it.id === horseId);
+  return horse?.name;
+};
+
+const convertTezos = (mutez) => {
+  return mutez / 1000000;
+};
+
 function BetTicketCard({ userAddress }) {
   const [betTickes, setBetTickets] = useState([]);
   const [winner, setWinner] = useState(undefined);
-  const { getStorage, getWinner } = useTezrun();
 
   /*const updateTickets = useCallback(() => {
     if (!userAddress) {
@@ -41,7 +49,6 @@ function BetTicketCard({ userAddress }) {
   const updateTickets = useCallback(() => {
     getTickets(userAddress)
       .then((tickets) => {
-        console.log("tickets", tickets);
         return tickets.map((ticket: any) => ({
           horseId: ticket.horse_id,
           horseName: getHorseName(ticket.horse_id),
@@ -61,15 +68,6 @@ function BetTicketCard({ userAddress }) {
   useInterval(() => {
     updateTickets();
   }, 5000);
-
-  const getHorseName = (horseId) => {
-    const horse = defaultHorses.find((it) => it.id === horseId);
-    return horse?.name;
-  };
-
-  const convertTezos = (mutez) => {
-    return mutez / 1000000;
-  };
 
   return (
     <div className="flex gap-4">
