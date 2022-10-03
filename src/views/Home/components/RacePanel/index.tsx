@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import useTezrun from "hooks/useTezrun";
 import useToast from "hooks/useToast";
+import useBeacon from "hooks/useBeacon";
 import { defaultHorses } from "hourse";
-import { finishRace } from "services";
+import { finishRace, getRewards } from "services";
 
 const RacePanel = ({ unityContext }) => {
+  const { address } = useBeacon();
   const { takeReward } = useTezrun();
   const { toastSuccess } = useToast();
   const [resultHorses, setResultHorses] = useState<any[]>([]);
@@ -40,10 +42,21 @@ const RacePanel = ({ unityContext }) => {
   }, [unityContext]);
 
   const handleTakeReward = async () => {
-    console.log("TakeReward", winner);
-    if (winner) {
-      await takeReward();
-      toastSuccess("Success", "You got reward successfully");
+    console.log("TakeReward", address);
+    try {
+      if (address) {
+        const result = await getRewards(address);
+        console.log('rewards', result)
+        if (result && result.mutez) {
+          const rewards = Number(result.mutez);
+          if (rewards > 0) {
+            await takeReward();
+            toastSuccess("Success", "You got reward successfully");
+          }
+        }
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
