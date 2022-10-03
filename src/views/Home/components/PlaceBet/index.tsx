@@ -4,8 +4,6 @@ import useToast from 'hooks/useToast'
 import useBeacon from 'hooks/useBeacon';
 import useTezrun from 'hooks/useTezrun';
 import {defaultHorses} from 'hourse';
-import {RaceState} from 'config';
-//import {updateBetting} from 'services';
 
 function PlaceBet({ raceState }) {
   const {connected} = useBeacon();

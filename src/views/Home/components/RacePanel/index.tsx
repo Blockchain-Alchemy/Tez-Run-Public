@@ -2,19 +2,16 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import useTezrun from "hooks/useTezrun";
 import useToast from "hooks/useToast";
-import { RaceState } from "config";
 import { defaultHorses } from "hourse";
 import { finishRace } from "services";
 
-const RacePanel = ({ unityContext, raceState, setRaceState }) => {
+const RacePanel = ({ unityContext }) => {
   const { takeReward } = useTezrun();
   const { toastSuccess } = useToast();
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const [winner, setWinner] = useState<undefined | number>(undefined);
 
   const onFinishRace = async (name: string, time: string) => {
-    setRaceState(RaceState.Finished);
-
     const index = resultHorses.findIndex((h) => h.name === name);
     if (index < 0) {
       resultHorses.push({ name, time });

@@ -2,13 +2,6 @@ import { NetworkType } from "@airgap/beacon-sdk";
 
 export const API_BASE_URL = "https://grat.fun";
 
-export const RaceState = {
-  None: 0,
-  Ready: 1,
-  Started: 2,
-  Finished: 3,
-};
-
 export const Admin = "tz1bxwduvRwBhq59FmThGKD5ceDFadr57JTq";
 
 export const Mainnet = {
