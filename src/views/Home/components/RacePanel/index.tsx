@@ -53,6 +53,8 @@ const RacePanel = ({ unityContext }) => {
             await takeReward();
             toastSuccess("Success", "You got reward successfully");
           }
+        } else {
+          
         }
       }
     } catch (e) {
