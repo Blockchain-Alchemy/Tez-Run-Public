@@ -5,7 +5,7 @@ import useBeacon from 'hooks/useBeacon';
 import useTezrun from 'hooks/useTezrun';
 import {defaultHorses} from 'hourse';
 import {RaceState} from 'config';
-import {updateBetting} from 'services';
+//import {updateBetting} from 'services';
 
 function PlaceBet({ raceState }) {
   const {connected} = useBeacon();
@@ -20,7 +20,6 @@ function PlaceBet({ raceState }) {
   const [payout, setPayout] = useState(0);
 
   const handleBet = async () => {
-    console.log("handleBet", connected);
     if (!connected) {
       toastError("Validation Error", "Please Connect Your Wallet");
       return;
@@ -61,7 +60,7 @@ function PlaceBet({ raceState }) {
       await placeBet(raceId, horseId, horse.payout, betAmount);
     }
 
-    await updateBetting(raceId, horseId, horse.payout, betAmount)
+    //await updateBetting(raceId, horseId, horse.payout, betAmount)
   };
 
   const onChangeHorseId = (horseId) => {
@@ -197,7 +196,6 @@ function PlaceBet({ raceState }) {
       <div className="flex justify-center w-full py-1.5 mt-2">
         <button
           className={betButtonStyle}
-          disabled={raceState !== RaceState.Ready}
           onClick={handleBet}
         >
           Bet

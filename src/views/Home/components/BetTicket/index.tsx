@@ -1,15 +1,16 @@
-import React, {useState, useCallback} from 'react';
-import BetTicket from './BetTicket'
-import {defaultHorses} from 'hourse'
-import {useInterval} from "hooks/useInterval"
-import useTezrun from 'hooks/useTezrun';
+import React, { useState, useCallback } from "react";
+import BetTicket from "./BetTicket";
+import { defaultHorses } from "hourse";
+import { useInterval } from "hooks/useInterval";
+import { getTickets } from "services";
+import useTezrun from "hooks/useTezrun";
 
 function BetTicketCard({ userAddress }) {
   const [betTickes, setBetTickets] = useState([]);
   const [winner, setWinner] = useState(undefined);
-  const {getStorage, getWinner} = useTezrun();
+  const { getStorage, getWinner } = useTezrun();
 
-  const updateTickets = useCallback(() => {
+  /*const updateTickets = useCallback(() => {
     if (!userAddress) {
       return
     }
@@ -35,24 +36,44 @@ function BetTicketCard({ userAddress }) {
       .then(winner => {
         setWinner(winner);
       })
-  }, [userAddress, getStorage, setBetTickets, getWinner, setWinner])
+  }, [userAddress, getStorage, setBetTickets, getWinner, setWinner])*/
+
+  const updateTickets = useCallback(() => {
+    getTickets(userAddress)
+      .then((tickets) => {
+        console.log("tickets", tickets);
+        return tickets.map((ticket: any) => ({
+          horseId: ticket.horse_id,
+          horseName: getHorseName(ticket.horse_id),
+          betAmount: convertTezos(ticket.amount),
+          payout: ticket.payout,
+          token: 0, //ticket.token.toNumber(),
+        }));
+      })
+      .then((tickets) => {
+        tickets && setBetTickets(tickets);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [userAddress]);
 
   useInterval(() => {
-    updateTickets()
-  }, 5000)
+    updateTickets();
+  }, 5000);
 
   const getHorseName = (horseId) => {
-    const horse = defaultHorses.find(it => it.id === horseId);
+    const horse = defaultHorses.find((it) => it.id === horseId);
     return horse?.name;
-  }
+  };
 
   const convertTezos = (mutez) => {
     return mutez / 1000000;
-  }
+  };
 
   return (
     <div className="flex gap-4">
-      { betTickes.map((ticket: any, index: number) => (
+      {betTickes.map((ticket: any, index: number) => (
         <BetTicket key={index} winner={winner} ticket={ticket}></BetTicket>
       ))}
     </div>

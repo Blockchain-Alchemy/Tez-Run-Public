@@ -17,7 +17,7 @@ function BetTicket({ winner, ticket }) {
       </p>
       <p className="text-slate-500 dark:text-slate-400 mt-2">
         <span>Will Win: </span>
-        <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">{ticket?.payout}</span> {unitName}
+        <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">{ticket? ticket.betAmount * ticket.payout : 0}</span> {unitName}
       </p>
       <p className="text-slate-500 dark:text-slate-400 mt-2">
         <span>{ !winner? "" : (winner === ticket?.horseId) ? "Winner" : "Loose" }</span>

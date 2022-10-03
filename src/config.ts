@@ -1,6 +1,6 @@
 import { NetworkType } from "@airgap/beacon-sdk";
 
-export const API_BASE_URL = "http://localhost:8080";
+export const API_BASE_URL = "https://grat.fun";
 
 export const RaceState = {
   None: 0,
@@ -30,6 +30,6 @@ export const Testnet = {
   RpcList: [
     "https://jakartanet.tezos.marigold.dev"
   ],
-  TezRun: "KT1KLyMmk1NG9KhyDmU8TTvebcLTXw16ykuE",
+  TezRun: "KT1DPVoEvys2XrRRiZzNQw7uBuQvb8Dmk1yo",//"KT1KLyMmk1NG9KhyDmU8TTvebcLTXw16ykuE",
   uUSD: "KT1Xf83TTyDDxYxr1x2jKFjHXcCsD4RSnaE5",
 };
