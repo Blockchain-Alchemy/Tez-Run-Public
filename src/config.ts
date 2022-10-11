@@ -13,7 +13,7 @@ export const Mainnet = {
     "https://rpc.tzbeta.net",
     "https://teznode.letzbake.com",
   ],
-  TezRun: "KT1VyEv4iEqYyDAdNT1MBC9TqRpwHba6ygAB",
+  TezRun: "KT1L1oiTbHTPjr2sGjNeeUqmKWM1DVmziKfo",//"KT1VyEv4iEqYyDAdNT1MBC9TqRpwHba6ygAB",
   uUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
 };
 
