@@ -6,12 +6,9 @@ export const Admin = "tz1bxwduvRwBhq59FmThGKD5ceDFadr57JTq";
 
 export const Mainnet = {
   NetworkType: NetworkType.MAINNET,
-  RpcUrl: "https://mainnet.api.tez.ie",
+  RpcUrl: "https://mainnet.tezos.marigold.dev",
   RpcList: [
-    "https://mainnet.api.tez.ie",
-    "https://mainnet.smartpy.io",
-    "https://rpc.tzbeta.net",
-    "https://teznode.letzbake.com",
+    "https://mainnet.tezos.marigold.dev",
   ],
   TezRun: "KT1L1oiTbHTPjr2sGjNeeUqmKWM1DVmziKfo",//"KT1VyEv4iEqYyDAdNT1MBC9TqRpwHba6ygAB",
   uUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
