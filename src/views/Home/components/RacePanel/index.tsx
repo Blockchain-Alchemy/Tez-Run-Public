@@ -3,13 +3,17 @@ import moment from "moment";
 import useTezrun from "hooks/useTezrun";
 import useToast from "hooks/useToast";
 import useBeacon from "hooks/useBeacon";
+import useAdmin from "hooks/useAdmin";
 import { defaultHorses } from "hourse";
 import { finishRace, getRewards } from "services";
+
+const isAdmin = true;
 
 const RacePanel = ({ unityContext }) => {
   const { address } = useBeacon();
   const { takeReward } = useTezrun();
   const { toastSuccess } = useToast();
+  const { readyRace } = useAdmin();
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const [winner, setWinner] = useState<undefined | number>(undefined);
 
@@ -46,7 +50,7 @@ const RacePanel = ({ unityContext }) => {
     try {
       if (address) {
         const result = await getRewards(address);
-        console.log('rewards', result)
+        console.log("rewards", result);
         if (result && result.mutez) {
           const rewards = Number(result.mutez);
           if (rewards > 0) {
@@ -54,7 +58,6 @@ const RacePanel = ({ unityContext }) => {
             toastSuccess("Success", "You got reward successfully");
           }
         } else {
-          
         }
       }
     } catch (e) {
@@ -62,17 +65,38 @@ const RacePanel = ({ unityContext }) => {
     }
   };
 
+  const handleReadyRace = async () => {
+    try {
+      const op = await readyRace();
+      console.log("ReadyRace Result", op);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
-    <div className="text-center mt-6">
-      <button
-        type="button"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
-        onClick={handleTakeReward}
-        disabled={false}
-      >
-        Take Reward
-      </button>
-    </div>
+    <>
+      <div className="text-center mt-6">
+        <button
+          type="button"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
+          onClick={handleTakeReward}
+          disabled={false}
+        >
+          Take Reward
+        </button>
+      </div>
+      {isAdmin && (
+        <button
+          type="button"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
+          onClick={handleReadyRace}
+          disabled={false}
+        >
+          Ready Race
+        </button>
+      )}
+    </>
   );
 };
 

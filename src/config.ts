@@ -10,7 +10,7 @@ export const Mainnet = {
   RpcList: [
     "https://mainnet.tezos.marigold.dev",
   ],
-  TezRun: "KT1L1oiTbHTPjr2sGjNeeUqmKWM1DVmziKfo",//"KT1VyEv4iEqYyDAdNT1MBC9TqRpwHba6ygAB",
+  TezRun: "KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
   uUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
 };
 
@@ -20,6 +20,6 @@ export const Testnet = {
   RpcList: [
     "https://jakartanet.tezos.marigold.dev"
   ],
-  TezRun: "KT1QqTCsHghND8gfeG55w2pWCskZpFFgjVCV",//"KT1DPVoEvys2XrRRiZzNQw7uBuQvb8Dmk1yo",//"KT1KLyMmk1NG9KhyDmU8TTvebcLTXw16ykuE",
+  TezRun: "KT1QqTCsHghND8gfeG55w2pWCskZpFFgjVCV",
   uUSD: "KT1Xf83TTyDDxYxr1x2jKFjHXcCsD4RSnaE5",
 };

@@ -26,7 +26,7 @@ const Home = () => {
   useInterval(() => {
     getRaceState()
       .then((result) => {
-        console.log("race", result);
+        //console.log("race", result);
         setRace(result);
       })
       .catch(console.error);

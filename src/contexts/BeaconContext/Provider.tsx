@@ -16,19 +16,17 @@ const scopes: PermissionScope[] = [
   PermissionScope.SIGN,
 ];
 
+type WalletType = ContractAbstraction<Wallet> | undefined;
+
 export const BeaconProvider: React.FC = ({ children }) => {
-  const [tezos, setTezos] = useState<TezosToolkit>(
-    new TezosToolkit(Testnet.RpcUrl)
-  );
-  const [networkType, setNetworkType] = useState(Testnet.NetworkType);
-  const [rpcUrl, setRpcUrl] = useState(Testnet.RpcUrl);
+  const [tezos, setTezos] = useState<TezosToolkit>(new TezosToolkit(Mainnet.RpcUrl));
+  const [networkType, setNetworkType] = useState(Mainnet.NetworkType);
+  const [rpcUrl, setRpcUrl] = useState(Mainnet.RpcUrl);
   const [loading, setLoading] = useState(false);
   const [wallet, setWallet] = useState<BeaconWallet | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [connected, setConnected] = useState<boolean>(false);
-  const [contract, setContract] = useState<
-    ContractAbstraction<Wallet> | undefined
-  >(undefined);
+  const [contract, setContract] = useState<WalletType>(undefined);
 
   useEffect(() => {
     setAddress(undefined);
@@ -67,15 +65,14 @@ export const BeaconProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const getContracts = async () => {
-      if (connected) {
-        const contractAddress =
-          networkType === Testnet.NetworkType ? Testnet.TezRun : Mainnet.TezRun;
-        const contract = await tezos.wallet.at(contractAddress);
-        console.log("TezRun Contract", contract);
-        setContract(contract);
-      }
+      const contractAddress =
+        networkType === Testnet.NetworkType ? Testnet.TezRun : Mainnet.TezRun;
+      console.log("contractAddress", contractAddress);
+      const contract = await tezos.wallet.at(contractAddress);
+      console.log("TezRun Contract", contract);
+      setContract(contract);
     };
-    getContracts();
+    connected && getContracts();
   }, [tezos, connected]);
 
   const connectWallet = useCallback(() => {

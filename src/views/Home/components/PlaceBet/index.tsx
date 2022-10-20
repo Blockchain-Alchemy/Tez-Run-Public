@@ -1,19 +1,19 @@
-import { useMemo, useState } from 'react';
-import Switch from 'components/Switch'
-import useToast from 'hooks/useToast'
-import useBeacon from 'hooks/useBeacon';
-import useTezrun from 'hooks/useTezrun';
-import {defaultHorses} from 'hourse';
+import { useMemo, useState } from "react";
+import Switch from "components/Switch";
+import useToast from "hooks/useToast";
+import useBeacon from "hooks/useBeacon";
+import useTezrun from "hooks/useTezrun";
+import { defaultHorses } from "hourse";
 
 function PlaceBet({ raceState }) {
-  const {connected} = useBeacon();
-  const {placeBet, takeReward, placeBetByToken, getApproval, approve} = useTezrun();
-  const {toastError} = useToast();
+  const { connected } = useBeacon();
+  const { placeBet, placeBetByToken, getApproval, approve } = useTezrun();
+  const { toastError } = useToast();
 
   const [horses, setHorses] = useState(defaultHorses);
   const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
-  const [betAmount, setBetAmount] = useState(0.08);
+  const [betAmount, setBetAmount] = useState(0.0008);
   const [selectedPlace, setSelectedPlace] = useState("win");
   const [payout, setPayout] = useState(0);
 
@@ -36,14 +36,14 @@ function PlaceBet({ raceState }) {
       return;
     }
 
-    const horse = horses.find(it => it.id === horseId)
+    const horse = horses.find((it) => it.id === horseId);
     if (!horse) {
       return;
     }
 
-    const raceId = 1;
-    console.log("nativeToken", nativeToken)
-    if (!nativeToken) {
+    if (nativeToken) {
+      await placeBet(horseId, horse.payout, betAmount);
+    } else {
       const approval = await getApproval();
       if (!approval) {
         const approved = await approve();
@@ -52,32 +52,29 @@ function PlaceBet({ raceState }) {
           return;
         }
       }
-      await placeBetByToken(raceId, horseId, horse.payout, betAmount);
-    }
-    else {
-      await placeBet(raceId, horseId, horse.payout, betAmount);
-    }
 
-    //await updateBetting(raceId, horseId, horse.payout, betAmount)
+      const tokenAmount = betAmount * 1000000000000;
+      await placeBet(horseId, horse.payout, 0, 1, tokenAmount);
+    }
   };
 
   const onChangeHorseId = (horseId) => {
     setHorseId(horseId);
 
-    const horse = horses.find(it => it.id === horseId)
+    const horse = horses.find((it) => it.id === horseId);
     if (horse) {
       setPayout(horse.payout * betAmount);
     }
-  }
+  };
 
   const onChangeBetAmount = (betAmount) => {
     setBetAmount(betAmount);
 
-    const horse = horses.find(it => it.id === horseId)
+    const horse = horses.find((it) => it.id === horseId);
     if (horse) {
       setPayout(horse.payout * betAmount);
     }
-  }
+  };
 
   const betButtonStyle = useMemo(() => {
     return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36";
@@ -89,8 +86,8 @@ function PlaceBet({ raceState }) {
   }, [raceState]);
 
   const tokenName = useMemo(() => {
-    return nativeToken ? 'ꜩ' : 'uUSD';
-  }, [nativeToken])
+    return nativeToken ? "ꜩ" : "uUSD";
+  }, [nativeToken]);
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl lg:mr-4">
@@ -124,7 +121,9 @@ function PlaceBet({ raceState }) {
             defaultValue={horseId}
             onChange={(e) => onChangeHorseId(Number(e.target.value))}
           >
-            <option disabled value="0">Select Horse</option>
+            <option disabled value="0">
+              Select Horse
+            </option>
             {horses.map((horse, index) => (
               <option key={index} value={horse.id}>
                 {horse.name}
@@ -165,10 +164,16 @@ function PlaceBet({ raceState }) {
             defaultValue={selectedPlace}
             onChange={(e) => setSelectedPlace(e.target.value)}
           >
-            <option value="" disabled>To Win</option>
+            <option value="" disabled>
+              To Win
+            </option>
             <option value="win">Win</option>
-            <option value="place" disabled>Place</option>
-            <option value="show" disabled>Show</option>
+            <option value="place" disabled>
+              Place
+            </option>
+            <option value="show" disabled>
+              Show
+            </option>
           </select>
         </div>
 
@@ -192,10 +197,7 @@ function PlaceBet({ raceState }) {
       </div>
 
       <div className="flex justify-center w-full py-1.5 mt-2">
-        <button
-          className={betButtonStyle}
-          onClick={handleBet}
-        >
+        <button className={betButtonStyle} onClick={handleBet}>
           Bet
         </button>
       </div>

@@ -4,7 +4,7 @@ import useBeacon from "./useBeacon";
 
 const useTezrun = () => {
   const { tezos, contract, address, networkType, setLoading } = useBeacon();
-  const [approval, setApproval] = useState(undefined);
+  const [approval, setApproval] = useState(false);
 
   const getStorage = useCallback(() => {
     return contract?.storage();
@@ -14,135 +14,113 @@ const useTezrun = () => {
     return networkType === Testnet.NetworkType ? Testnet.uUSD : Mainnet.uUSD;
   }, [networkType]);
 
-  const tezrunContractAddress = useMemo(() => {
-    return networkType === Testnet.NetworkType ? Testnet.TezRun : Mainnet.TezRun;
+  const gameContractAddress = useMemo(() => {
+    return networkType === Testnet.NetworkType
+      ? Testnet.TezRun
+      : Mainnet.TezRun;
   }, [networkType]);
 
-  const getApproval = useCallback(() => {
-    setLoading(true);
-
+  const getApproval = async () => {
     if (approval) {
       return new Promise((resolve) => resolve(approval));
     }
+    try {
+      setLoading(true);
+      const contract = await tezos.wallet.at(uUSDContractAddress);
+      const storage: any = await contract.storage();
 
-    return tezos?.wallet
-      .at(uUSDContractAddress)
-      .then((contract) => {
-        return contract.storage();
-      })
-      .then((storage: any) => {
-        return storage.balances.get(address);
-      })
-      .then((balance) => {
-        return balance.approvals.get(tezrunContractAddress);
-      })
-      .then((approv) => {
-        const result = approv?.toNumber();
-        setApproval(result);
-        return result;
-      })
-      .catch((error) => {
-        console.error("error", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [tezos, address, approval, uUSDContractAddress, tezrunContractAddress, setLoading, setApproval]);
+      const key = {
+        owner: address,
+        operator: gameContractAddress,
+        token_id: 0,
+      };
+      const operators = await storage.operators.get(key);
+      if (operators) {
+        setApproval(true);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const approve = useCallback(() => {
-    console.log("approve");
-    setLoading(true);
-
-    return tezos?.wallet
-      .at(uUSDContractAddress)
-      .then((contract) => {
-        console.info("uUSD.contract", contract);
-        return contract?.methods
-          .approve(tezrunContractAddress, 1000000)
-          .send();
-      })
-      .then((result) => {
-        console.info("approve", result);
-        return result;
-      })
-      .catch((error) => {
-        console.error("error", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [tezos, uUSDContractAddress, tezrunContractAddress, setLoading]);
+  const approve = async () => {
+    try {
+      setLoading(true);
+      const contract = await tezos.wallet.at(uUSDContractAddress);
+      const params = [
+        {
+          add_operator: {
+            owner: address,
+            operator: gameContractAddress,
+            token_id: 0,
+          },
+        },
+      ];
+      const op = await contract.methods.update_operators(params).send();
+      return op.confirmation(2);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const placeBet = useCallback(
-    (raceId, horseId, payout, amount) => {
-      console.log("placeBet", raceId, horseId, payout, amount);
-      console.log("placeBet-contract", contract);
-      setLoading(true);
-
-      return contract?.methods
-        .place_bet(Number(horseId), Number(payout), Number(raceId))
-        .send({
-          amount: amount,
-        })
-        .then((result) => {
-          console.info("placeBet", result);
-          return result;
-        })
-        .catch((error) => {
-          console.error("placeBet-error", error);
-        })
-        .finally(() => {
+    async (horseId, payout, tezosAmount, tokenId = 0, tokenAmount = 0) => {
+      if (contract) {
+        try {
+          setLoading(true);
+          const op = await contract.methods
+            .place_bet(tokenAmount, horseId, payout, tokenId)
+            .send({
+              amount: tezosAmount,
+            });
+          return op.confirmation(2);
+        } catch (e) {
+          console.error(e);
+        } finally {
           setLoading(false);
-        });
+        }
+      }
     },
-    [contract, setLoading]
+    [contract]
   );
 
   const placeBetByToken = useCallback(
-    (raceId, horseId, payout, amount) => {
-      console.log("placeBetByToken", raceId, horseId, payout, amount);
-      setLoading(true);
-
-      return contract?.methods
-        .placeBetByToken(amount, horseId, payout, raceId, 1)
-        .send()
-        .then((result) => {
-          console.info("placeBetByToken", result);
-          return result;
-        })
-        .catch((error) => {
-          console.error("placeBetByToken-error", error);
-        })
-        .finally(() => {
+    async (raceId, horseId, payout, amount) => {
+      if (contract) {
+        try {
+          setLoading(true);
+          const op = await contract.methods
+            .place_bet(amount, horseId, payout, raceId, 1)
+            .send();
+          return op.confirmation(2);
+        } catch (e) {
+          console.error(e);
+        } finally {
           setLoading(false);
-        });
+        }
+      }
     },
-    [contract, setLoading]
+    [contract]
   );
 
-  const takeReward = useCallback(() => {
-    setLoading(true);
-
-    return contract?.methods
-      .take_rewards()
-      .send()
-      .then((result) => {
-        console.info("takeReward", result);
-        return result;
-      })
-      .catch((error) => {
-        console.error("takeReward-error", error);
-      })
-      .finally(() => {
+  const takeReward = useCallback(async () => {
+    if (contract) {
+      try {
+        setLoading(true);
+        const op = await contract.methods.take_rewards().send();
+        return op.confirmation(2);
+      } catch (e) {
+        console.error(e);
+      } finally {
         setLoading(false);
-      });
-  }, [contract, setLoading]);
-
-  const getWinner = useCallback(() => {
-    return contract?.storage().then((storage: any) => {
-      //console.log("storage", storage);
-      return storage.winner?.toNumber();
-    });
+      }
+    }
   }, [contract]);
 
   return {
@@ -152,7 +130,6 @@ const useTezrun = () => {
     getApproval,
     approve,
     getStorage,
-    getWinner,
   };
 };
 

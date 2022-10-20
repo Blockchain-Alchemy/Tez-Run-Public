@@ -1,4 +1,4 @@
-import {useCallback} from "react";
+import { useCallback } from "react";
 import useBeacon from "./useBeacon";
 
 const useAdmin = () => {
@@ -17,20 +17,17 @@ const useAdmin = () => {
       });
   }, [contract]);
 
-  
   const readyRace = useCallback(() => {
     return contract?.methods
-      .ready_race(5)
+      .ready_race()
       .send()
-      .then((result) => {
-        console.info("readyRace", result);
-        return result;
+      .then((op) => {
+        return op.confirmation(2);
       })
       .catch((error) => {
         console.error("readyRace", error);
       });
   }, [contract]);
-
 
   const startRace = useCallback(() => {
     return contract?.methods
@@ -45,21 +42,22 @@ const useAdmin = () => {
       });
   }, [contract]);
 
-
-  const finishRace = useCallback((winner) => {
-    console.log("finishRace:winner=", winner)
-    return contract?.methods
-      .finish_race(winner)
-      .send()
-      .then((result) => {
-        console.info("finishRace", result);
-        return result;
-      })
-      .catch((error) => {
-        console.error("finishRace", error);
-      });
-  }, [contract]);
-
+  const finishRace = useCallback(
+    (winner) => {
+      console.log("finishRace:winner=", winner);
+      return contract?.methods
+        .finish_race(winner)
+        .send()
+        .then((result) => {
+          console.info("finishRace", result);
+          return result;
+        })
+        .catch((error) => {
+          console.error("finishRace", error);
+        });
+    },
+    [contract]
+  );
 
   return {
     mint,
