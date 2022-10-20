@@ -7,7 +7,7 @@ import useAdmin from "hooks/useAdmin";
 import { defaultHorses } from "hourse";
 import { finishRace, getRewards } from "services";
 
-const isAdmin = true;
+const isAdmin = false;
 
 const RacePanel = ({ unityContext }) => {
   const { address } = useBeacon();
