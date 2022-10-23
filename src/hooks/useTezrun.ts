@@ -79,7 +79,7 @@ const useTezrun = () => {
             .send({
               amount: tezosAmount,
             });
-          return op.confirmation(2);
+          return op.confirmation();
         } catch (e) {
           console.error(e);
         } finally {
@@ -98,7 +98,7 @@ const useTezrun = () => {
           const op = await contract.methods
             .place_bet(amount, horseId, payout, raceId, 1)
             .send();
-          return op.confirmation(2);
+          return op.confirmation();
         } catch (e) {
           console.error(e);
         } finally {

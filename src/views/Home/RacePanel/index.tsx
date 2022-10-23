@@ -3,6 +3,7 @@ import moment from "moment";
 import useTezrun from "hooks/useTezrun";
 import useToast from "hooks/useToast";
 import useBeacon from "hooks/useBeacon";
+import Loader from "components/Loader";
 import { defaultHorses } from "hourse";
 import { readyRace, startRace, finishRace, getRewards } from "services";
 
@@ -12,6 +13,7 @@ const RacePanel = ({ unityContext }) => {
   const { address } = useBeacon();
   const { takeReward } = useTezrun();
   const { toastSuccess } = useToast();
+  const [loading, setLoading] = useState(false);
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const [winner, setWinner] = useState<undefined | number>(undefined);
 
@@ -32,7 +34,7 @@ const RacePanel = ({ unityContext }) => {
       if (horse) {
         console.log('FinishRace', horse)
         setWinner(horse.id);
-        await finishRace();
+        //await finishRace();
       }
     }
   };
@@ -47,6 +49,7 @@ const RacePanel = ({ unityContext }) => {
   const handleTakeReward = async () => {
     console.log("TakeReward", address);
     try {
+      setLoading(true);
       if (address) {
         const result = await getRewards(address);
         console.log("rewards", result);
@@ -61,33 +64,44 @@ const RacePanel = ({ unityContext }) => {
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleReadyRace = async () => {
     try {
+      setLoading(true);
       const op = await readyRace();
       console.log("ReadyRace Result", op);
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleStartRace = async () => {
     try {
+      setLoading(true);
       const op = await startRace();
       console.log("StartRace Result", op);
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleFinishRace = async () => {
     try {
+      setLoading(true);
       const op = await finishRace();
       console.log("FinishRace Result", op);
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,8 +116,9 @@ const RacePanel = ({ unityContext }) => {
         >
           Take Reward
         </button>
-        {isAdmin && (
+        {isAdmin && address && (
           <>
+            {loading && <Loader />}
             <button
               type="button"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"

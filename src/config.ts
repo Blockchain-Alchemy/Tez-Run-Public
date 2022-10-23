@@ -10,7 +10,7 @@ export const Mainnet = {
   RpcList: [
     "https://mainnet.tezos.marigold.dev",
   ],
-  TezRun: "KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
+  TezRun: "KT1TK9GheViS3Z8hJSjZnBo7324rXnFtnYGC", //"KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
   uUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
 };
 
