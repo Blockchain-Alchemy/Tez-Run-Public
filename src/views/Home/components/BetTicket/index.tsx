@@ -14,6 +14,10 @@ const convertTezos = (mutez) => {
   return mutez / 1000000;
 };
 
+const convertToken = (token) => {
+  return token / 1000000000000;
+};
+
 function BetTicketCard({ userAddress }) {
   const [betTickes, setBetTickets] = useState([]);
   const [winner, setWinner] = useState(undefined);
@@ -49,13 +53,22 @@ function BetTicketCard({ userAddress }) {
   const updateTickets = useCallback(() => {
     getTickets(userAddress)
       .then((tickets) => {
-        return tickets.map((ticket: any) => ({
-          horseId: ticket.horse_id,
-          horseName: getHorseName(ticket.horse_id),
-          betAmount: convertTezos(ticket.amount),
-          payout: ticket.payout,
-          token: 0, //ticket.token.toNumber(),
-        }));
+        console.log("tickets", tickets);
+        return tickets.map((ticket: any) => {
+          const horseId = Number(ticket.horse_id);
+          const token = Number(ticket.token);
+          console.log('token', token)
+          const betAmount = token
+            ? convertToken(Number(ticket.amount))
+            : convertTezos(Number(ticket.tezos));
+          return {
+            horseId: horseId,
+            horseName: getHorseName(horseId),
+            betAmount,
+            payout: Number(ticket.payout),
+            token,
+          };
+        });
       })
       .then((tickets) => {
         tickets && setBetTickets(tickets);

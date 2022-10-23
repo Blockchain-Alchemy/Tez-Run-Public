@@ -21,16 +21,20 @@ const unityContext = new UnityContext({
 const Home = () => {
   const { loading, address } = useBeacon();
   const [race, setRace] = useState<Race>({} as Race);
-  const [raceState, setRaceState] = useState(RaceState.Ready);
 
   useInterval(() => {
     getRaceState()
       .then((result) => {
-        //console.log("race", result);
+        if (result.status) {
+          console.log("RaceState", result);
+          if (race.status === RaceState.Ready && result.status === RaceState.Started) {
+            unityContext.send("GameController", "StartRaceNow", 45);
+          }
+        }
         setRace(result);
       })
       .catch(console.error);
-  }, 5000);
+  }, 2000);
 
   return (
     <div className="container mx-auto">
@@ -63,7 +67,7 @@ const Home = () => {
             id="place-bet-card"
             className="col-span-12 md-col-span-6 lg:col-span-3"
           >
-            <PlaceBet raceState={raceState}></PlaceBet>
+            <PlaceBet race={race}></PlaceBet>
           </div>
           <div className="col-span-12 md-col-span-6 lg:col-start-4 lg:col-span-9">
             <BetTicketCard userAddress={address}></BetTicketCard>

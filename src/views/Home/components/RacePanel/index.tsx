@@ -7,7 +7,7 @@ import useAdmin from "hooks/useAdmin";
 import { defaultHorses } from "hourse";
 import { finishRace, getRewards } from "services";
 
-const isAdmin = false;
+const isAdmin = true;
 
 const RacePanel = ({ unityContext }) => {
   const { address } = useBeacon();
@@ -32,6 +32,7 @@ const RacePanel = ({ unityContext }) => {
       const firstHorse = resultHorses[0];
       const horse = defaultHorses.find((it) => it.name === firstHorse.name);
       if (horse) {
+        console.log('FinishRace', horse)
         setWinner(horse.id);
         await finishRace();
       }
@@ -85,17 +86,17 @@ const RacePanel = ({ unityContext }) => {
         >
           Take Reward
         </button>
+        {isAdmin && (
+          <button
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
+            onClick={handleReadyRace}
+            disabled={false}
+          >
+            Ready Race
+          </button>
+        )}
       </div>
-      {isAdmin && (
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
-          onClick={handleReadyRace}
-          disabled={false}
-        >
-          Ready Race
-        </button>
-      )}
     </>
   );
 };

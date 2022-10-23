@@ -4,10 +4,11 @@ import useToast from "hooks/useToast";
 import useBeacon from "hooks/useBeacon";
 import useTezrun from "hooks/useTezrun";
 import { defaultHorses } from "hourse";
+import { RaceState } from "types";
 
-function PlaceBet({ raceState }) {
+function PlaceBet({ race }) {
   const { connected } = useBeacon();
-  const { placeBet, placeBetByToken, getApproval, approve } = useTezrun();
+  const { placeBet, getApproval, approve } = useTezrun();
   const { toastError } = useToast();
 
   const [horses, setHorses] = useState(defaultHorses);
@@ -77,13 +78,13 @@ function PlaceBet({ raceState }) {
   };
 
   const betButtonStyle = useMemo(() => {
-    return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36";
-    /*if (raceState !== RaceState.Ready) {
+    //return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36";
+    if (race.status !== RaceState.Ready) {
       return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36"
     } else {
       return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36"
-    }*/
-  }, [raceState]);
+    }
+  }, [race]);
 
   const tokenName = useMemo(() => {
     return nativeToken ? "ꜩ" : "uUSD";
