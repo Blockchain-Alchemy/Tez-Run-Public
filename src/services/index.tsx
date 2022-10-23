@@ -30,6 +30,13 @@ export const getTickets = (address: string) => {
   });
 }
 
+export const getGameState = (address: string) => {
+  const url = `${API_BASE_URL}/api/v1/tezrun/status/${address}`;
+  return axios.get(url).then((res) => {
+    return res.data;
+  });
+}
+
 export const getRewards = (address: string) => {
   const url = `${API_BASE_URL}/api/v1/tezrun/rewards/${address}`;
   return axios.get(url).then((res) => {

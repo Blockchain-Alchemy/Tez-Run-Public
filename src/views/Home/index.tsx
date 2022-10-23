@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Unity, { UnityContext } from "react-unity-webgl";
 import { Race, RaceState } from "types";
-import { getRaceState } from "services";
+import { getGameState } from "services";
 import { useInterval } from "hooks/useInterval";
 import useBeacon from "hooks/useBeacon";
 import HorseOdds from "./HorseOdds";
 import RaceTimer from "./RaceTimer";
 import PlaceBet from "./PlaceBet";
-import BetTicketCard from "./BetTicket";
+import BetTicket from "./BetTicket";
 import RacePanel from "./RacePanel";
 import Loader from "components/Loader";
 
@@ -21,19 +21,40 @@ const unityContext = new UnityContext({
 const Home = () => {
   const { loading, address } = useBeacon();
   const [race, setRace] = useState<Race>({} as Race);
+  const [tickets, setTickets] = useState([]);
 
-  useInterval(() => {
-    getRaceState()
-      .then((result) => {
-        if (result.status) {
-          console.log("RaceState", result);
-          if (race.status === RaceState.Ready && result.status === RaceState.Started) {
-            unityContext.send("GameController", "StartRaceNow", 45);
+  useInterval(async () => {
+    try {
+      if (address) {
+        const game = await getGameState(address);
+        if (game.race) {
+          setRace(game.race);
+          const updatedState = game.race.status;
+          if (updatedState) {
+            if (
+              race.status === RaceState.Ready &&
+              updatedState === RaceState.Started
+            ) {
+              unityContext.send("GameController", "StartRaceNow", 45);
+            }
           }
         }
-        setRace(result);
-      })
-      .catch(console.error);
+        if (game.tickets) {
+          const tickets = game.tickets.map((ticket: any) => {
+            return {
+              horseId: Number(ticket.horse_id),
+              payout: Number(ticket.payout),
+              token: Number(ticket.token),
+              tezos: Number(ticket.tezos),
+              amount: Number(ticket.amount),
+            };
+          });
+          setTickets(tickets);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }, 2000);
 
   return (
@@ -70,7 +91,11 @@ const Home = () => {
             <PlaceBet race={race}></PlaceBet>
           </div>
           <div className="col-span-12 md-col-span-6 lg:col-start-4 lg:col-span-9">
-            <BetTicketCard userAddress={address}></BetTicketCard>
+            <div className="flex gap-4">
+              {(tickets || []).map((ticket: any, index: number) => (
+                <BetTicket key={index} ticket={ticket}></BetTicket>
+              ))}
+            </div>
           </div>
         </div>
       </div>

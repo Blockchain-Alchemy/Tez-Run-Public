@@ -1,14 +1,5 @@
-import React, { useState, useCallback } from "react";
-import BetTicket from "./BetTicket";
+import React, { useMemo } from "react";
 import { defaultHorses } from "hourse";
-import { useInterval } from "hooks/useInterval";
-import { getTickets } from "services";
-import useTezrun from "hooks/useTezrun";
-
-const getHorseName = (horseId) => {
-  const horse = defaultHorses.find((it) => it.id === horseId);
-  return horse?.name;
-};
 
 const convertTezos = (mutez) => {
   return mutez / 1000000;
@@ -18,77 +9,51 @@ const convertToken = (token) => {
   return token / 1000000000000;
 };
 
-function BetTicketCard({ userAddress }) {
-  const [betTickes, setBetTickets] = useState([]);
-  const [winner, setWinner] = useState(undefined);
+const BetTicket = ({ ticket }) => {
+  const horseName = useMemo(() => {
+    const horse = defaultHorses.find((it) => it.id === ticket.horseId);
+    return horse?.name;
+  }, [ticket]);
 
-  /*const updateTickets = useCallback(() => {
-    if (!userAddress) {
-      return
+  const balance = useMemo(() => {
+    if (ticket.token === 0) {
+      return convertTezos(ticket.tezos);
+    } else {
+      return convertToken(ticket.amount);
     }
-    return getStorage()
-      ?.then((storage: any) => {
-        return storage?.race.bets;
-      })
-      .then(raceBets => {
-        return raceBets
-          ?.filter((ticket: any) => ticket.address === userAddress)
-          .map((ticket: any) => ({
-            horseId: ticket.horse_id.toNumber(),
-            horseName: getHorseName(ticket.horse_id.toNumber()),
-            betAmount: convertTezos(ticket.amount.toNumber()),
-            payout: ticket.payout.toNumber(),
-            token: 0,//ticket.token.toNumber(),
-          }))
-      })
-      .then(tickets => {
-        tickets && setBetTickets(tickets)
-        return getWinner();
-      })
-      .then(winner => {
-        setWinner(winner);
-      })
-  }, [userAddress, getStorage, setBetTickets, getWinner, setWinner])*/
+  }, [ticket])
 
-  const updateTickets = useCallback(() => {
-    getTickets(userAddress)
-      .then((tickets) => {
-        console.log("tickets", tickets);
-        return tickets.map((ticket: any) => {
-          const horseId = Number(ticket.horse_id);
-          const token = Number(ticket.token);
-          console.log('token', token)
-          const betAmount = token
-            ? convertToken(Number(ticket.amount))
-            : convertTezos(Number(ticket.tezos));
-          return {
-            horseId: horseId,
-            horseName: getHorseName(horseId),
-            betAmount,
-            payout: Number(ticket.payout),
-            token,
-          };
-        });
-      })
-      .then((tickets) => {
-        tickets && setBetTickets(tickets);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [userAddress]);
+  const unitName = useMemo(() => {
+    return ticket.token === 0 ? "ꜩ" : "uUSD";
+  }, [ticket]);
 
-  useInterval(() => {
-    updateTickets();
-  }, 5000);
 
   return (
-    <div className="flex gap-4">
-      {betTickes.map((ticket: any, index: number) => (
-        <BetTicket key={index} winner={winner} ticket={ticket}></BetTicket>
-      ))}
+    <div className="bg-white w-50 dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
+      <h3 className="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">
+        Bet Ticket
+      </h3>
+      <p className="text-slate-500 dark:text-slate-400 mt-2">{horseName}</p>
+      <p className="text-slate-500 dark:text-slate-400 mt-2">To Win</p>
+      <p className="text-slate-500 dark:text-slate-400 mt-2">
+        <span>Bet Placed: </span>
+        <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">
+          {balance}
+        </span>{" "}
+        {unitName}
+      </p>
+      <p className="text-slate-500 dark:text-slate-400 mt-2">
+        <span>Will Win: </span>
+        <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">
+          {balance * ticket.payout}
+        </span>{" "}
+        {unitName}
+      </p>
+      <p className="text-slate-500 dark:text-slate-400 mt-2">
+        {/* <span>{ !winner? "" : (winner === ticket?.horseId) ? "Winner" : "Loose" }</span> */}
+      </p>
     </div>
   );
-}
+};
 
-export default BetTicketCard;
+export default BetTicket;
