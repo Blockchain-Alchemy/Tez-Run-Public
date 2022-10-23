@@ -4,11 +4,11 @@ import { Race, RaceState } from "types";
 import { getRaceState } from "services";
 import { useInterval } from "hooks/useInterval";
 import useBeacon from "hooks/useBeacon";
-import HorseOdds from "./components/HorseOdds";
-import RaceTimer from "./components/RaceTimer";
-import PlaceBet from "./components/PlaceBet";
-import BetTicketCard from "./components/BetTicket";
-import RacePanel from "./components/RacePanel";
+import HorseOdds from "./HorseOdds";
+import RaceTimer from "./RaceTimer";
+import PlaceBet from "./PlaceBet";
+import BetTicketCard from "./BetTicket";
+import RacePanel from "./RacePanel";
 import Loader from "components/Loader";
 
 const unityContext = new UnityContext({
