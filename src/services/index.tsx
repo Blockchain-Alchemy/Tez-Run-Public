@@ -37,6 +37,20 @@ export const getGameState = (address: string) => {
   });
 }
 
+export const readyRace = () => {
+  const url = `${API_BASE_URL}/api/v1/tezrun/race/ready`;
+  return axios.get(url).then((res) => {
+    return res.data;
+  });
+}
+
+export const startRace = () => {
+  const url = `${API_BASE_URL}/api/v1/tezrun/race/start`;
+  return axios.get(url).then((res) => {
+    return res.data;
+  });
+}
+
 export const getRewards = (address: string) => {
   const url = `${API_BASE_URL}/api/v1/tezrun/rewards/${address}`;
   return axios.get(url).then((res) => {
