@@ -45,7 +45,7 @@ const BetTicket = ({ ticket }) => {
       <p className="text-slate-500 dark:text-slate-400 mt-2">
         <span>Will Win: </span>
         <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">
-          {balance * ticket.payout}
+          {(balance * ticket.payout).toFixed(5)}
         </span>{" "}
         {unitName}
       </p>

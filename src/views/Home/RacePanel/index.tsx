@@ -53,13 +53,11 @@ const RacePanel = ({ unityContext }) => {
       if (address) {
         const result = await getRewards(address);
         console.log("rewards", result);
-        if (result && result.mutez) {
-          const rewards = Number(result.mutez);
-          if (rewards > 0) {
-            await takeReward();
-            toastSuccess("Success", "You got reward successfully");
-          }
+        if (result?.tezos || result?.tokens) {
+          await takeReward();
+          toastSuccess("Success", "You got reward successfully");
         } else {
+          toastSuccess("Info", "There is not rewards");
         }
       }
     } catch (e) {

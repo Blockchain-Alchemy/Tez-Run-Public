@@ -14,7 +14,7 @@ function PlaceBet({ race }) {
   const [horses, setHorses] = useState(defaultHorses);
   const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
-  const [betAmount, setBetAmount] = useState(0.0008);
+  const [betAmount, setBetAmount] = useState(0.004);
   const [selectedPlace, setSelectedPlace] = useState("win");
   const [payout, setPayout] = useState(0);
 
