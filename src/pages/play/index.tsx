@@ -9,6 +9,8 @@ import Loader from "components/loader";
 import "./styles.css";
 import HorseOdds from "./HorseOdds";
 import RaceTimer from "./RaceTimer";
+import PlaceBet from "./PlaceBet";
+import { Race } from "./types";
 
 const unityConfig = {
   loaderUrl: "Build/1.loader.js",
@@ -16,6 +18,15 @@ const unityConfig = {
   frameworkUrl: "Build/1.framework.js",
   codeUrl: "Build/1.wasm",
 };
+
+const race: Race = {
+  admin: 'admin',
+  paused: false,
+  race_id: 1,
+  start_time: '2022-12-12 15:00:00',
+  status: '1',
+  winner: 1,
+}
 
 const Play = () => {
   const { loading } = useSelector((state: RootState) => state.play);
@@ -67,11 +78,17 @@ const Play = () => {
                 </Card>
               </Grid>
               <Grid item sm={2} xs={12}>
-                <RaceTimer race={{ status: '1' }}/>
+                <RaceTimer race={race}/>
               </Grid>
             </Grid>
           </Box>
-
+          <Box sx={{ mb: 4 }}>
+            <Grid container spacing={4}>
+              <Grid item sm={3} xs={12}>
+                <PlaceBet race={race} />
+              </Grid>
+            </Grid>
+          </Box>
           {/* <Card>
             <CardContent
               sx={{
