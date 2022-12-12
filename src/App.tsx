@@ -1,18 +1,15 @@
-import React from 'react';
-import './App.css';
-import { ToastListener } from './contexts/ToastsContext'
-import Home from "./views/Home"
-import Menu from './components/Menu';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+//import Home from "./pages/home";
+import Play from "./pages/play";
 
-const App: React.FC = () => {
-  return (
-    <>
-      <Menu>
-        <Home></Home>
-        <ToastListener />
-      </Menu>
-    </>
-  )
-}
+const App = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route index element={<Play />} />
+      <Route path="play" element={<Play />} />
+    </Routes>
+  </BrowserRouter>
+);
 
 export default App;
