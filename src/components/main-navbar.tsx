@@ -26,7 +26,7 @@ export const MainNavbar = (props) => {
         color: "text.secondary",
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ minHeight: 64 }}>
           <NavLink to="/">
             <Logo
