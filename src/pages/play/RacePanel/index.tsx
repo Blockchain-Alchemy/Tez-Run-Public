@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import { toast } from "react-hot-toast";
 import useTezrun from "hooks/useTezrun";
-import useToast from "hooks/useToast";
 import useBeacon from "hooks/useBeacon";
-import Loader from "components/Loader";
-import { defaultHorses } from "hourse";
+import Loader from "components/loader";
+import { defaultHorses } from "../horses";
 import { readyRace, startRace, finishRace, getRewards } from "services";
 
 const isAdmin = true;
@@ -12,7 +12,6 @@ const isAdmin = true;
 const RacePanel = ({ unityContext }) => {
   const { address } = useBeacon();
   const { takeReward } = useTezrun();
-  const { toastSuccess } = useToast();
   const [loading, setLoading] = useState(false);
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const [winner, setWinner] = useState<undefined | number>(undefined);
@@ -32,7 +31,7 @@ const RacePanel = ({ unityContext }) => {
       const firstHorse = resultHorses[0];
       const horse = defaultHorses.find((it) => it.name === firstHorse.name);
       if (horse) {
-        console.log('FinishRace', horse)
+        console.log("FinishRace", horse);
         setWinner(horse.id);
         //await finishRace();
       }
@@ -55,9 +54,9 @@ const RacePanel = ({ unityContext }) => {
         console.log("rewards", result);
         if (result?.tezos || result?.tokens) {
           await takeReward();
-          toastSuccess("Success", "You got reward successfully");
+          toast.success("You got reward successfully");
         } else {
-          toastSuccess("Info", "There is not rewards");
+          toast.success("There is not rewards");
         }
       }
     } catch (e) {
