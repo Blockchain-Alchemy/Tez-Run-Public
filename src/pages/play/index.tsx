@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { Box, Card, CardContent, Container, Grid } from "@mui/material";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { MainLayout } from "components/main-layout";
-import { Escrow } from "components/escrow";
 import { RootState } from "store";
 import Loader from "components/loader";
 import "./styles.css";
@@ -20,13 +19,13 @@ const unityConfig = {
 };
 
 const race: Race = {
-  admin: 'admin',
+  admin: "admin",
   paused: false,
   race_id: 1,
-  start_time: '2022-12-12 15:00:00',
-  status: '1',
+  start_time: "2022-12-12 15:00:00",
+  status: "1",
   winner: 1,
-}
+};
 
 const Play = () => {
   const { loading } = useSelector((state: RootState) => state.play);
@@ -43,79 +42,39 @@ const Play = () => {
           py: 4,
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box sx={{ mb: 4 }}>
-            <Grid container spacing={4}>
+            <Grid container spacing={0.5}>
+              <Grid item sm={10} xs={12}>
+                <Unity
+                  unityProvider={unityContext.unityProvider}
+                  style={{
+                    height: 540,
+                    width: 920,
+                    background: "#555",
+                  }}
+                />
+                {!isLoaded && loadingProgression > 0 && (
+                  <div className="unity-loader">
+                    <div>
+                      Loading... {Math.round(loadingProgression * 100)}%
+                    </div>
+                  </div>
+                )}
+              </Grid>
               <Grid item sm={2} xs={12}>
+                <RaceTimer race={race} />
                 <HorseOdds />
-              </Grid>
-              <Grid item sm={8} xs={12}>
-                <Card>
-                  <CardContent
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      minHeight: "540px",
-                      position: "relative",
-                    }}
-                  >
-                    <Unity
-                      unityProvider={unityContext.unityProvider}
-                      style={{
-                        height: 540,
-                        width: 950,
-                        background: "#555",
-                      }}
-                    />
-                    {!isLoaded && loadingProgression > 0 && (
-                      <div className="unity-loader">
-                        <div>
-                          Loading... {Math.round(loadingProgression * 100)}%
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item sm={2} xs={12}>
-                <RaceTimer race={race}/>
               </Grid>
             </Grid>
           </Box>
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={4}>
-              <Grid item sm={3} xs={12}>
+              <Grid item sm={4} xs={12}>
                 <PlaceBet race={race} />
               </Grid>
             </Grid>
           </Box>
-          {/* <Card>
-            <CardContent
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                minHeight: "540px",
-                position: "relative",
-              }}
-            >
-              <Unity
-                unityProvider={unityContext.unityProvider}
-                style={{
-                  height: 540,
-                  width: 950,
-                  background: "#555",
-                }}
-              />
-              {!isLoaded && loadingProgression > 0 && (
-                <div className="unity-loader">
-                  <div>Loading... {Math.round(loadingProgression * 100)}%</div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-          <Card sx={{ mt: 3 }}>
-            <Escrow unityContext={unityContext}></Escrow>
-          </Card> */}
         </Container>
       </Box>
     </MainLayout>

@@ -107,12 +107,21 @@ function PlaceBet({ race }) {
           <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
             Place Bet
           </Typography>
-          <Grid container spacing={1}>
+          <Grid
+            container
+            spacing={1}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
             <Grid item sm={6}>
-              Select Horse:
+              <Typography color="textSecondary" variant="body1">
+                Select Horse:
+              </Typography>
             </Grid>
             <Grid item sm={6}>
               <Select
+                fullWidth
                 value={horseId}
                 onChange={(e) => onChangeHorseId(Number(e.target.value))}
               >
@@ -126,7 +135,9 @@ function PlaceBet({ race }) {
             </Grid>
 
             <Grid item sm={6}>
-              Bet Amount ({tokenName}):
+              <Typography color="textSecondary" variant="body1">
+                Bet Amount ({tokenName}):
+              </Typography>
             </Grid>
             <Grid item sm={6}>
               <Input
@@ -143,10 +154,13 @@ function PlaceBet({ race }) {
             </Grid>
 
             <Grid item sm={6}>
-              Select Place:
+              <Typography color="textSecondary" variant="body1">
+                Select Place:
+              </Typography>
             </Grid>
             <Grid item sm={6}>
               <Select
+                fullWidth
                 value={selectedPlace}
                 onChange={(e) => setSelectedPlace(e.target.value)}
               >
@@ -158,7 +172,9 @@ function PlaceBet({ race }) {
             </Grid>
 
             <Grid item sm={6}>
-              Payout ({tokenName}):
+              <Typography color="textSecondary" variant="body1">
+                Payout ({tokenName}):
+              </Typography>
             </Grid>
             <Grid item sm={6}>
               <Input
@@ -174,7 +190,29 @@ function PlaceBet({ race }) {
               />
             </Grid>
           </Grid>
-          <Button onClick={handleBet}>Bet</Button>
+        </div>
+      </Box>
+      <Box sx={{ px: 3, py: 2 }}>
+        <div>
+          <Grid
+            container
+            spacing={1}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item sm={6}></Grid>
+            <Grid item sm={6}>
+              <Button
+                variant="contained"
+                fullWidth
+                size="medium"
+                onClick={handleBet}
+              >
+                Bet
+              </Button>
+            </Grid>
+          </Grid>
         </div>
       </Box>
     </Card>

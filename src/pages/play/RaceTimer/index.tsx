@@ -27,13 +27,7 @@ const RaceTimer = ({ race }: RaceTimerProps) => {
 
   return (
     <Card>
-      <Box
-        sx={{
-          textAlign: "center",
-          px: 3,
-          py: 2,
-        }}
-      >
+      <Box sx={{ textAlign: "center", px: 3, py: 2 }}>
         <div>
           <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
             Race Starts in:

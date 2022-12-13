@@ -6,8 +6,8 @@ function HorseOdds() {
   const [horses, setHorses] = useState(defaultHorses);
 
   return (
-    <Card>
-      <Box sx={{ px: 3, py: 2 }}>
+    <Card sx={{ my: 2 }}>
+      <Box sx={{ textAlign: "center", py: 2 }}>
         <div>
           <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
             Odds
@@ -15,12 +15,12 @@ function HorseOdds() {
           <Grid container spacing={1}>
             {horses.map((horse, index) => (
               <>
-                <Grid item sm={8}>
+                <Grid item sm={7} sx={{ textAlign: "right" }}>
                   <Typography key={index} color="textSecondary" variant="body1">
                     {horse.name}
                   </Typography>
                 </Grid>
-                <Grid item sm={4}>
+                <Grid item sm={5}>
                   <Typography key={index} color="textSecondary" variant="body1">
                     1 : {horse.payout}
                   </Typography>
