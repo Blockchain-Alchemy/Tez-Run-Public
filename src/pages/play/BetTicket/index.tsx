@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { defaultHorses } from "hourse";
+import { defaultHorses } from "../horses";
 
 const convertTezos = (mutez) => {
   return mutez / 1000000;
