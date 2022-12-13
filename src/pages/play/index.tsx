@@ -1,16 +1,23 @@
-import React from "react";
+
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, Card, CardContent, Container, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import { Unity, useUnityContext } from "react-unity-webgl";
+
 import { MainLayout } from "components/main-layout";
-import { RootState } from "store";
 import Loader from "components/loader";
-import "./styles.css";
+import useBeacon from "hooks/useBeacon";
+import useInterval from "hooks/useInterval";
+
+import { getGameState } from "services";
+import { RootState } from "store";
+import { Race, RaceState } from "./types";
+
 import HorseOdds from "./HorseOdds";
 import RaceTimer from "./RaceTimer";
 import PlaceBet from "./PlaceBet";
-import { Race } from "./types";
 import BetTicket from "./BetTicket";
+import "./styles.css";
 
 const unityConfig = {
   loaderUrl: "Build/1.loader.js",
@@ -19,26 +26,49 @@ const unityConfig = {
   codeUrl: "Build/1.wasm",
 };
 
-const race: Race = {
-  admin: "admin",
-  paused: false,
-  race_id: 1,
-  start_time: "2022-12-12 15:00:00",
-  status: "1",
-  winner: 1,
-};
-
-const ticket = {
-  horseId: 1,
-  token: 0,
-  tezos: 4,
-  payout: 2,
-}
-
 const Play = () => {
+  const { address } = useBeacon();
   const { loading } = useSelector((state: RootState) => state.play);
   const unityContext = useUnityContext(unityConfig);
-  const { loadingProgression, isLoaded } = unityContext;
+  const { loadingProgression, isLoaded, sendMessage } = unityContext;
+  const [race, setRace] = useState<Race>({} as Race);
+  const [tickets, setTickets] = useState([]);
+
+  useInterval(async () => {
+    try {
+      if (address) {
+        const game = await getGameState(address);
+        if (game.race) {
+          setRace(game.race);
+          const updatedState = game.race.status;
+          if (updatedState) {
+            if (
+              race.status === RaceState.Ready &&
+              updatedState === RaceState.Started
+            ) {
+              sendMessage("GameController", "StartRaceNow", 45);
+            }
+          }
+        }
+        if (game.tickets) {
+          const tickets = game.tickets.map((ticket: any) => {
+            return {
+              horseId: Number(ticket.horse_id),
+              payout: Number(ticket.payout),
+              token: Number(ticket.token),
+              tezos: Number(ticket.tezos),
+              amount: Number(ticket.amount),
+            };
+          });
+          setTickets(tickets);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, 2000);
+
+
 
   return (
     <MainLayout>
@@ -79,11 +109,11 @@ const Play = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={4}>
               <Grid item sm={4} xs={12}>
-                <PlaceBet race={race} />
+                <PlaceBet />
               </Grid>
-              <Grid item sm={2} xs={12}>
-                <BetTicket ticket={ticket} />
-              </Grid>
+              {(tickets || []).map((ticket: any, index: number) => (
+                <BetTicket key={index} ticket={ticket}></BetTicket>
+              ))}
             </Grid>
           </Box>
         </Container>

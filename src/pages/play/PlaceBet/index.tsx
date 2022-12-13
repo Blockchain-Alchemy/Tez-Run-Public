@@ -1,29 +1,26 @@
 import { useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
-  Avatar,
   Box,
   Button,
   Card,
-  CardContent,
-  Divider,
   Input,
   Grid,
-  Switch,
   MenuItem,
   Select,
-  TextField,
   Typography,
 } from "@mui/material";
-// import useToast from "hooks/useToast";
-// import useBeacon from "hooks/useBeacon";
-// import useTezrun from "hooks/useTezrun";
+import toast from "react-hot-toast";
+import useBeacon from "hooks/useBeacon";
+import useTezrun from "hooks/useTezrun";
 import { defaultHorses } from "../horses";
 import { RaceState } from "../types";
+import { setLoading } from "slices/play";
 
-function PlaceBet({ race }) {
-  //const { connected } = useBeacon();
-  //const { placeBet, getApproval, approve } = useTezrun();
-  //const { toastError } = useToast();
+function PlaceBet() {
+  const dispatch = useDispatch();
+  const { connected } = useBeacon();
+  const { placeBet, getApproval, approve } = useTezrun();
 
   const [horses, setHorses] = useState(defaultHorses);
   const [nativeToken, setNativeToken] = useState(true);
@@ -33,40 +30,49 @@ function PlaceBet({ race }) {
   const [payout, setPayout] = useState(0);
 
   const handleBet = async () => {
-    // if (!connected) {
-    //   toastError("Validation Error", "Please Connect Your Wallet");
-    //   return;
-    // }
-    // if (horseId === 0) {
-    //   toastError("Validation Error", "Please select horse");
-    //   return;
-    // }
-    // if (betAmount === 0) {
-    //   toastError("Validation Error", "Please input bet amount");
-    //   return;
-    // }
-    // if (payout === 0) {
-    //   toastError("Validation Error", "Please input payout amount");
-    //   return;
-    // }
-    // const horse = horses.find((it) => it.id === horseId);
-    // if (!horse) {
-    //   return;
-    // }
-    // if (nativeToken) {
-    //   await placeBet(horseId, horse.payout, betAmount);
-    // } else {
-    //   const approval = await getApproval();
-    //   if (!approval) {
-    //     const approved = await approve();
-    //     if (!approved) {
-    //       toastError("Validation Error", "Failed to approve");
-    //       return;
-    //     }
-    //   }
-    //   const tokenAmount = betAmount * 1000000000000;
-    //   await placeBet(horseId, horse.payout, 0, 1, tokenAmount);
-    // }
+    if (!connected) {
+      toast.error("Please connect your wallet!");
+      return;
+    }
+    if (horseId === 0) {
+      toast.error("Please select a horse!");
+      return;
+    }
+    if (betAmount === 0) {
+      toast.error("Please input bet amount!");
+      return;
+    }
+    if (payout === 0) {
+      toast.error("Please input payout amount!");
+      return;
+    }
+    const horse = horses.find((it) => it.id === horseId);
+    if (!horse) {
+      return;
+    }
+    try {
+      dispatch(setLoading(true));
+
+      if (nativeToken) {
+        await placeBet(horseId, horse.payout, betAmount);
+      } else {
+        const approval = await getApproval();
+        if (!approval) {
+          const approved = await approve();
+          if (!approved) {
+            toast.error("Failed to approve");
+            return;
+          }
+        }
+
+        const tokenAmount = betAmount * 1000000000000;
+        await placeBet(horseId, horse.payout, 0, 1, tokenAmount);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   const onChangeHorseId = (horseId) => {
@@ -86,15 +92,6 @@ function PlaceBet({ race }) {
       setPayout(horse.payout * betAmount);
     }
   };
-
-  const betButtonStyle = useMemo(() => {
-    //return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36";
-    if (race.status !== RaceState.Ready) {
-      return "text-white bg-gray-400 dark:bg-gray-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-36";
-    } else {
-      return "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36";
-    }
-  }, [race]);
 
   const tokenName = useMemo(() => {
     return nativeToken ? "ꜩ" : "uUSD";
@@ -149,6 +146,7 @@ function PlaceBet({ race }) {
                 borderColor: "divider",
               }}
               value={betAmount}
+              onChange={(e) => onChangeBetAmount(Number(e.target.value))}
             />
           </Grid>
 
