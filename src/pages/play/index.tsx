@@ -10,6 +10,7 @@ import HorseOdds from "./HorseOdds";
 import RaceTimer from "./RaceTimer";
 import PlaceBet from "./PlaceBet";
 import { Race } from "./types";
+import BetTicket from "./BetTicket";
 
 const unityConfig = {
   loaderUrl: "Build/1.loader.js",
@@ -26,6 +27,13 @@ const race: Race = {
   status: "1",
   winner: 1,
 };
+
+const ticket = {
+  horseId: 1,
+  token: 0,
+  tezos: 4,
+  payout: 2,
+}
 
 const Play = () => {
   const { loading } = useSelector((state: RootState) => state.play);
@@ -72,6 +80,9 @@ const Play = () => {
             <Grid container spacing={4}>
               <Grid item sm={4} xs={12}>
                 <PlaceBet race={race} />
+              </Grid>
+              <Grid item sm={2} xs={12}>
+                <BetTicket ticket={ticket} />
               </Grid>
             </Grid>
           </Box>

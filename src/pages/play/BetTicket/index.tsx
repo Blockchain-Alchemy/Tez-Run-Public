@@ -1,4 +1,19 @@
 import React, { useMemo } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Input,
+  Grid,
+  Switch,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { defaultHorses } from "../horses";
 
 const convertTezos = (mutez) => {
@@ -21,38 +36,40 @@ const BetTicket = ({ ticket }) => {
     } else {
       return convertToken(ticket.amount);
     }
-  }, [ticket])
+  }, [ticket]);
 
   const unitName = useMemo(() => {
     return ticket.token === 0 ? "ꜩ" : "uUSD";
   }, [ticket]);
 
-
   return (
-    <div className="bg-white w-50 dark:bg-slate-900 rounded-lg px-4 py-6 ring-1 ring-slate-900/5 shadow-xl">
-      <h3 className="text-slate-900 dark:text-white mb-5 text-base font-medium tracking-tight">
-        Bet Ticket
-      </h3>
-      <p className="text-slate-500 dark:text-slate-400 mt-2">{horseName}</p>
-      <p className="text-slate-500 dark:text-slate-400 mt-2">To Win</p>
-      <p className="text-slate-500 dark:text-slate-400 mt-2">
-        <span>Bet Placed: </span>
-        <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">
-          {balance}
-        </span>{" "}
-        {unitName}
-      </p>
-      <p className="text-slate-500 dark:text-slate-400 mt-2">
-        <span>Will Win: </span>
-        <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">
-          {(balance * ticket.payout).toFixed(5)}
-        </span>{" "}
-        {unitName}
-      </p>
-      <p className="text-slate-500 dark:text-slate-400 mt-2">
-        {/* <span>{ !winner? "" : (winner === ticket?.horseId) ? "Winner" : "Loose" }</span> */}
-      </p>
-    </div>
+    <Card>
+      <Box sx={{ px: 3, py: 2 }}>
+        <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
+          Bet Ticket
+        </Typography>
+        <Typography color="textSecondary" variant="body1">
+          {horseName}
+        </Typography>
+        <Typography color="textSecondary" variant="body1">
+          To Win: 
+        </Typography>
+        <Typography color="textSecondary" variant="body1">
+          <span>Bet Placed: </span>
+          <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">
+            {balance}
+          </span>{" "}
+          {unitName}
+        </Typography>
+        <Typography color="textSecondary" variant="body1">
+          <span>Will Win: </span>
+          <span className="text-slate-900 dark:text-white mb-5 text-base font-medium">
+            {(balance * ticket.payout).toFixed(5)}
+          </span>{" "}
+          {unitName}
+        </Typography>
+      </Box>
+    </Card>
   );
 };
 

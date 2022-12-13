@@ -103,94 +103,92 @@ function PlaceBet({ race }) {
   return (
     <Card>
       <Box sx={{ px: 3, py: 2 }}>
-        <div>
-          <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
-            Place Bet
-          </Typography>
-          <Grid
-            container
-            spacing={1}
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item sm={6}>
-              <Typography color="textSecondary" variant="body1">
-                Select Horse:
-              </Typography>
-            </Grid>
-            <Grid item sm={6}>
-              <Select
-                fullWidth
-                value={horseId}
-                onChange={(e) => onChangeHorseId(Number(e.target.value))}
-              >
-                <MenuItem value={0}>Select Horse</MenuItem>
-                {horses.map((horse, index) => (
-                  <MenuItem key={index} value={horse.id}>
-                    {horse.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Grid>
-
-            <Grid item sm={6}>
-              <Typography color="textSecondary" variant="body1">
-                Bet Amount ({tokenName}):
-              </Typography>
-            </Grid>
-            <Grid item sm={6}>
-              <Input
-                disableUnderline
-                fullWidth
-                placeholder="Tezos"
-                sx={{
-                  p: 1,
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-                value={betAmount}
-              />
-            </Grid>
-
-            <Grid item sm={6}>
-              <Typography color="textSecondary" variant="body1">
-                Select Place:
-              </Typography>
-            </Grid>
-            <Grid item sm={6}>
-              <Select
-                fullWidth
-                value={selectedPlace}
-                onChange={(e) => setSelectedPlace(e.target.value)}
-              >
-                <MenuItem value={""}>To Win</MenuItem>
-                <MenuItem value={"win"}>Win</MenuItem>
-                <MenuItem value={"place"}>Place</MenuItem>
-                <MenuItem value={"show"}>Show</MenuItem>
-              </Select>
-            </Grid>
-
-            <Grid item sm={6}>
-              <Typography color="textSecondary" variant="body1">
-                Payout ({tokenName}):
-              </Typography>
-            </Grid>
-            <Grid item sm={6}>
-              <Input
-                disableUnderline
-                fullWidth
-                placeholder="Tezos"
-                sx={{
-                  p: 1,
-                  borderBottom: 1,
-                  borderColor: "divider",
-                }}
-                value={payout?.toFixed(4)}
-              />
-            </Grid>
+        <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
+          Place Bet
+        </Typography>
+        <Grid
+          container
+          spacing={1}
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item sm={6}>
+            <Typography color="textSecondary" variant="body1">
+              Select Horse:
+            </Typography>
           </Grid>
-        </div>
+          <Grid item sm={6}>
+            <Select
+              fullWidth
+              value={horseId}
+              onChange={(e) => onChangeHorseId(Number(e.target.value))}
+            >
+              <MenuItem value={0}>Select Horse</MenuItem>
+              {horses.map((horse, index) => (
+                <MenuItem key={index} value={horse.id}>
+                  {horse.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+
+          <Grid item sm={6}>
+            <Typography color="textSecondary" variant="body1">
+              Bet Amount ({tokenName}):
+            </Typography>
+          </Grid>
+          <Grid item sm={6}>
+            <Input
+              disableUnderline
+              fullWidth
+              placeholder="Tezos"
+              sx={{
+                p: 1,
+                borderBottom: 1,
+                borderColor: "divider",
+              }}
+              value={betAmount}
+            />
+          </Grid>
+
+          <Grid item sm={6}>
+            <Typography color="textSecondary" variant="body1">
+              Select Place:
+            </Typography>
+          </Grid>
+          <Grid item sm={6}>
+            <Select
+              fullWidth
+              value={selectedPlace}
+              onChange={(e) => setSelectedPlace(e.target.value)}
+            >
+              <MenuItem value={""}>To Win</MenuItem>
+              <MenuItem value={"win"}>Win</MenuItem>
+              <MenuItem value={"place"}>Place</MenuItem>
+              <MenuItem value={"show"}>Show</MenuItem>
+            </Select>
+          </Grid>
+
+          <Grid item sm={6}>
+            <Typography color="textSecondary" variant="body1">
+              Payout ({tokenName}):
+            </Typography>
+          </Grid>
+          <Grid item sm={6}>
+            <Input
+              disableUnderline
+              fullWidth
+              placeholder="Tezos"
+              sx={{
+                p: 1,
+                borderBottom: 1,
+                borderColor: "divider",
+              }}
+              value={payout?.toFixed(4)}
+            />
+          </Grid>
+        </Grid>
       </Box>
       <Box sx={{ px: 3, py: 2 }}>
         <div>
