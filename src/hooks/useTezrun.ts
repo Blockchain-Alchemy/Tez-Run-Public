@@ -1,14 +1,16 @@
 import { useCallback, useState, useMemo } from "react";
-import { Testnet, Mainnet } from "config";
+import { Testnet, Mainnet } from "configs";
 import useBeacon from "./useBeacon";
 
 const useTezrun = () => {
-  const { tezos, contract, address, networkType, setLoading } = useBeacon();
+  const { tezos, address, networkType } = useBeacon();
   const [approval, setApproval] = useState(false);
 
-  const getStorage = useCallback(() => {
-    return contract?.storage();
-  }, [contract]);
+  const getContract = useCallback(() => {
+    const contractAddress =
+      networkType === Testnet.NetworkType ? Testnet.TezRun : Mainnet.TezRun;
+    return tezos.wallet.at(contractAddress);
+  }, [tezos, networkType]);
 
   const uUSDContractAddress = useMemo(() => {
     return networkType === Testnet.NetworkType ? Testnet.uUSD : Mainnet.uUSD;
@@ -25,7 +27,6 @@ const useTezrun = () => {
       return new Promise((resolve) => resolve(approval));
     }
     try {
-      setLoading(true);
       const contract = await tezos.wallet.at(uUSDContractAddress);
       const storage: any = await contract.storage();
 
@@ -42,14 +43,11 @@ const useTezrun = () => {
       return false;
     } catch (e) {
       console.error(e);
-    } finally {
-      setLoading(false);
     }
   };
 
   const approve = async () => {
     try {
-      setLoading(true);
       const contract = await tezos.wallet.at(uUSDContractAddress);
       const params = [
         {
@@ -64,64 +62,38 @@ const useTezrun = () => {
       return op.confirmation(2);
     } catch (e) {
       console.error(e);
-    } finally {
-      setLoading(false);
     }
   };
 
   const placeBet = useCallback(
     async (horseId, payout, tezosAmount, tokenId = 0, tokenAmount = 0) => {
-      if (contract) {
-        try {
-          setLoading(true);
-          const op = await contract.methods
-            .place_bet(tokenAmount, horseId, payout, tokenId)
-            .send({
-              amount: tezosAmount,
-            });
-          return op.confirmation();
-        } catch (e) {
-          console.error(e);
-        } finally {
-          setLoading(false);
-        }
-      }
+      const contract = await getContract();
+      const op = await contract.methods
+        .place_bet(tokenAmount, horseId, payout, tokenId)
+        .send({
+          amount: tezosAmount,
+        });
+      return op.confirmation(2);
     },
-    [contract]
+    [getContract]
   );
 
   const placeBetByToken = useCallback(
     async (raceId, horseId, payout, amount) => {
-      if (contract) {
-        try {
-          setLoading(true);
-          const op = await contract.methods
-            .place_bet(amount, horseId, payout, raceId, 1)
-            .send();
-          return op.confirmation();
-        } catch (e) {
-          console.error(e);
-        } finally {
-          setLoading(false);
-        }
-      }
+      const contract = await getContract();
+      const op = await contract.methods
+        .place_bet(amount, horseId, payout, raceId, 1)
+        .send();
+      return op.confirmation(2);
     },
-    [contract]
+    [getContract]
   );
 
   const takeReward = useCallback(async () => {
-    if (contract) {
-      try {
-        setLoading(true);
-        const op = await contract.methods.take_rewards().send();
-        return op.confirmation(2);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-  }, [contract]);
+    const contract = await getContract();
+    const op = await contract.methods.take_rewards().send();
+    return op.confirmation(2);
+  }, [getContract]);
 
   return {
     placeBet,
@@ -129,7 +101,6 @@ const useTezrun = () => {
     takeReward,
     getApproval,
     approve,
-    getStorage,
   };
 };
 
