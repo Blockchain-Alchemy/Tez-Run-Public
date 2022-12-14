@@ -9,22 +9,20 @@ function HorseOdds() {
           <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
             Odds
           </Typography>
-          <Grid container spacing={1}>
-            {defaultHorses.map((horse, index) => (
-              <>
-                <Grid item sm={7} sx={{ textAlign: "right" }}>
-                  <Typography key={index} color="textSecondary" variant="body1">
-                    {horse.name}
-                  </Typography>
-                </Grid>
-                <Grid item sm={5}>
-                  <Typography key={index} color="textSecondary" variant="body1">
-                    1 : {horse.payout}
-                  </Typography>
-                </Grid>
-              </>
-            ))}
-          </Grid>
+          {defaultHorses.map((horse, index) => (
+            <Grid key={index} container spacing={0}>
+              <Grid item sm={7} sx={{ textAlign: "right" }}>
+                <Typography key={index} color="textSecondary" variant="body1">
+                  {horse.name}
+                </Typography>
+              </Grid>
+              <Grid item sm={5} sx={{ pl: 2, textAlign: "left" }}>
+                <Typography key={index} color="textSecondary" variant="body1">
+                  1 : {horse.payout}
+                </Typography>
+              </Grid>
+            </Grid>
+          ))}
         </div>
       </Box>
     </Card>
