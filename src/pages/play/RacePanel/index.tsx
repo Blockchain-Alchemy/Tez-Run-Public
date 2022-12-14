@@ -10,7 +10,7 @@ import { readyRace, startRace, finishRace, getRewards } from "services";
 const isAdmin = true;
 
 const RacePanel = ({ unityContext }) => {
-  const { address } = useBeacon();
+  const { indexer, address } = useBeacon();
   const { takeReward } = useTezrun();
   const [loading, setLoading] = useState(false);
   const [resultHorses, setResultHorses] = useState<any[]>([]);
@@ -50,7 +50,7 @@ const RacePanel = ({ unityContext }) => {
     try {
       setLoading(true);
       if (address) {
-        const result = await getRewards(address);
+        const result = await getRewards(indexer, address);
         console.log("rewards", result);
         if (result?.tezos || result?.tokens) {
           await takeReward();

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Container, Grid } from "@mui/material";
@@ -27,7 +26,7 @@ const unityConfig = {
 };
 
 const Play = () => {
-  const { address } = useBeacon();
+  const { indexer, address } = useBeacon();
   const { loading } = useSelector((state: RootState) => state.play);
   const unityContext = useUnityContext(unityConfig);
   const { loadingProgression, isLoaded, sendMessage } = unityContext;
@@ -37,7 +36,7 @@ const Play = () => {
   useInterval(async () => {
     try {
       if (address) {
-        const game = await getGameState(address);
+        const game = await getGameState(indexer, address);
         if (game.race) {
           setRace(game.race);
           const updatedState = game.race.status;
@@ -68,8 +67,6 @@ const Play = () => {
     }
   }, 2000);
 
-
-
   return (
     <MainLayout>
       {loading && <Loader />}
@@ -84,21 +81,23 @@ const Play = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={0.5}>
               <Grid item sm={10} xs={12}>
-                <Unity
-                  unityProvider={unityContext.unityProvider}
-                  style={{
-                    height: 540,
-                    width: 920,
-                    background: "#555",
-                  }}
-                />
-                {!isLoaded && loadingProgression > 0 && (
-                  <div className="unity-loader">
-                    <div>
-                      Loading... {Math.round(loadingProgression * 100)}%
+                <div className="unity-container">
+                  <Unity
+                    unityProvider={unityContext.unityProvider}
+                    style={{
+                      height: 540,
+                      width: 920,
+                      background: "#555",
+                    }}
+                  />
+                  {!isLoaded && loadingProgression > 0 && (
+                    <div className="unity-loader">
+                      <div>
+                        Loading... {Math.round(loadingProgression * 100)}%
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </Grid>
               <Grid item sm={2} xs={12}>
                 <RaceTimer race={race} />

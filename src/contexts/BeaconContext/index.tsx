@@ -1,9 +1,19 @@
-import React, { createContext, useState, useCallback, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useCallback,
+  ReactNode,
+  useMemo,
+} from "react";
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import { NetworkType, PermissionResponseOutput, PermissionScope } from "@airgap/beacon-sdk";
+import {
+  NetworkType,
+  PermissionResponseOutput,
+  PermissionScope,
+} from "@airgap/beacon-sdk";
 import { BeaconEvent, defaultEventCallbacks } from "@airgap/beacon-sdk";
-import { Mainnet } from "configs";
+import { Mainnet, Testnet } from "configs";
 import { useEffect } from "react";
 
 export interface BeaconContextApi {
@@ -14,6 +24,7 @@ export interface BeaconContextApi {
   address: string | undefined;
   rpcUrl: string;
   networkType: NetworkType;
+  indexer: string;
   connectWallet: () => Promise<PermissionResponseOutput | undefined>;
   disconnectWallet: () => Promise<void>;
   setNetworkType: (networkType: NetworkType) => void;
@@ -39,6 +50,12 @@ export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
   const [publicKey, setPublicKey] = useState<string | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [connected, setConnected] = useState<boolean>(false);
+
+  const indexer = useMemo(() => {
+    return networkType === Mainnet.NetworkType
+      ? Mainnet.Indexer
+      : Testnet.Indexer;
+  }, [networkType]);
 
   useEffect(() => {
     setAddress(undefined);
@@ -118,6 +135,7 @@ export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
         address,
         rpcUrl,
         networkType,
+        indexer,
         connectWallet,
         disconnectWallet,
         setNetworkType,

@@ -8,6 +8,7 @@ export const API_BASE_URL = "https://grat.fun";
 
 export const Mainnet = {
   NetworkType: NetworkType.MAINNET,
+  Indexer: "https://api.tzstats.com",
   RpcUrl: "https://mainnet.tezos.marigold.dev",
   RpcList: ["https://mainnet.tezos.marigold.dev"],
   TezRun: "KT1TK9GheViS3Z8hJSjZnBo7324rXnFtnYGC", //"KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
@@ -17,6 +18,7 @@ export const Mainnet = {
 
 export const Testnet = {
   NetworkType: NetworkType.JAKARTANET,
+  Indexer: "https://api.jakarta.tzstats.com",
   RpcUrl: "https://jakartanet.tezos.marigold.dev",
   RpcList: ["https://jakartanet.tezos.marigold.dev"],
   TezRun: "KT1QqTCsHghND8gfeG55w2pWCskZpFFgjVCV",

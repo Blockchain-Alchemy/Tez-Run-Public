@@ -1,3 +1,7 @@
+.unity-container {
+  position: relative;
+}
+
 .unity-loader {
   position: absolute;
   left: 50%;

@@ -1,19 +1,5 @@
-import React, { useMemo } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Input,
-  Grid,
-  Switch,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { useMemo } from "react";
+import { Box, Card, Typography } from "@mui/material";
 import { defaultHorses } from "../horses";
 
 const convertTezos = (mutez) => {
@@ -52,7 +38,7 @@ const BetTicket = ({ ticket }) => {
           {horseName}
         </Typography>
         <Typography color="textSecondary" variant="body1">
-          To Win: 
+          To Win:
         </Typography>
         <Typography color="textSecondary" variant="body1">
           <span>Bet Placed: </span>
