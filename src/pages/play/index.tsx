@@ -31,7 +31,7 @@ const Play = () => {
   const unityContext = useUnityContext(unityConfig);
   const { loadingProgression, isLoaded, sendMessage } = unityContext;
   const [race, setRace] = useState<Race>({} as Race);
-  const [tickets, setTickets] = useState([]);
+  const [tickets, setTickets] = useState<any[]>([]);
 
   useInterval(async () => {
     try {
@@ -67,6 +67,18 @@ const Play = () => {
     }
   }, 2000);
 
+  const ticketList = () => (
+    <Box>
+      <Grid container spacing={1}>
+        {(tickets || []).map((ticket: any, index: number) => (
+          <Grid item key={index} sm={3} xs={6}>
+            <BetTicket key={index} ticket={ticket}></BetTicket>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+
   return (
     <MainLayout>
       {loading && <Loader />}
@@ -78,7 +90,7 @@ const Play = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ mb: 4 }}>
+          <Box sx={{ mb: 4, mr: 2 }}>
             <Grid container spacing={0.5}>
               <Grid item sm={10} xs={12}>
                 <div className="unity-container">
@@ -106,13 +118,13 @@ const Play = () => {
             </Grid>
           </Box>
           <Box sx={{ mb: 4 }}>
-            <Grid container spacing={4}>
+            <Grid container spacing={1}>
               <Grid item sm={4} xs={12}>
                 <PlaceBet />
               </Grid>
-              {(tickets || []).map((ticket: any, index: number) => (
-                <BetTicket key={index} ticket={ticket}></BetTicket>
-              ))}
+              <Grid item sm={8} xs={12}>
+                {ticketList()}
+              </Grid>
             </Grid>
           </Box>
         </Container>
