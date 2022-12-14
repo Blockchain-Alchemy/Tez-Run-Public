@@ -1,10 +1,7 @@
-import { useState } from "react";
 import { Box, Card, Grid, Typography } from "@mui/material";
 import { defaultHorses } from "../horses";
 
 function HorseOdds() {
-  const [horses, setHorses] = useState(defaultHorses);
-
   return (
     <Card sx={{ my: 2 }}>
       <Box sx={{ textAlign: "center", py: 2 }}>
@@ -13,7 +10,7 @@ function HorseOdds() {
             Odds
           </Typography>
           <Grid container spacing={1}>
-            {horses.map((horse, index) => (
+            {defaultHorses.map((horse, index) => (
               <>
                 <Grid item sm={7} sx={{ textAlign: "right" }}>
                   <Typography key={index} color="textSecondary" variant="body1">

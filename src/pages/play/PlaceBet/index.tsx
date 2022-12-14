@@ -14,7 +14,6 @@ import toast from "react-hot-toast";
 import useBeacon from "hooks/useBeacon";
 import useTezrun from "hooks/useTezrun";
 import { defaultHorses } from "../horses";
-import { RaceState } from "../types";
 import { setLoading } from "slices/play";
 
 function PlaceBet() {
@@ -22,8 +21,7 @@ function PlaceBet() {
   const { connected } = useBeacon();
   const { placeBet, getApproval, approve } = useTezrun();
 
-  const [horses, setHorses] = useState(defaultHorses);
-  const [nativeToken, setNativeToken] = useState(true);
+  const nativeToken = true;//const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
   const [betAmount, setBetAmount] = useState(0.004);
   const [selectedPlace, setSelectedPlace] = useState("win");
@@ -46,7 +44,7 @@ function PlaceBet() {
       toast.error("Please input payout amount!");
       return;
     }
-    const horse = horses.find((it) => it.id === horseId);
+    const horse = defaultHorses.find((it) => it.id === horseId);
     if (!horse) {
       return;
     }
@@ -78,7 +76,7 @@ function PlaceBet() {
   const onChangeHorseId = (horseId) => {
     setHorseId(horseId);
 
-    const horse = horses.find((it) => it.id === horseId);
+    const horse = defaultHorses.find((it) => it.id === horseId);
     if (horse) {
       setPayout(horse.payout * betAmount);
     }
@@ -87,7 +85,7 @@ function PlaceBet() {
   const onChangeBetAmount = (betAmount) => {
     setBetAmount(betAmount);
 
-    const horse = horses.find((it) => it.id === horseId);
+    const horse = defaultHorses.find((it) => it.id === horseId);
     if (horse) {
       setPayout(horse.payout * betAmount);
     }
@@ -122,7 +120,7 @@ function PlaceBet() {
               onChange={(e) => onChangeHorseId(Number(e.target.value))}
             >
               <MenuItem value={0}>Select Horse</MenuItem>
-              {horses.map((horse, index) => (
+              {defaultHorses.map((horse, index) => (
                 <MenuItem key={index} value={horse.id}>
                   {horse.name}
                 </MenuItem>
