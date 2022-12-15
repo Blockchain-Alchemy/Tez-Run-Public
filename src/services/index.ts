@@ -83,8 +83,9 @@ export const startRace = () => {
   });
 };
 
-export const finishRace = async () => {
-  const url = `${API_BASE_URL}/api/v1/tezrun/race/finish`;
+export const finishRace = async (winner?: number | string) => {
+  const winnerId = winner ? winner : "";
+  const url = `${API_BASE_URL}/api/v1/tezrun/race/finish?winner=${winnerId}`;
   return axios.get(url).then((res) => {
     return res.data;
   });

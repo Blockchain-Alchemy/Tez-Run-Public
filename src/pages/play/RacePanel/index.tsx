@@ -29,11 +29,12 @@ const RacePanel = ({ unityContext }) => {
       });
 
       const firstHorse = resultHorses[0];
+      console.log('Winner:', firstHorse);
       const horse = defaultHorses.find((it) => it.name === firstHorse.name);
       if (horse) {
         console.log("FinishRace", horse);
         setWinner(horse.id);
-        //await finishRace();
+        await finishRace(horse.id);
       }
     }
   };

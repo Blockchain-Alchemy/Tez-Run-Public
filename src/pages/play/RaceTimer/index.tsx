@@ -14,18 +14,17 @@ type RaceTimerProps = {
 const RaceTimer = ({ race }: RaceTimerProps) => {
   const dispatch = useDispatch();
   const [remainTime, setRemainTime] = useState(0);
+  const { status, start_time } = race || {};
 
   useEffect(() => {
-    if (race) {
-      if (race.status === RaceState.Ready) {
-        const seconds = moment(race.start_time).diff(moment(), "seconds");
-        setRemainTime(seconds);
-      } else if (race.status === RaceState.Started) {
-        const seconds = 600 - moment().diff(moment(race.start_time), "seconds");
-        setRemainTime(seconds);
-      }
+    if (status === RaceState.Ready) {
+      const seconds = moment(start_time).diff(moment(), "seconds");
+      setRemainTime(seconds);
+    } else if (status === RaceState.Started) {
+      const seconds = 600 - moment().diff(moment(start_time), "seconds");
+      setRemainTime(seconds);
     }
-  }, [race?.status]);
+  }, [status, start_time]);
 
   // Start timer
   setTimeout(() => {
@@ -35,15 +34,13 @@ const RaceTimer = ({ race }: RaceTimerProps) => {
   }, 1000);
 
   const raceState = useMemo(() => {
-    if (race) {
-      if (race.status === RaceState.Ready) {
-        return "Race Starts in";
-      } else if (race.status === RaceState.Started) {
-        return "Race Ends in";
-      }
+    if (status === RaceState.Ready) {
+      return "Race Starts in";
+    } else if (status === RaceState.Started) {
+      return "Race Ends in";
     }
     return "Race Timer";
-  }, [race]);
+  }, [status]);
 
   const handleEndRace = async () => {
     try {
