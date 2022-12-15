@@ -11,7 +11,7 @@ export const Mainnet = {
   Indexer: "https://api.tzstats.com",
   RpcUrl: "https://mainnet.tezos.marigold.dev",
   RpcList: ["https://mainnet.tezos.marigold.dev"],
-  TezRun: "KT1TK9GheViS3Z8hJSjZnBo7324rXnFtnYGC", //"KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
+  TezRun: "KT1SabQEuqzxrwp6caZyXPXpt98FhHoPB5NZ",//"KT1TK9GheViS3Z8hJSjZnBo7324rXnFtnYGC", //"KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
   Escrow: "KT1R2Uo6Q3o4emoPekgbEPs2eQMpqXfravSC",
   uUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
 };
