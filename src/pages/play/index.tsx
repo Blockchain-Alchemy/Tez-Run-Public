@@ -4,7 +4,7 @@ import { Box, Container, Grid } from "@mui/material";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 import { MainLayout } from "components/main-layout";
-import Loader from "components/loader";
+import Loader from "components/loaders";
 import useBeacon from "hooks/useBeacon";
 import useInterval from "hooks/useInterval";
 

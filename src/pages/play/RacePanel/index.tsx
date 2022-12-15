@@ -3,7 +3,7 @@ import moment from "moment";
 import { toast } from "react-hot-toast";
 import useTezrun from "hooks/useTezrun";
 import useBeacon from "hooks/useBeacon";
-import Loader from "components/loader";
+import Loader from "components/loaders";
 import { defaultHorses } from "../horses";
 import { readyRace, startRace, finishRace, getRewards } from "services";
 
