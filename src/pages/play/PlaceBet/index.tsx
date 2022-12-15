@@ -57,7 +57,8 @@ function PlaceBet({ race }: Props) {
       dispatch(setLoading(true));
 
       if (nativeToken) {
-        const rate = payout * 1000000000000;
+        const rate = Math.round(payout * 1000000000000);
+        console.log('rate', rate, betAmount)
         await placeBet(horseId, rate, betAmount);
       } else {
         const approval = await getApproval();
