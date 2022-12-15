@@ -122,7 +122,7 @@ const Play = () => {
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={1}>
               <Grid item sm={4} xs={12}>
-                <PlaceBet />
+                <PlaceBet race={race} />
               </Grid>
               <Grid item sm={8} xs={12}>
                 {ticketList()}

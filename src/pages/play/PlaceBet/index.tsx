@@ -13,15 +13,20 @@ import {
 import toast from "react-hot-toast";
 import useBeacon from "hooks/useBeacon";
 import useTezrun from "hooks/useTezrun";
-import { defaultHorses } from "../horses";
 import { setLoading } from "slices/play";
+import { defaultHorses } from "../horses";
+import { Race, RaceState } from "../types";
 
-function PlaceBet() {
+type Props = {
+  race: Race;
+};
+
+function PlaceBet({ race }: Props) {
   const dispatch = useDispatch();
   const { connected } = useBeacon();
   const { placeBet, getApproval, approve } = useTezrun();
 
-  const nativeToken = true;//const [nativeToken, setNativeToken] = useState(true);
+  const nativeToken = true; //const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
   const [betAmount, setBetAmount] = useState(0.004);
   const [selectedPlace, setSelectedPlace] = useState("win");
@@ -203,6 +208,7 @@ function PlaceBet() {
                 fullWidth
                 size="medium"
                 onClick={handleBet}
+                disabled={!race || race.status === RaceState.Started}
               >
                 Bet
               </Button>
