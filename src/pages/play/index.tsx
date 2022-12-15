@@ -35,34 +35,32 @@ const Play = () => {
 
   useInterval(async () => {
     try {
-      if (address) {
-        const game = await getGameState(indexer, address);
-        if (game.race) {
-          setRace(game.race);
-          const updatedState = game.race.status;
-          if (updatedState) {
-            if (
-              race.status === RaceState.Ready &&
-              updatedState === RaceState.Started
-            ) {
-              sendMessage("GameController", "StartRaceNow", 45);
-            }
+      const game = await getGameState(indexer);
+      if (game.race) {
+        setRace(game.race);
+        const updatedState = game.race.status;
+        if (updatedState) {
+          if (
+            race.status === RaceState.Ready &&
+            updatedState === RaceState.Started
+          ) {
+            sendMessage("GameController", "StartRaceNow", 45);
           }
         }
-        if (game.tickets) {
-          const tickets = game.tickets
-            .filter((t) => t.address === address)
-            .map((ticket: any) => {
-              return {
-                horseId: Number(ticket.horse_id),
-                payout: Number(ticket.payout),
-                token: Number(ticket.token),
-                tezos: Number(ticket.tezos),
-                amount: Number(ticket.amount),
-              };
-            });
-          setTickets(tickets);
-        }
+      }
+      if (address && game.tickets) {
+        const tickets = game.tickets
+          .filter((t) => t.address === address)
+          .map((ticket: any) => {
+            return {
+              horseId: Number(ticket.horse_id),
+              payout: Number(ticket.payout),
+              token: Number(ticket.token),
+              tezos: Number(ticket.tezos),
+              amount: Number(ticket.amount),
+            };
+          });
+        setTickets(tickets);
       }
     } catch (err) {
       console.error(err);
@@ -96,7 +94,11 @@ const Play = () => {
             <Grid container spacing={0.5}>
               <Grid item sm={10} xs={12}>
                 {!!isLoaded && race?.status === RaceState.Started ? (
-                  <img className="placeholder" src="/images/placeholder.jpg" alt="placeholder" />
+                  <img
+                    className="placeholder"
+                    src="/images/placeholder.jpg"
+                    alt="placeholder"
+                  />
                 ) : (
                   <div className="unity-container">
                     <Unity

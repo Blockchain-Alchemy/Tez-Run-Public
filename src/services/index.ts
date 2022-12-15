@@ -40,7 +40,7 @@ export const getTickets = (indexer: string, address: string) => {
   return getStorage(indexer).then((storage) => storage.value.tickets);
 };
 
-export const getGameState = (indexer: string, address: string) => {
+export const getGameState = (indexer: string) => {
   // const url = `${API_BASE_URL}/api/v1/tezrun/status/${address}`;
   // return axios.get(url).then((res) => {
   //   return res.data;

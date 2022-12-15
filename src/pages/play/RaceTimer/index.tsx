@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import moment from "moment";
 import { Box, Card, Typography } from "@mui/material";
 import { Race, RaceState } from "../types";
@@ -11,12 +11,16 @@ const RaceTimer = ({ race }: RaceTimerProps) => {
   const [remainTime, setRemainTime] = useState(0);
 
   useEffect(() => {
-    if (race && race.status === RaceState.Ready) {
-      const seconds = moment(race.start_time).diff(moment(), "seconds");
-      console.log("seconds", seconds);
-      setRemainTime(seconds);
+    if (race) {
+      if (race.status === RaceState.Ready) {
+        const seconds = moment(race.start_time).diff(moment(), "seconds");
+        setRemainTime(seconds);
+      } else if (race.status === RaceState.Started) {
+        const seconds = 600 - moment().diff(moment(race.start_time), "seconds");
+        setRemainTime(seconds);
+      }
     }
-  }, [race]);
+  }, [race?.status]);
 
   // Start timer
   setTimeout(() => {
@@ -25,23 +29,26 @@ const RaceTimer = ({ race }: RaceTimerProps) => {
     }
   }, 1000);
 
+  const raceState = useMemo(() => {
+    if (race) {
+      if (race.status === RaceState.Ready) {
+        return "Race Starts in";
+      } else if (race.status === RaceState.Started) {
+        return "Race Ends in";
+      }
+    }
+    return "Race Timer";
+  }, [race]);
+
   return (
     <Card>
       <Box sx={{ textAlign: "center", px: 3, py: 2 }}>
-        {race.status === RaceState.Ready ? (
-          <>
-            <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
-              Race Starts in:
-            </Typography>
-            <Typography color="textSecondary" variant="body1">
-              {moment.utc(remainTime * 1000).format("HH:mm:ss")}
-            </Typography>
-          </>
-        ) : (
-          <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
-            Race Started!
-          </Typography>
-        )}
+        <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
+          {raceState}:
+        </Typography>
+        <Typography color="textSecondary" variant="body1">
+          {moment.utc(remainTime * 1000).format("HH:mm:ss")}
+        </Typography>
       </Box>
     </Card>
   );
