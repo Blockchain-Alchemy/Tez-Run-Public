@@ -19,27 +19,30 @@ const RacePanel = ({ status, unityContext }) => {
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const { addEventListener, removeEventListener } = unityContext;
 
-  const onFinishRace = useCallback(async (name: string, time: string) => {
-    const index = resultHorses.findIndex((h) => h.name === name);
-    if (index < 0) {
-      resultHorses.push({ name, time });
-      setResultHorses([...resultHorses]);
-    }
-
-    if (resultHorses.length === 6) {
-      resultHorses.sort((a: any, b: any) => {
-        return moment(a.time).diff(b.time);
-      });
-
-      const firstHorse = resultHorses[0];
-      console.log("Winner:", firstHorse);
-      const horse = defaultHorses.find((it) => it.name === firstHorse.name);
-      if (horse) {
-        console.log("FinishRace", horse);
-        await finishRace(horse.id);
+  const onFinishRace = useCallback(
+    async (name: string, time: string) => {
+      const index = resultHorses.findIndex((h) => h.name === name);
+      if (index < 0) {
+        resultHorses.push({ name, time });
+        setResultHorses([...resultHorses]);
       }
-    }
-  }, [resultHorses]);
+
+      if (resultHorses.length === 6) {
+        resultHorses.sort((a: any, b: any) => {
+          return moment(a.time).diff(b.time);
+        });
+
+        const firstHorse = resultHorses[0];
+        console.log("Winner:", firstHorse);
+        const horse = defaultHorses.find((it) => it.name === firstHorse.name);
+        if (horse) {
+          console.log("FinishRace", horse);
+          await finishRace(horse.id);
+        }
+      }
+    },
+    [resultHorses]
+  );
 
   useEffect(() => {
     console.log("Initialize Unity Events");
@@ -57,24 +60,32 @@ const RacePanel = ({ status, unityContext }) => {
         toast.error("Please connect your wallet!");
         return;
       }
-      setLoading(true);
-      const balance = await getBalance(indexer, Mainnet.TezRun);
-      const rewards = await getRewards(indexer, address);
-      console.log("rewards", balance, rewards);
-      if (balance < rewards) {
-        toast.error("Insufficient Funds to Give Reward, Please contact support");
+      dispatch(setLoading(true));
+
+      const rewards = await getRewards(indexer, address);      
+      if (rewards <= 0) {
+        toast.success("There is no rewards");
         return;
       }
-      if (rewards?.length > 0) {
-        await takeReward();
-        toast.success("You got reward successfully");
-      } else {
-        toast.success("There is not rewards");
+
+      const balance = await getBalance(indexer, Mainnet.TezRun);
+      console.log("rewards", balance, rewards);
+      if (balance < rewards) {
+        toast.error(
+          "Insufficient Funds to Give Reward, Please contact support"
+        );
+        return;
       }
+
+      await takeReward();
+      toast.success("You got reward successfully");
     } catch (e) {
       console.error(e);
+      toast.error(
+        "Insufficient Funds to Give Reward, Please contact support"
+      );
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 

@@ -190,7 +190,7 @@ function PlaceBet({ race }: Props) {
                 borderColor: "divider",
               }}
               disabled
-              value={payout?.toFixed(4)}
+              value={parseFloat(payout?.toFixed(4))}
             />
           </Grid>
         </Grid>
