@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import moment from "moment";
-import { Box, Button, Card, Typography } from "@mui/material";
+import { Box, Button, Card } from "@mui/material";
 
 import useTezrun from "hooks/useTezrun";
 import useBeacon from "hooks/useBeacon";
@@ -47,7 +47,7 @@ const RacePanel = ({ status, unityContext }) => {
     return () => {
       removeEventListener("FinishedRace", onFinishRace);
     };
-  }, [unityContext]);
+  }, [addEventListener, removeEventListener]);
 
   const handleTakeReward = async () => {
     console.log("TakeReward", address);
