@@ -83,7 +83,7 @@ export const startRace = () => {
   });
 };
 
-export const finishRace = () => {
+export const finishRace = async () => {
   const url = `${API_BASE_URL}/api/v1/tezrun/race/finish`;
   return axios.get(url).then((res) => {
     return res.data;

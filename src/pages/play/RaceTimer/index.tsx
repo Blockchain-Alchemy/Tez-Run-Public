@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import moment from "moment";
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Button, Card, Typography } from "@mui/material";
 import { Race, RaceState } from "../types";
+import { finishRace } from "services";
+import { toast } from "react-hot-toast";
+import { setLoading } from "slices/play";
 
 type RaceTimerProps = {
   race: Race;
 };
 
 const RaceTimer = ({ race }: RaceTimerProps) => {
+  const dispatch = useDispatch();
   const [remainTime, setRemainTime] = useState(0);
 
   useEffect(() => {
@@ -40,6 +45,18 @@ const RaceTimer = ({ race }: RaceTimerProps) => {
     return "Race Timer";
   }, [race]);
 
+  const handleEndRace = async () => {
+    try {
+      dispatch(setLoading(true));
+      await finishRace();
+      toast.success("The race is finished!");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   return (
     <Card>
       <Box sx={{ textAlign: "center", px: 3, py: 2 }}>
@@ -49,6 +66,17 @@ const RaceTimer = ({ race }: RaceTimerProps) => {
         <Typography color="textSecondary" variant="body1">
           {moment.utc(remainTime * 1000).format("HH:mm:ss")}
         </Typography>
+      </Box>
+      <Box sx={{ textAlign: "center", px: 1, py: 2 }}>
+        <Button
+          variant="contained"
+          fullWidth
+          size="medium"
+          onClick={handleEndRace}
+          disabled={!race || race.status !== RaceState.Started}
+        >
+          Debug: End Race
+        </Button>
       </Box>
     </Card>
   );
