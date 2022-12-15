@@ -115,7 +115,10 @@ const Play = () => {
               <Grid item sm={2} xs={12}>
                 <RaceTimer race={race} />
                 <HorseOdds />
-                <RacePanel race={race} unityContext={unityContext}></RacePanel>
+                <RacePanel
+                  status={race?.status}
+                  unityContext={unityContext}
+                ></RacePanel>
               </Grid>
             </Grid>
           </Box>

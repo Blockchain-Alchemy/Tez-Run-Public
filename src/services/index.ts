@@ -24,6 +24,13 @@ export const getStorage = (indexer: string) => {
   });
 };
 
+export const getBigmapValues = (indexer: string, id: string) => {
+  const url = `${indexer}/explorer/bigmap/${id}/values`;
+  return axios.get(url).then((res) => {
+    return res.data;
+  });
+};
+
 export const getRaceState = (indexer: string) => {
   // const url = `${API_BASE_URL}/api/v1/tezrun/race/status`;
   // return axios.get(url).then((res) => {
@@ -66,7 +73,17 @@ export const getRewards = (indexer: string, address: string) => {
   // return axios.get(url).then((res) => {
   //   return res.data;
   // });
-  return getStorage(indexer).then((storage) => storage.value.rewards);
+  return getStorage(indexer)
+    .then((storage) => {
+      const id = storage.value.rewards;
+      return getBigmapValues(indexer, id);
+    })
+    .then((rewards: any[]) => {
+      if (!rewards) {
+        return [];
+      }
+      return rewards.filter((i) => i.key === address && i.value["0"]);
+    });
 };
 
 export const readyRace = () => {

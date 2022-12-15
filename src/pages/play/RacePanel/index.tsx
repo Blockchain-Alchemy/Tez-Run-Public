@@ -11,7 +11,7 @@ import { finishRace, getRewards } from "services";
 import { setLoading } from "slices/play";
 import { RaceState } from "../types";
 
-const RacePanel = ({ race, unityContext }) => {
+const RacePanel = ({ status, unityContext }) => {
   const dispatch = useDispatch();
   const { indexer, address } = useBeacon();
   const { takeReward } = useTezrun();
@@ -52,16 +52,18 @@ const RacePanel = ({ race, unityContext }) => {
   const handleTakeReward = async () => {
     console.log("TakeReward", address);
     try {
+      if (!address) {
+        toast.error("Please connect your wallet!");
+        return;
+      }
       setLoading(true);
-      if (address) {
-        const result = await getRewards(indexer, address);
-        console.log("rewards", result);
-        if (result?.tezos || result?.tokens) {
-          await takeReward();
-          toast.success("You got reward successfully");
-        } else {
-          toast.success("There is not rewards");
-        }
+      const rewards = await getRewards(indexer, address);
+      console.log("rewards", rewards);
+      if (rewards?.length > 0) {
+        await takeReward();
+        toast.success("You got reward successfully");
+      } else {
+        toast.success("There is not rewards");
       }
     } catch (e) {
       console.error(e);
@@ -126,7 +128,7 @@ const RacePanel = ({ race, unityContext }) => {
           fullWidth
           size="medium"
           onClick={handleFinishRace}
-          disabled={!race || race.status !== RaceState.Started}
+          disabled={status !== RaceState.Started}
         >
           Debug: End Race
         </Button>
@@ -137,7 +139,6 @@ const RacePanel = ({ race, unityContext }) => {
           fullWidth
           size="medium"
           onClick={handleTakeReward}
-          disabled={!race || race.status === RaceState.Started}
         >
           Take Reward
         </Button>
