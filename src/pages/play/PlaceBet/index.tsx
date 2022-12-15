@@ -28,7 +28,7 @@ function PlaceBet({ race }: Props) {
 
   const nativeToken = true; //const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
-  const [betAmount, setBetAmount] = useState(0.001);
+  const [betAmount, setBetAmount] = useState(0.001);//(1);//(0.001);
   const [selectedPlace, setSelectedPlace] = useState("win");
   const [payout, setPayout] = useState(0);
 
@@ -57,7 +57,7 @@ function PlaceBet({ race }: Props) {
       dispatch(setLoading(true));
 
       if (nativeToken) {
-        const rate = payout / betAmount;
+        const rate = payout * 1000000000000;
         await placeBet(horseId, rate, betAmount);
       } else {
         const approval = await getApproval();
@@ -69,7 +69,7 @@ function PlaceBet({ race }: Props) {
           }
         }
 
-        const rate = payout / betAmount;
+        const rate = payout * 1000000000000;
         const tokenAmount = betAmount * 1000000000000;
         await placeBet(horseId, rate, 0, 1, tokenAmount);
       }
