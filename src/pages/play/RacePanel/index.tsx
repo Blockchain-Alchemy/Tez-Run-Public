@@ -7,7 +7,8 @@ import { Box, Button, Card } from "@mui/material";
 import useTezrun from "hooks/useTezrun";
 import useBeacon from "hooks/useBeacon";
 import { defaultHorses } from "../horses";
-import { finishRace, getRewards } from "services";
+import { finishRace, getBalance, getRewards } from "services";
+import { Mainnet } from "configs";
 import { setLoading } from "slices/play";
 import { RaceState } from "../types";
 
@@ -57,8 +58,13 @@ const RacePanel = ({ status, unityContext }) => {
         return;
       }
       setLoading(true);
+      const balance = await getBalance(indexer, Mainnet.TezRun);
       const rewards = await getRewards(indexer, address);
-      console.log("rewards", rewards);
+      console.log("rewards", balance, rewards);
+      if (balance < rewards) {
+        toast.error("Insufficient Funds to Give Reward, Please contact support");
+        return;
+      }
       if (rewards?.length > 0) {
         await takeReward();
         toast.success("You got reward successfully");

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { uuid } from "uuidv4";
-import { API_BASE_URL } from "configs";
+import { API_BASE_URL, Mainnet } from "configs";
 
 export const updateBetting = (raceId, horseId, payout, amount) => {
   const url = `${API_BASE_URL}/api/bet`;
@@ -17,8 +17,15 @@ export const updateBetting = (raceId, horseId, payout, amount) => {
 };
 
 // Indexer
+export const getBalance = (indexer: string, address: string) => {
+  const url = `${indexer}/explorer/address/${address}}`;
+  return axios.get(url).then((res) => {
+    return Number(res.data.spendable_balance) * 1000000000000;
+  });
+};
+
 export const getStorage = (indexer: string) => {
-  const url = `${indexer}/explorer/contract/KT1TK9GheViS3Z8hJSjZnBo7324rXnFtnYGC/storage`;
+  const url = `${indexer}/explorer/contract/${Mainnet.TezRun}/storage`;
   return axios.get(url).then((res) => {
     return res.data;
   });
@@ -80,9 +87,11 @@ export const getRewards = (indexer: string, address: string) => {
     })
     .then((rewards: any[]) => {
       if (!rewards) {
-        return [];
+        return 0;
       }
-      return rewards.filter((i) => i.key === address && i.value["0"]);
+      return rewards
+        .filter((i) => i.key === address && i.value["0"])
+        .reduce((prev, item) => prev + Number(item.value[0]), 0);
     });
 };
 
