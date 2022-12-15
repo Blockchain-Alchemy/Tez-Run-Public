@@ -47,7 +47,7 @@ const RacePanel = ({ status, unityContext }) => {
     return () => {
       removeEventListener("FinishedRace", onFinishRace);
     };
-  }, [addEventListener, removeEventListener, onFinishRace]);
+  }, []);
 
   const handleTakeReward = async () => {
     console.log("TakeReward", address);
