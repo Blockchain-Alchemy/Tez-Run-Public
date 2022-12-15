@@ -37,7 +37,7 @@ const RacePanel = ({ status, unityContext }) => {
         const horse = defaultHorses.find((it) => it.name === firstHorse.name);
         if (horse) {
           console.log("FinishRace", horse);
-          await finishRace(horse.id);
+          //await finishRace(horse.id);
         }
       }
     },
