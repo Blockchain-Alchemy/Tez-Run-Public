@@ -95,23 +95,27 @@ const Play = () => {
           <Box sx={{ mb: 4, mr: 2 }}>
             <Grid container spacing={0.5}>
               <Grid item sm={10} xs={12}>
-                <div className="unity-container">
-                  <Unity
-                    unityProvider={unityContext.unityProvider}
-                    style={{
-                      height: 540,
-                      width: 920,
-                      background: "#555",
-                    }}
-                  />
-                  {!isLoaded && loadingProgression > 0 && (
-                    <div className="unity-loader">
-                      <div>
-                        Loading... {Math.round(loadingProgression * 100)}%
+                {race?.status === RaceState.Started || true ? (
+                  <img className="placeholder" src="/images/placeholder.jpg" alt="placeholder" />
+                ) : (
+                  <div className="unity-container">
+                    <Unity
+                      unityProvider={unityContext.unityProvider}
+                      style={{
+                        height: 540,
+                        width: 920,
+                        background: "#555",
+                      }}
+                    />
+                    {!isLoaded && loadingProgression > 0 && (
+                      <div className="unity-loader">
+                        <div>
+                          Loading... {Math.round(loadingProgression * 100)}%
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </Grid>
               <Grid item sm={2} xs={12}>
                 <RaceTimer race={race} />
