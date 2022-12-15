@@ -50,15 +50,17 @@ const Play = () => {
           }
         }
         if (game.tickets) {
-          const tickets = game.tickets.map((ticket: any) => {
-            return {
-              horseId: Number(ticket.horse_id),
-              payout: Number(ticket.payout),
-              token: Number(ticket.token),
-              tezos: Number(ticket.tezos),
-              amount: Number(ticket.amount),
-            };
-          });
+          const tickets = game.tickets
+            .filter((t) => t.address === address)
+            .map((ticket: any) => {
+              return {
+                horseId: Number(ticket.horse_id),
+                payout: Number(ticket.payout),
+                token: Number(ticket.token),
+                tezos: Number(ticket.tezos),
+                amount: Number(ticket.amount),
+              };
+            });
           setTickets(tickets);
         }
       }

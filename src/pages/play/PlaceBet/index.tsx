@@ -158,6 +158,7 @@ function PlaceBet() {
               fullWidth
               value={selectedPlace}
               onChange={(e) => setSelectedPlace(e.target.value)}
+              disabled
             >
               <MenuItem value={""}>To Win</MenuItem>
               <MenuItem value={"win"}>Win</MenuItem>
