@@ -95,7 +95,7 @@ const Play = () => {
           <Box sx={{ mb: 4, mr: 2 }}>
             <Grid container spacing={0.5}>
               <Grid item sm={10} xs={12}>
-                {race?.status === RaceState.Started || true ? (
+                {race?.status === RaceState.Started ? (
                   <img className="placeholder" src="/images/placeholder.jpg" alt="placeholder" />
                 ) : (
                   <div className="unity-container">
