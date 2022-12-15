@@ -18,7 +18,7 @@ function HorseOdds() {
               </Grid>
               <Grid item sm={5} sx={{ pl: 2, textAlign: "left" }}>
                 <Typography key={index} color="textSecondary" variant="body1">
-                  1 : {horse.payout}
+                  {horse.payout[0]} - {horse.payout[1]}
                 </Typography>
               </Grid>
             </Grid>

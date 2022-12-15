@@ -57,7 +57,8 @@ function PlaceBet({ race }: Props) {
       dispatch(setLoading(true));
 
       if (nativeToken) {
-        await placeBet(horseId, horse.payout, betAmount);
+        const rate = payout / betAmount;
+        await placeBet(horseId, rate, betAmount);
       } else {
         const approval = await getApproval();
         if (!approval) {
@@ -68,8 +69,9 @@ function PlaceBet({ race }: Props) {
           }
         }
 
+        const rate = payout / betAmount;
         const tokenAmount = betAmount * 1000000000000;
-        await placeBet(horseId, horse.payout, 0, 1, tokenAmount);
+        await placeBet(horseId, rate, 0, 1, tokenAmount);
       }
     } catch (error) {
       console.error(error);
@@ -83,7 +85,7 @@ function PlaceBet({ race }: Props) {
 
     const horse = defaultHorses.find((it) => it.id === horseId);
     if (horse) {
-      setPayout(horse.payout * betAmount);
+      setPayout(betAmount * (horse.payout[0] / horse.payout[1]) + betAmount);
     }
   };
 
@@ -92,7 +94,7 @@ function PlaceBet({ race }: Props) {
 
     const horse = defaultHorses.find((it) => it.id === horseId);
     if (horse) {
-      setPayout(horse.payout * betAmount);
+      setPayout(betAmount / horse.payout[0] * horse.payout[1] + betAmount);
     }
   };
 
@@ -187,6 +189,7 @@ function PlaceBet({ race }: Props) {
                 borderBottom: 1,
                 borderColor: "divider",
               }}
+              disabled
               value={payout?.toFixed(4)}
             />
           </Grid>
