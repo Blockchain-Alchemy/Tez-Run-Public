@@ -59,7 +59,7 @@ const useTezrun = () => {
         },
       ];
       const op = await contract.methods.update_operators(params).send();
-      return op.confirmation(2);
+      return op.confirmation();
     } catch (e) {
       console.error(e);
     }
@@ -73,7 +73,7 @@ const useTezrun = () => {
         .send({
           amount: tezosAmount,
         });
-      return op.confirmation(2);
+      return op.confirmation();
     },
     [getContract]
   );
@@ -84,7 +84,7 @@ const useTezrun = () => {
       const op = await contract.methods
         .place_bet(amount, horseId, payout, raceId, 1)
         .send();
-      return op.confirmation(2);
+      return op.confirmation();
     },
     [getContract]
   );
@@ -92,7 +92,7 @@ const useTezrun = () => {
   const takeReward = useCallback(async () => {
     const contract = await getContract();
     const op = await contract.methods.take_rewards().send();
-    return op.confirmation(2);
+    return op.confirmation();
   }, [getContract]);
 
   return {
