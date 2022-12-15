@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import moment from "moment";
@@ -18,7 +18,7 @@ const RacePanel = ({ status, unityContext }) => {
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const { addEventListener, removeEventListener } = unityContext;
 
-  const onFinishRace = async (name: string, time: string) => {
+  const onFinishRace = useCallback(async (name: string, time: string) => {
     const index = resultHorses.findIndex((h) => h.name === name);
     if (index < 0) {
       resultHorses.push({ name, time });
@@ -38,7 +38,7 @@ const RacePanel = ({ status, unityContext }) => {
         await finishRace(horse.id);
       }
     }
-  };
+  }, [resultHorses]);
 
   useEffect(() => {
     console.log("Initialize Unity Events");
@@ -47,7 +47,7 @@ const RacePanel = ({ status, unityContext }) => {
     return () => {
       removeEventListener("FinishedRace", onFinishRace);
     };
-  }, []);
+  }, [addEventListener, removeEventListener, onFinishRace]);
 
   const handleTakeReward = async () => {
     console.log("TakeReward", address);
