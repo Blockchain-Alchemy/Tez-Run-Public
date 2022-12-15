@@ -57,7 +57,7 @@ function PlaceBet({ race }: Props) {
       dispatch(setLoading(true));
 
       if (nativeToken) {
-        const rate = Math.round(payout * 1000000000000);
+        const rate = Math.round(payout * 1000000);
         console.log('rate', rate, betAmount)
         await placeBet(horseId, rate, betAmount);
       } else {
@@ -70,8 +70,8 @@ function PlaceBet({ race }: Props) {
           }
         }
 
-        const rate = payout * 1000000000000;
-        const tokenAmount = betAmount * 1000000000000;
+        const rate = payout * 1000000;
+        const tokenAmount = betAmount * 1000000;
         await placeBet(horseId, rate, 0, 1, tokenAmount);
       }
     } catch (error) {

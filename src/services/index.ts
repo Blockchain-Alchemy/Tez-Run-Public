@@ -20,7 +20,7 @@ export const updateBetting = (raceId, horseId, payout, amount) => {
 export const getBalance = (indexer: string, address: string) => {
   const url = `${indexer}/explorer/account/${address}`;
   return axios.get(url).then((res) => {
-    return Number(res.data.spendable_balance) * 1000000000000;
+    return Number(res.data.spendable_balance) * 1000000;
   });
 };
 

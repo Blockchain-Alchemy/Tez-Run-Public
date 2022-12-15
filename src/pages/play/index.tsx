@@ -55,7 +55,7 @@ const Play = () => {
           .map((ticket: any) => {
             return {
               horseId: Number(ticket.horse_id),
-              payout: Number(ticket.payout) / 1000000000000,
+              payout: Number(ticket.payout) / 1000000,
               token: Number(ticket.token),
               tezos: Number(ticket.tezos),
               amount: Number(ticket.amount),
