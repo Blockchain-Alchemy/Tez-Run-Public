@@ -16,6 +16,7 @@ import HorseOdds from "./HorseOdds";
 import RaceTimer from "./RaceTimer";
 import PlaceBet from "./PlaceBet";
 import BetTicket from "./BetTicket";
+import RacePanel from "./RacePanel";
 import "./styles.css";
 
 const unityConfig = {
@@ -114,6 +115,7 @@ const Play = () => {
               <Grid item sm={2} xs={12}>
                 <RaceTimer race={race} />
                 <HorseOdds />
+                <RacePanel race={race} unityContext={unityContext}></RacePanel>
               </Grid>
             </Grid>
           </Box>

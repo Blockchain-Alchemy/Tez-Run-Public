@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
+import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
+import moment from "moment";
+import { Box, Button, Card, Typography } from "@mui/material";
+
 import useTezrun from "hooks/useTezrun";
 import useBeacon from "hooks/useBeacon";
-import Loader from "components/loaders";
 import { defaultHorses } from "../horses";
-import { readyRace, startRace, finishRace, getRewards } from "services";
+import { finishRace, getRewards } from "services";
+import { setLoading } from "slices/play";
+import { RaceState } from "../types";
 
-const isAdmin = true;
-
-const RacePanel = ({ unityContext }) => {
+const RacePanel = ({ race, unityContext }) => {
+  const dispatch = useDispatch();
   const { indexer, address } = useBeacon();
   const { takeReward } = useTezrun();
-  const [loading, setLoading] = useState(false);
   const [resultHorses, setResultHorses] = useState<any[]>([]);
-  const [winner, setWinner] = useState<undefined | number>(undefined);
+  const { addEventListener, removeEventListener } = unityContext;
 
   const onFinishRace = async (name: string, time: string) => {
     const index = resultHorses.findIndex((h) => h.name === name);
@@ -29,11 +31,10 @@ const RacePanel = ({ unityContext }) => {
       });
 
       const firstHorse = resultHorses[0];
-      console.log('Winner:', firstHorse);
+      console.log("Winner:", firstHorse);
       const horse = defaultHorses.find((it) => it.name === firstHorse.name);
       if (horse) {
         console.log("FinishRace", horse);
-        setWinner(horse.id);
         await finishRace(horse.id);
       }
     }
@@ -41,9 +42,11 @@ const RacePanel = ({ unityContext }) => {
 
   useEffect(() => {
     console.log("Initialize Unity Events");
-    unityContext.on("FinishedRace", function (horse: string, time: string) {
-      onFinishRace(horse, time);
-    });
+    addEventListener("FinishedRace", onFinishRace);
+
+    return () => {
+      removeEventListener("FinishedRace", onFinishRace);
+    };
   }, [unityContext]);
 
   const handleTakeReward = async () => {
@@ -67,7 +70,7 @@ const RacePanel = ({ unityContext }) => {
     }
   };
 
-  const handleReadyRace = async () => {
+  /*const handleReadyRace = async () => {
     try {
       setLoading(true);
       const op = await readyRace();
@@ -101,50 +104,45 @@ const RacePanel = ({ unityContext }) => {
     } finally {
       setLoading(false);
     }
+  };*/
+
+  const handleFinishRace = async () => {
+    try {
+      dispatch(setLoading(true));
+      await finishRace();
+      toast.success("The race is finished!");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   return (
-    <>
-      <div className="text-center mt-6">
-        <button
-          type="button"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
+    <Card sx={{ mt: 2, px: 1, py: 2 }}>
+      <Box sx={{ textAlign: "center", mb: 1 }}>
+        <Button
+          variant="contained"
+          fullWidth
+          size="medium"
+          onClick={handleFinishRace}
+          disabled={!race || race.status !== RaceState.Started}
+        >
+          Debug: End Race
+        </Button>
+      </Box>
+      <Box sx={{ textAlign: "center" }}>
+        <Button
+          variant="contained"
+          fullWidth
+          size="medium"
           onClick={handleTakeReward}
-          disabled={false}
+          disabled={!race || race.status === RaceState.Started}
         >
           Take Reward
-        </button>
-        {isAdmin && address && (
-          <>
-            {loading && <Loader />}
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
-              onClick={handleReadyRace}
-              disabled={false}
-            >
-              Ready Race
-            </button>
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
-              onClick={handleStartRace}
-              disabled={false}
-            >
-              Start Race
-            </button>
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-36 mb-4"
-              onClick={handleFinishRace}
-              disabled={false}
-            >
-              Finish Race
-            </button>
-          </>
-        )}
-      </div>
-    </>
+        </Button>
+      </Box>
+    </Card>
   );
 };
 
