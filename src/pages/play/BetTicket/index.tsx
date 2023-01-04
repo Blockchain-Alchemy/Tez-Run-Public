@@ -11,7 +11,20 @@ const convertToken = (token) => {
   return token / 1000000000000;
 };
 
-const BetTicket = ({ ticket }) => {
+interface Ticket {
+  horseId: number;
+  token: number;
+  tezos: number;
+  amount: number;
+  payout: number;
+  pending: boolean;
+}
+
+interface Props {
+  ticket: Ticket;
+}
+
+const BetTicket = ({ ticket }: Props) => {
   const horseName = useMemo(() => {
     const horse = defaultHorses.find((it) => it.id === ticket.horseId);
     return horse?.name;
@@ -32,11 +45,7 @@ const BetTicket = ({ ticket }) => {
   return (
     <Card>
       <CardHeader
-        title={
-          <Typography variant="h5" sx={{ textAlign: "center" }}>
-            Bet Ticket
-          </Typography>
-        }
+        title={<Typography variant="h5">Bet Ticket</Typography>}
         action={<Help title="Bet Ticket" content="Bet Ticket" />}
       />
       <Box sx={{ px: 3, py: 2 }}>
@@ -60,6 +69,11 @@ const BetTicket = ({ ticket }) => {
           </span>{" "}
           {unitName}
         </Typography>
+        {!!ticket.pending && (
+          <Typography color="textSecondary" variant="body1">
+            <span>Adding Bet to Blockchain...</span>
+          </Typography>
+        )}
       </Box>
     </Card>
   );

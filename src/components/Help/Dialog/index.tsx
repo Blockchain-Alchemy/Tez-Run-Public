@@ -1,4 +1,11 @@
-import { Box, Dialog, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  Divider,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { X as XIcon } from "icons/x";
 
 type Props = {
@@ -19,8 +26,22 @@ export const HelpDialog = ({ onClose, open, title, content }: Props) => {
           <XIcon fontSize="small" />
         </IconButton>
       </Box>
-      <Box sx={{ p: 3 }}>
-        {content}
+      <Box sx={{ p: 3 }}>{content}</Box>
+      <Divider />
+      <Box
+        sx={{
+          alignItems: "center",
+          display: "flex",
+          p: 2,
+        }}
+      >
+        <Box sx={{ flexGrow: 1 }} />
+        <Button onClick={onClose} type="submit" variant="contained">
+          OK
+        </Button>
+        <Button sx={{ ml: 1 }}>
+          More Info
+        </Button>
       </Box>
     </Dialog>
   );

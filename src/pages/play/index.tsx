@@ -29,7 +29,9 @@ const unityConfig = {
 const Play = () => {
   const { address } = useWallet();
   const { getGameState } = useIndexer();
-  const { loading } = useSelector((state: RootState) => state.play);
+  const { loading, pendingTickets } = useSelector(
+    (state: RootState) => state.play
+  );
   const unityContext = useUnityContext(unityConfig);
   const { loadingProgression, isLoaded, sendMessage } = unityContext;
   const [race, setRace] = useState<Race>({} as Race);
@@ -69,20 +71,21 @@ const Play = () => {
     }
   }, 2000);
 
-  const ticketList = useMemo(
-    () => (
+  const ticketView = useMemo(() => {
+    const totalTickets = (tickets || []).concat(pendingTickets);
+    console.log('totalTickets', totalTickets)
+    return (
       <Box>
         <Grid container spacing={1}>
-          {(tickets || []).map((ticket: any, index: number) => (
+          {totalTickets.map((ticket: any, index: number) => (
             <Grid item key={index} sm={3} xs={6}>
               <BetTicket key={index} ticket={ticket}></BetTicket>
             </Grid>
           ))}
         </Grid>
       </Box>
-    ),
-    [tickets]
-  );
+    );
+  }, [tickets, pendingTickets]);
 
   return (
     <MainLayout>
@@ -132,7 +135,7 @@ const Play = () => {
                 <PlaceBet race={race} />
               </Grid>
               <Grid item sm={8} xs={12}>
-                {ticketList}
+                {ticketView}
               </Grid>
             </Grid>
           </Box>

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Ticket } from "pages/play/types";
 
 interface PlayState {
   loading: boolean;
@@ -7,6 +8,7 @@ interface PlayState {
   roomId: number | null;
   startTime: string | null;
   banned: boolean;
+  pendingTickets: Ticket[];
 }
 
 const initialState: PlayState = {
@@ -16,6 +18,7 @@ const initialState: PlayState = {
   roomId: 0,
   startTime: null,
   banned: false,
+  pendingTickets: [],
 };
 
 const slice = createSlice({
@@ -53,6 +56,18 @@ const slice = createSlice({
     },
     setBanned(state, action: PayloadAction<boolean>) {
       state.banned = action.payload;
+    },
+    addPendingTicket(state, action: PayloadAction<Ticket>) {
+      state.pendingTickets.push(action.payload);
+      state.pendingTickets = [...state.pendingTickets];
+    },
+    removePendingTicket(state, action:PayloadAction<string>) {
+      console.log('~~~~~~~~~~~~~~~~~removePendingTicket', action.payload)
+      const index = state.pendingTickets.findIndex(i => i.id = action.payload);
+      if (index >= 0) {
+        state.pendingTickets.splice(index, 1);
+      }
+      state.pendingTickets = [...state.pendingTickets];
     }
   },
 });
@@ -68,4 +83,6 @@ export const {
   setJoinedRoom,
   setOpenRoom,
   setBanned,
+  addPendingTicket,
+  removePendingTicket,
 } = slice.actions;

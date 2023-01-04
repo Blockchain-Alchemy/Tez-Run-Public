@@ -13,3 +13,13 @@ export type Race = {
   status: string;
   winner: number;
 };
+
+export type Ticket = {
+  id? : string;
+  horseId: number;
+  token: number;
+  tezos: number;
+  amount: number;
+  payout: number;
+  pending: boolean;
+}

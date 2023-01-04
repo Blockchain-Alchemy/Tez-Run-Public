@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { TransactionWalletOperation } from "@taquito/taquito";
 import {
   Box,
   Button,
@@ -12,11 +13,12 @@ import {
   Typography,
 } from "@mui/material";
 import toast from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
 import { useWallet } from "contexts/WalletProvider";
 import { useTezrun } from "hooks/useTezrun";
-import { setLoading } from "slices/play";
+import { addPendingTicket, removePendingTicket, setLoading } from "slices/play";
 import { defaultHorses } from "../horses";
-import { Race, RaceState } from "../types";
+import { Race, RaceState, Ticket } from "../types";
 import { Help } from "components/Help";
 
 type Props = {
@@ -58,10 +60,11 @@ function PlaceBet({ race }: Props) {
     try {
       dispatch(setLoading(true));
 
+      let op: TransactionWalletOperation | null = null;
       if (nativeToken) {
         const rate = Math.round(payout * 1000000);
         console.log("rate", rate, betAmount);
-        await placeBet(horseId, rate, betAmount);
+        op = await placeBet(horseId, rate, betAmount);
       } else {
         const approval = await getApproval();
         if (!approval) {
@@ -71,16 +74,39 @@ function PlaceBet({ race }: Props) {
             return;
           }
         }
-
         const rate = payout * 1000000;
         const tokenAmount = betAmount * 1000000;
-        await placeBet(horseId, rate, 0, 1, tokenAmount);
+        op = await placeBet(horseId, rate, 0, 1, tokenAmount);
+      }
+      if (op) {
+        const ticket: Ticket = {
+          id: uuidv4(),
+          horseId,
+          payout,
+          token: nativeToken ? 0 : 1,
+          tezos: nativeToken ? betAmount : 0,
+          amount: nativeToken ? 0 : betAmount,
+          pending: true,
+        };
+        console.log("ticket", ticket);
+        dispatch(addPendingTicket(ticket));
+        waitPendingTicket(op, ticket);
       }
     } catch (error) {
       console.error(error);
     } finally {
       dispatch(setLoading(false));
     }
+  };
+
+  const waitPendingTicket = async (
+    op: TransactionWalletOperation,
+    ticket: Ticket
+  ) => {
+    op.confirmation().then(() => {
+      console.log("~~~~~~~~~~~~~~~~~confirmed", ticket.id);
+      dispatch(removePendingTicket(ticket.id!));
+    });
   };
 
   const onChangeHorseId = (horseId) => {
@@ -108,11 +134,7 @@ function PlaceBet({ race }: Props) {
   return (
     <Card>
       <CardHeader
-        title={
-          <Typography variant="h5" sx={{ textAlign: "center" }}>
-            Place Bet
-          </Typography>
-        }
+        title={<Typography variant="h5">Place Bet</Typography>}
         action={<Help title="Place Bet" content="Place your bet" />}
       />
       <Box sx={{ px: 3, pb: 2 }}>

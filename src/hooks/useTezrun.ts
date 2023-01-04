@@ -62,7 +62,8 @@ export const useTezrun = () => {
         .send({
           amount: tezosAmount,
         });
-      return op.confirmation();
+      //return op.confirmation();
+      return op;
     },
     [getContract]
   );
