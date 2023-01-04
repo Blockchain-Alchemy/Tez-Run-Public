@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  CardHeader,
   Input,
   Grid,
   MenuItem,
@@ -16,6 +17,7 @@ import useTezrun from "hooks/useTezrun";
 import { setLoading } from "slices/play";
 import { defaultHorses } from "../horses";
 import { Race, RaceState } from "../types";
+import { Help } from "components/Help";
 
 type Props = {
   race: Race;
@@ -28,7 +30,7 @@ function PlaceBet({ race }: Props) {
 
   const nativeToken = true; //const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
-  const [betAmount, setBetAmount] = useState(0.001);//(1);//(0.001);
+  const [betAmount, setBetAmount] = useState(0.001); //(1);//(0.001);
   const [selectedPlace, setSelectedPlace] = useState("win");
   const [payout, setPayout] = useState(0);
 
@@ -58,7 +60,7 @@ function PlaceBet({ race }: Props) {
 
       if (nativeToken) {
         const rate = Math.round(payout * 1000000);
-        console.log('rate', rate, betAmount)
+        console.log("rate", rate, betAmount);
         await placeBet(horseId, rate, betAmount);
       } else {
         const approval = await getApproval();
@@ -95,7 +97,7 @@ function PlaceBet({ race }: Props) {
 
     const horse = defaultHorses.find((it) => it.id === horseId);
     if (horse) {
-      setPayout(betAmount / horse.payout[0] * horse.payout[1] + betAmount);
+      setPayout((betAmount / horse.payout[0]) * horse.payout[1] + betAmount);
     }
   };
 
@@ -105,10 +107,15 @@ function PlaceBet({ race }: Props) {
 
   return (
     <Card>
-      <Box sx={{ px: 3, py: 2 }}>
-        <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
-          Place Bet
-        </Typography>
+      <CardHeader
+        title={
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
+            Place Bet
+          </Typography>
+        }
+        action={<Help title="Place Bet" content="Place your bet" />}
+      />
+      <Box sx={{ px: 3, pb: 2 }}>
         <Grid
           container
           spacing={1}
