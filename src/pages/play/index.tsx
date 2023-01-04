@@ -5,10 +5,10 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 
 import { MainLayout } from "components/main-layout";
 import Loader from "components/Loader";
-import useBeacon from "hooks/useBeacon";
+import { useWallet } from "contexts/WalletProvider";
+import { useIndexer } from "hooks/useIndexer";
 import useInterval from "hooks/useInterval";
 
-import { getGameState } from "services";
 import { RootState } from "store";
 import { Race, RaceState } from "./types";
 
@@ -27,7 +27,8 @@ const unityConfig = {
 };
 
 const Play = () => {
-  const { indexer, address } = useBeacon();
+  const { address } = useWallet();
+  const { getGameState } = useIndexer();
   const { loading } = useSelector((state: RootState) => state.play);
   const unityContext = useUnityContext(unityConfig);
   const { loadingProgression, isLoaded, sendMessage } = unityContext;
@@ -36,7 +37,7 @@ const Play = () => {
 
   useInterval(async () => {
     try {
-      const game = await getGameState(indexer);
+      const game = await getGameState();
       if (game.race) {
         setRace(game.race);
         const updatedState = game.race.status;

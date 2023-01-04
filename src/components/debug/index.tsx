@@ -10,11 +10,11 @@ import {
 } from "@mui/material";
 import toast from "react-hot-toast";
 import { setBanned } from "slices/play";
-import useBeacon from "hooks/useBeacon";
+import { useWallet } from "contexts/WalletProvider";
 
 export const DebugMenu = () => {
   const dispatch = useDispatch();
-  const { address } = useBeacon();
+  const { address } = useWallet();
 
   const injectionCheat = useCallback(() => {
     if (!address) {
@@ -25,7 +25,7 @@ export const DebugMenu = () => {
       address.length - 4
     )}`;
     toast.error(`This address has been banned for cheating. ${shortAddress}`);
-    
+
     dispatch(setBanned(true));
 
     // eslint-disable-next-line
@@ -46,11 +46,7 @@ export const DebugMenu = () => {
         </Box>
       </CardContent>
       <CardActions>
-        <Button
-          size="small"
-          variant="outlined"
-          onClick={injectionCheat}
-        >
+        <Button size="small" variant="outlined" onClick={injectionCheat}>
           JS Injection Cheat
         </Button>
       </CardActions>

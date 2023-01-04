@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "@mui/material";
-import useBeacon from "hooks/useBeacon";
+import { useWallet } from "contexts/WalletProvider";
 import { setBanned } from "slices/play";
 
 export const ConnectButton = () => {
   const dispatch = useDispatch();
-  const { address, connectWallet, disconnectWallet } = useBeacon();
+  const { address, connectWallet, disconnectWallet } = useWallet();
 
   const connect = () => {
     dispatch(setBanned(false));

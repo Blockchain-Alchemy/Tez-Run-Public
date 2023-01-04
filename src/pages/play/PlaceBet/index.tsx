@@ -12,8 +12,8 @@ import {
   Typography,
 } from "@mui/material";
 import toast from "react-hot-toast";
-import useBeacon from "hooks/useBeacon";
-import useTezrun from "hooks/useTezrun";
+import { useWallet } from "contexts/WalletProvider";
+import { useTezrun } from "hooks/useTezrun";
 import { setLoading } from "slices/play";
 import { defaultHorses } from "../horses";
 import { Race, RaceState } from "../types";
@@ -25,7 +25,7 @@ type Props = {
 
 function PlaceBet({ race }: Props) {
   const dispatch = useDispatch();
-  const { connected } = useBeacon();
+  const { connected } = useWallet();
   const { placeBet, getApproval, approve } = useTezrun();
 
   const nativeToken = true; //const [nativeToken, setNativeToken] = useState(true);

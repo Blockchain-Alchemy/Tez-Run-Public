@@ -6,8 +6,8 @@ import { AbortedBeaconError } from "@airgap/beacon-sdk";
 import { Box, Button, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { RootState } from "store";
+import { useWallet } from "contexts/WalletProvider";
 import { setLoading, setJoinedRoom, setOpenRoom } from "slices/play";
-import useBeacon from "hooks/useBeacon";
 import useSocket from "hooks/useSocket";
 import { requestSign } from "utils/tezos-wallet";
 import { MainLayout } from "components/main-layout";
@@ -24,7 +24,7 @@ const Home = () => {
     (state: RootState) => state.play
   );
   const { socket } = useSocket();
-  const { wallet, publicKey, address: walletAddress } = useBeacon();
+  const { wallet, publicKey, address: walletAddress } = useWallet();
 
   useEffect(() => {
     socket.on("JOIN_SUCCESS", (msg) => {
