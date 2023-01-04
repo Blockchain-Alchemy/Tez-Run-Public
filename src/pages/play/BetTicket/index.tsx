@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Box, Card, CardHeader, Typography } from "@mui/material";
 import { defaultHorses } from "../horses";
 import { Help } from "components/Help";
+import { Ticket } from "../types";
 
 const convertTezos = (mutez) => {
   return mutez / 1000000;
@@ -10,15 +11,6 @@ const convertTezos = (mutez) => {
 const convertToken = (token) => {
   return token / 1000000000000;
 };
-
-interface Ticket {
-  horseId: number;
-  token: number;
-  tezos: number;
-  amount: number;
-  payout: number;
-  pending: boolean;
-}
 
 interface Props {
   ticket: Ticket;
