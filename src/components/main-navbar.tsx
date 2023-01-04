@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Menu as MenuIcon } from "../icons/menu";
 import { Logo } from "./logo";
-import { ConnectButton } from "./connect-button";
+import { ConnectButton } from "./ConnectButton";
 
 export const MainNavbar = (props) => {
   const { onOpenSidebar } = props;
