@@ -53,17 +53,7 @@ const Play = () => {
         }
       }
       if (address && game.tickets) {
-        const tickets = game.tickets
-          .filter((t) => t.address === address)
-          .map((ticket: any) => {
-            return {
-              horseId: Number(ticket.horse_id),
-              payout: Number(ticket.payout) / 1000000,
-              token: Number(ticket.token),
-              tezos: Number(ticket.tezos),
-              amount: Number(ticket.amount),
-            };
-          });
+        const tickets = game.tickets.filter((t) => t.address === address);
         setTickets(tickets);
       }
     } catch (err) {
@@ -73,7 +63,7 @@ const Play = () => {
 
   const ticketView = useMemo(() => {
     const totalTickets = (tickets || []).concat(pendingTickets);
-    console.log('totalTickets', totalTickets)
+    console.log("totalTickets", totalTickets);
     return (
       <Box>
         <Grid container spacing={1}>

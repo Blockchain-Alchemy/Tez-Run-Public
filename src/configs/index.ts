@@ -22,7 +22,7 @@ export const Networks: ConfigMap = {
   [NetworkType.MAINNET]: {
     RpcUrl: "https://mainnet.api.tez.ie",
     Indexer: "https://api.tzstats.com",
-    TezRun: "KT1SabQEuqzxrwp6caZyXPXpt98FhHoPB5NZ",
+    TezRun: "KT1Pn2u8gd9k5v37md7gKLbPxy9DwPzc2T4i",//"KT1SabQEuqzxrwp6caZyXPXpt98FhHoPB5NZ",
     Escrow: "KT1R2Uo6Q3o4emoPekgbEPs2eQMpqXfravSC",
     UUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
   },

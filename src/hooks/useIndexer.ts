@@ -43,6 +43,16 @@ export const useIndexer = () => {
   const getGameState = useCallback(() => {
     return getStorage().then((storage) => {
       const value = storage.value;
+      const tickets = value.tickets.map((ticket: any) => {
+        return {
+          id: ticket.id,
+          horseId: Number(ticket.horse_id),
+          payout: Number(ticket.payout) / 1000000,
+          token: Number(ticket.token),
+          tezos: Number(ticket.tezos),
+          amount: Number(ticket.amount),
+        };
+      });
       return {
         race: {
           admin: value.admin,
@@ -52,7 +62,7 @@ export const useIndexer = () => {
           status: value.status,
           winner: value.winner,
         },
-        tickets: value.tickets,
+        tickets,
       };
     });
   }, [getStorage]);
