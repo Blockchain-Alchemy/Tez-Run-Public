@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Container, Grid } from "@mui/material";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 import { MainLayout } from "components/main-layout";
-import Loader from "components/loaders";
+import Loader from "components/Loader";
 import useBeacon from "hooks/useBeacon";
 import useInterval from "hooks/useInterval";
 
@@ -68,16 +68,19 @@ const Play = () => {
     }
   }, 2000);
 
-  const ticketList = () => (
-    <Box>
-      <Grid container spacing={1}>
-        {(tickets || []).map((ticket: any, index: number) => (
-          <Grid item key={index} sm={3} xs={6}>
-            <BetTicket key={index} ticket={ticket}></BetTicket>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+  const ticketList = useMemo(
+    () => (
+      <Box>
+        <Grid container spacing={1}>
+          {(tickets || []).map((ticket: any, index: number) => (
+            <Grid item key={index} sm={3} xs={6}>
+              <BetTicket key={index} ticket={ticket}></BetTicket>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    ),
+    [tickets]
   );
 
   return (
@@ -128,7 +131,7 @@ const Play = () => {
                 <PlaceBet race={race} />
               </Grid>
               <Grid item sm={8} xs={12}>
-                {ticketList()}
+                {ticketList}
               </Grid>
             </Grid>
           </Box>
