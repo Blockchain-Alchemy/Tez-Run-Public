@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, CardHeader, Typography } from "@mui/material";
 import { defaultHorses } from "../horses";
+import { Help } from "components/Help";
 
 const convertTezos = (mutez) => {
   return mutez / 1000000;
@@ -30,10 +31,15 @@ const BetTicket = ({ ticket }) => {
 
   return (
     <Card>
+      <CardHeader
+        title={
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
+            Bet Ticket
+          </Typography>
+        }
+        action={<Help title="Bet Ticket" content="Bet Ticket" />}
+      />
       <Box sx={{ px: 3, py: 2 }}>
-        <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
-          Bet Ticket
-        </Typography>
         <Typography color="textSecondary" variant="body1">
           {horseName}
         </Typography>
