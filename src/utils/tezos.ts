@@ -28,6 +28,6 @@ export const convertToMutez = (mutez) => {
   return mutez * 1000000;
 };
 
-export const convertToken = (token) => {
+export const convertToToken = (token) => {
   return token / 1000000000000;
 };

@@ -3,7 +3,7 @@ import { Box, Card, CardHeader, Typography } from "@mui/material";
 import { defaultHorses } from "../horses";
 import { Help } from "components/Help";
 import { Ticket } from "../types";
-import { convertToTezos, convertToken } from "utils/tezos";
+import { convertToTezos, convertToToken } from "utils/tezos";
 
 interface Props {
   ticket: Ticket;
@@ -19,7 +19,7 @@ const BetTicket = ({ ticket }: Props) => {
     if (ticket.token === 0) {
       return convertToTezos(ticket.tezos);
     } else {
-      return convertToken(ticket.amount);
+      return convertToToken(ticket.amount);
     }
   }, [ticket]);
 
