@@ -1,14 +1,20 @@
-import { Box, Card, Grid, Typography } from "@mui/material";
+import { Box, Card, CardHeader, Grid, Typography } from "@mui/material";
 import { defaultHorses } from "../horses";
+import { Help } from "components/Help";
 
 function HorseOdds() {
   return (
     <Card sx={{ my: 2 }}>
-      <Box sx={{ textAlign: "center", py: 2 }}>
-        <div>
-          <Typography sx={{ mt: 1, mb: 2 }} variant="h5">
+      <CardHeader
+        title={
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
             Odds
           </Typography>
+        }
+        action={<Help title="Odds" content="Odds" />}
+      />
+      <Box sx={{ textAlign: "center", pb: 2 }}>
+        <div>
           {defaultHorses.map((horse, index) => (
             <Grid key={index} container spacing={0}>
               <Grid item sm={7} sx={{ textAlign: "right" }}>
