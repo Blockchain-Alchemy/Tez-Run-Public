@@ -6,23 +6,33 @@ export const Admin = "tz1bxwduvRwBhq59FmThGKD5ceDFadr57JTq";
 
 export const API_BASE_URL = "https://grat.fun";
 
-export const Mainnet = {
-  NetworkType: NetworkType.MAINNET,
-  Indexer: "https://api.tzstats.com",
-  RpcUrl: "https://mainnet.tezos.marigold.dev",
-  RpcList: ["https://mainnet.tezos.marigold.dev"],
-  TezRun: "KT1SabQEuqzxrwp6caZyXPXpt98FhHoPB5NZ",//"KT1TK9GheViS3Z8hJSjZnBo7324rXnFtnYGC", //"KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
-  Escrow: "KT1R2Uo6Q3o4emoPekgbEPs2eQMpqXfravSC",
-  uUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
+export type NetworkConfig = {
+  RpcUrl: string;
+  Indexer: string;
+  TezRun: string;
+  Escrow: string;
+  UUSD: string;
 };
 
-export const Testnet = {
-  NetworkType: NetworkType.JAKARTANET,
-  Indexer: "https://api.jakarta.tzstats.com",
-  RpcUrl: "https://jakartanet.tezos.marigold.dev",
-  RpcList: ["https://jakartanet.tezos.marigold.dev"],
-  TezRun: "KT1QqTCsHghND8gfeG55w2pWCskZpFFgjVCV",
-  uUSD: "KT1Xf83TTyDDxYxr1x2jKFjHXcCsD4RSnaE5",
+type ConfigMap = {
+  [key in NetworkType]?: NetworkConfig;
+};
+
+export const Networks: ConfigMap = {
+  [NetworkType.MAINNET]: {
+    RpcUrl: "https://mainnet.api.tez.ie",
+    Indexer: "https://api.tzstats.com",
+    TezRun: "KT1SabQEuqzxrwp6caZyXPXpt98FhHoPB5NZ", //"KT1TK9GheViS3Z8hJSjZnBo7324rXnFtnYGC", //"KT1EEtxiV2qpGrQbG61gCB3gtVWiARxbEv1d",
+    Escrow: "KT1R2Uo6Q3o4emoPekgbEPs2eQMpqXfravSC",
+    UUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
+  },
+  [NetworkType.JAKARTANET]: {
+    RpcUrl: "https://jakartanet.tezos.marigold.dev",
+    Indexer: "https://api.jakarta.tzstats.com",
+    TezRun: "KT1QqTCsHghND8gfeG55w2pWCskZpFFgjVCV",
+    Escrow: "",
+    UUSD: "",
+  },
 };
 
 export const ShowCheatMenu = true;

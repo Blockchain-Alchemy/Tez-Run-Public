@@ -1,13 +1,14 @@
 import { useCallback } from "react";
-import { Mainnet } from "configs";
-import useBeacon from "./useBeacon";
+import { useNetwork } from "../contexts/NetworkProvider";
+import { useWallet } from "../contexts/WalletProvider";
 
 export const useEscrow = () => {
-  const { tezos } = useBeacon();
+  const { tezos } = useWallet();
+  const { config } = useNetwork();
 
   const deposit = useCallback(async () => {
     try {
-      const contract = await tezos.wallet.at(Mainnet.Escrow);
+      const contract = await tezos.wallet.at(config.Escrow);
       const op = await contract.methods.deposit().send({
         amount: 1,
       });
@@ -15,7 +16,7 @@ export const useEscrow = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [tezos]);
+  }, [tezos, config]);
 
   return {
     deposit,

@@ -1,38 +1,22 @@
 import React, {
   createContext,
+  useEffect,
   useState,
   useCallback,
   ReactNode,
-  useMemo,
-} from "react";
-import { TezosToolkit } from "@taquito/taquito";
-import { BeaconWallet } from "@taquito/beacon-wallet";
+} from 'react';
 import {
-  NetworkType,
-  PermissionResponseOutput,
+  BeaconEvent,
+  defaultEventCallbacks,
   PermissionScope,
-} from "@airgap/beacon-sdk";
-import { BeaconEvent, defaultEventCallbacks } from "@airgap/beacon-sdk";
-import { Mainnet, Testnet } from "configs";
-import { useEffect } from "react";
+} from '@airgap/beacon-sdk';
+import { BeaconWallet } from '@taquito/beacon-wallet';
+import { TezosToolkit } from '@taquito/taquito';
+import { useNetwork } from 'contexts/NetworkProvider';
+import { WalletContextApi } from './types';
 
-export interface BeaconContextApi {
-  tezos: TezosToolkit;
-  wallet: BeaconWallet | undefined;
-  connected: boolean;
-  publicKey: string | undefined;
-  address: string | undefined;
-  rpcUrl: string;
-  networkType: NetworkType;
-  indexer: string;
-  connectWallet: () => Promise<PermissionResponseOutput | undefined>;
-  disconnectWallet: () => Promise<void>;
-  setNetworkType: (networkType: NetworkType) => void;
-  setRpcUrl: (url: string) => void;
-}
-
-export const BeaconContext = createContext<BeaconContextApi>(
-  {} as BeaconContextApi
+export const WalletContext = createContext<WalletContextApi>(
+  {} as WalletContextApi
 );
 
 const scopes: PermissionScope[] = [
@@ -40,28 +24,21 @@ const scopes: PermissionScope[] = [
   PermissionScope.SIGN,
 ];
 
-export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
+export const WalletProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [tezos, setTezos] = useState(new TezosToolkit(Mainnet.RpcUrl));
-  const [networkType, setNetworkType] = useState(Mainnet.NetworkType);
-  const [rpcUrl, setRpcUrl] = useState(Mainnet.RpcUrl);
+  const { networkType, config } = useNetwork();
+  const [tezos, setTezos] = useState(new TezosToolkit(config.RpcUrl));
   const [wallet, setWallet] = useState<BeaconWallet>();
   const [publicKey, setPublicKey] = useState<string | undefined>(undefined);
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [connected, setConnected] = useState<boolean>(false);
 
-  const indexer = useMemo(() => {
-    return networkType === Mainnet.NetworkType
-      ? Mainnet.Indexer
-      : Testnet.Indexer;
-  }, [networkType]);
-
   useEffect(() => {
     setAddress(undefined);
     setConnected(false);
-    setTezos(new TezosToolkit(rpcUrl));
-  }, [rpcUrl]);
+    setTezos(new TezosToolkit(config.RpcUrl));
+  }, [config]);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -71,7 +48,7 @@ export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       const _wallet = new BeaconWallet({
-        name: "Escrow Demo",
+        name: 'GFT',
         preferredNetwork: networkType,
         disableDefaultEvents: true, // Disable all events / UI. This also disables the pairing alert.
         eventHandlers: {
@@ -85,6 +62,7 @@ export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
         },
       });
 
+      console.log('setWalletProvider', _wallet);
       tezos.setWalletProvider(_wallet);
       setWallet(_wallet);
     })();
@@ -95,11 +73,11 @@ export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
       return Promise.resolve(undefined);
     }
     try {
-      console.log("Request Permission", networkType, rpcUrl);
+      console.log('Request Permission', networkType, config.RpcUrl);
       const permissions = await wallet.client.requestPermissions({
         network: {
           type: networkType,
-          rpcUrl: rpcUrl,
+          rpcUrl: config.RpcUrl,
         },
         scopes,
       });
@@ -115,7 +93,7 @@ export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
     } catch (error) {
       setConnected(false);
     }
-  }, [wallet, networkType, rpcUrl]);
+  }, [wallet, networkType, config]);
 
   const disconnectWallet = useCallback(async () => {
     setConnected(false);
@@ -126,23 +104,18 @@ export const BeaconProvider: React.FC<{ children: ReactNode }> = ({
   }, [wallet]);
 
   return (
-    <BeaconContext.Provider
+    <WalletContext.Provider
       value={{
         tezos,
         wallet,
         connected,
         publicKey,
         address,
-        rpcUrl,
-        networkType,
-        indexer,
         connectWallet,
         disconnectWallet,
-        setNetworkType,
-        setRpcUrl,
       }}
     >
       {children}
-    </BeaconContext.Provider>
+    </WalletContext.Provider>
   );
 };

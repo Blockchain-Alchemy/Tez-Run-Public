@@ -1,38 +1,27 @@
-import { useCallback, useState, useMemo } from "react";
-import { Testnet, Mainnet } from "configs";
-import useBeacon from "./useBeacon";
+import { useCallback, useState } from "react";
+import { useNetwork } from "../contexts/NetworkProvider";
+import { useWallet } from "../contexts/WalletProvider";
 
 const useTezrun = () => {
-  const { tezos, address, networkType } = useBeacon();
+  const { config } = useNetwork();
+  const { tezos, address } = useWallet();
   const [approval, setApproval] = useState(false);
 
   const getContract = useCallback(() => {
-    const contractAddress =
-      networkType === Testnet.NetworkType ? Testnet.TezRun : Mainnet.TezRun;
-    return tezos.wallet.at(contractAddress);
-  }, [tezos, networkType]);
-
-  const uUSDContractAddress = useMemo(() => {
-    return networkType === Testnet.NetworkType ? Testnet.uUSD : Mainnet.uUSD;
-  }, [networkType]);
-
-  const gameContractAddress = useMemo(() => {
-    return networkType === Testnet.NetworkType
-      ? Testnet.TezRun
-      : Mainnet.TezRun;
-  }, [networkType]);
+    return tezos.wallet.at(config.TezRun);
+  }, [tezos, config]);
 
   const getApproval = async () => {
     if (approval) {
       return new Promise((resolve) => resolve(approval));
     }
     try {
-      const contract = await tezos.wallet.at(uUSDContractAddress);
+      const contract = await tezos.wallet.at(config.UUSD);
       const storage: any = await contract.storage();
 
       const key = {
         owner: address,
-        operator: gameContractAddress,
+        operator: config.TezRun,
         token_id: 0,
       };
       const operators = await storage.operators.get(key);
@@ -48,12 +37,12 @@ const useTezrun = () => {
 
   const approve = async () => {
     try {
-      const contract = await tezos.wallet.at(uUSDContractAddress);
+      const contract = await tezos.wallet.at(config.UUSD);
       const params = [
         {
           add_operator: {
             owner: address,
-            operator: gameContractAddress,
+            operator: config.TezRun,
             token_id: 0,
           },
         },
