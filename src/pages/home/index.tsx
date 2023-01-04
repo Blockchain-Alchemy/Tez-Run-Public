@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { redirect } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
@@ -12,7 +11,7 @@ import useBeacon from "hooks/useBeacon";
 import useSocket from "hooks/useSocket";
 import { requestSign } from "utils/tezos-wallet";
 import { MainLayout } from "components/main-layout";
-import { CountDown } from "components/countdown";
+import { CountDown } from "components/CountDown";
 
 const StyledButton = styled(Button)(() => ({
   width: 160,
@@ -45,7 +44,7 @@ const Home = () => {
       socket.off("JOIN_SUCCESS");
       socket.off("ROOM_INFO");
     };
-  }, [dispatch, socket]);
+  }, [dispatch, socket, navigate]);
 
   const joinGame = async () => {
     try {
