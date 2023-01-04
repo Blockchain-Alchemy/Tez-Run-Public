@@ -15,7 +15,8 @@ export type Race = {
 };
 
 export type Ticket = {
-  id?: string;
+  id: number;
+  address: string;
   horseId: number;
   token: number;
   tezos: number;

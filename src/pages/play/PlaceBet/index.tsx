@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { TransactionWalletOperation } from "@taquito/taquito";
 import {
   Box,
   Button,
@@ -13,13 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import toast from "react-hot-toast";
-import { v4 as uuidv4 } from "uuid";
 import { useWallet } from "contexts/WalletProvider";
 import { useTezrun } from "hooks/useTezrun";
-import { addPendingTicket, removePendingTicket, setLoading } from "slices/play";
+import { addPendingTicket, setLoading } from "slices/play";
 import { defaultHorses } from "../horses";
 import { Race, RaceState, Ticket } from "../types";
 import { Help } from "components/Help";
+import { convertToMutez } from "utils/tezos";
 
 type Props = {
   race: Race;
@@ -27,7 +26,7 @@ type Props = {
 
 function PlaceBet({ race }: Props) {
   const dispatch = useDispatch();
-  const { connected } = useWallet();
+  const { address, connected } = useWallet();
   const { placeBet, getApproval, approve } = useTezrun();
 
   const nativeToken = true; //const [nativeToken, setNativeToken] = useState(true);
@@ -60,11 +59,10 @@ function PlaceBet({ race }: Props) {
     try {
       dispatch(setLoading(true));
 
-      let op: TransactionWalletOperation | null = null;
       if (nativeToken) {
         const rate = Math.round(payout * 1000000);
         console.log("rate", rate, betAmount);
-        op = await placeBet(horseId, rate, betAmount);
+        await placeBet(horseId, rate, betAmount);
       } else {
         const approval = await getApproval();
         if (!approval) {
@@ -76,37 +74,24 @@ function PlaceBet({ race }: Props) {
         }
         const rate = payout * 1000000;
         const tokenAmount = betAmount * 1000000;
-        op = await placeBet(horseId, rate, 0, 1, tokenAmount);
+        await placeBet(horseId, rate, 0, 1, tokenAmount);
       }
-      if (op) {
-        const ticket: Ticket = {
-          id: uuidv4(),
-          horseId,
-          payout,
-          token: nativeToken ? 0 : 1,
-          tezos: nativeToken ? betAmount : 0,
-          amount: nativeToken ? 0 : betAmount,
-          pending: true,
-        };
-        console.log("ticket", ticket);
-        dispatch(addPendingTicket(ticket));
-        waitPendingTicket(op, ticket);
-      }
+      const ticket: Ticket = {
+        id: 0,
+        address: address!,
+        horseId,
+        payout,
+        token: convertToMutez(nativeToken ? 0 : 1),
+        tezos: nativeToken ? betAmount : 0,
+        amount: nativeToken ? 0 : betAmount,
+        pending: true,
+      };
+      dispatch(addPendingTicket(ticket));
     } catch (error) {
       console.error(error);
     } finally {
       dispatch(setLoading(false));
     }
-  };
-
-  const waitPendingTicket = async (
-    op: TransactionWalletOperation,
-    ticket: Ticket
-  ) => {
-    op.confirmation().then(() => {
-      console.log("~~~~~~~~~~~~~~~~~confirmed", ticket.id);
-      dispatch(removePendingTicket(ticket.id!));
-    });
   };
 
   const onChangeHorseId = (horseId) => {

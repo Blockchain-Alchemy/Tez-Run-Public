@@ -8,7 +8,7 @@ interface PlayState {
   roomId: number | null;
   startTime: string | null;
   banned: boolean;
-  pendingTickets: Ticket[];
+  tickets: Ticket[];
 }
 
 const initialState: PlayState = {
@@ -18,7 +18,13 @@ const initialState: PlayState = {
   roomId: 0,
   startTime: null,
   banned: false,
-  pendingTickets: [],
+  tickets: [],
+};
+
+const getMaxTicketId = (tickets: Ticket[]) => {
+  return tickets.reduce((prev, ticket) => {
+    return Math.max(prev, ticket.id);
+  }, 0);
 };
 
 const slice = createSlice({
@@ -58,17 +64,29 @@ const slice = createSlice({
       state.banned = action.payload;
     },
     addPendingTicket(state, action: PayloadAction<Ticket>) {
-      state.pendingTickets.push(action.payload);
-      state.pendingTickets = [...state.pendingTickets];
+      action.payload.id = getMaxTicketId(state.tickets) + 1;
+      state.tickets.push(action.payload);
+      console.log('addPendingTicket~~~~~~~~~!!!', state.tickets)
     },
-    removePendingTicket(state, action:PayloadAction<string>) {
-      console.log('~~~~~~~~~~~~~~~~~removePendingTicket', action.payload)
-      const index = state.pendingTickets.findIndex(i => i.id = action.payload);
-      if (index >= 0) {
-        state.pendingTickets.splice(index, 1);
+    updateTickets(state, action: PayloadAction<Ticket[]>) {
+      //console.log('action.payload', action.payload)
+      //console.log('state.tickets', state.tickets)
+      let pendingTickets = state.tickets
+        .filter((t) => !!t.pending)
+        .sort((a, b) => a.id - b.id);
+      if (pendingTickets.length > 0) {
+        const ticketId = pendingTickets[0].id;
+        const newTickets = action.payload.filter(
+          (t) => t.id >= ticketId
+        ).length;
+        console.log('newTickets', newTickets)
+        if (newTickets > 0) {
+          pendingTickets = pendingTickets.splice(0, newTickets);
+        }
       }
-      state.pendingTickets = [...state.pendingTickets];
-    }
+      console.log('Final pendingTickets~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', pendingTickets.length)
+      state.tickets = [...action.payload, ...pendingTickets];
+    },
   },
 });
 
@@ -84,5 +102,5 @@ export const {
   setOpenRoom,
   setBanned,
   addPendingTicket,
-  removePendingTicket,
+  updateTickets,
 } = slice.actions;

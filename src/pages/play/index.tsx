@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Container, Grid } from "@mui/material";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
@@ -18,6 +18,7 @@ import PlaceBet from "./PlaceBet";
 import BetTicket from "./BetTicket";
 import RacePanel from "./RacePanel";
 import "./styles.css";
+import { updateTickets } from "slices/play";
 
 const unityConfig = {
   loaderUrl: "Build/1.loader.js",
@@ -27,15 +28,13 @@ const unityConfig = {
 };
 
 const Play = () => {
+  const dispatch = useDispatch();
   const { address } = useWallet();
   const { getGameState } = useIndexer();
-  const { loading, pendingTickets } = useSelector(
-    (state: RootState) => state.play
-  );
+  const { loading, tickets } = useSelector((state: RootState) => state.play);
   const unityContext = useUnityContext(unityConfig);
   const { loadingProgression, isLoaded, sendMessage } = unityContext;
   const [race, setRace] = useState<Race>({} as Race);
-  const [tickets, setTickets] = useState<any[]>([]);
 
   useInterval(async () => {
     try {
@@ -52,30 +51,30 @@ const Play = () => {
           }
         }
       }
+      console.log('game.tickets', game.tickets)
       if (address && game.tickets) {
         const tickets = game.tickets.filter((t) => t.address === address);
-        setTickets(tickets);
+        dispatch(updateTickets(tickets));
       }
     } catch (err) {
       console.error(err);
     }
   }, 2000);
 
-  const ticketView = useMemo(() => {
-    const totalTickets = (tickets || []).concat(pendingTickets);
-    console.log("totalTickets", totalTickets);
-    return (
+  const ticketView = useMemo(
+    () => (
       <Box>
         <Grid container spacing={1}>
-          {totalTickets.map((ticket: any, index: number) => (
+          {(tickets || []).map((ticket: any, index: number) => (
             <Grid item key={index} sm={3} xs={6}>
               <BetTicket key={index} ticket={ticket}></BetTicket>
             </Grid>
           ))}
         </Grid>
       </Box>
-    );
-  }, [tickets, pendingTickets]);
+    ),
+    [tickets]
+  );
 
   return (
     <MainLayout>

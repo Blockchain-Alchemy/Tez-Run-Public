@@ -9,7 +9,7 @@ import { RootState } from "store";
 import { useWallet } from "contexts/WalletProvider";
 import { setLoading, setJoinedRoom, setOpenRoom } from "slices/play";
 import useSocket from "hooks/useSocket";
-import { requestSign } from "utils/tezos-wallet";
+import { requestSign } from "utils/tezos";
 import { MainLayout } from "components/main-layout";
 import { CountDown } from "components/CountDown";
 

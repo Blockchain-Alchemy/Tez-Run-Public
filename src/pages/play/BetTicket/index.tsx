@@ -3,14 +3,7 @@ import { Box, Card, CardHeader, Typography } from "@mui/material";
 import { defaultHorses } from "../horses";
 import { Help } from "components/Help";
 import { Ticket } from "../types";
-
-const convertTezos = (mutez) => {
-  return mutez / 1000000;
-};
-
-const convertToken = (token) => {
-  return token / 1000000000000;
-};
+import { convertToTezos, convertToken } from "utils/tezos";
 
 interface Props {
   ticket: Ticket;
@@ -24,7 +17,7 @@ const BetTicket = ({ ticket }: Props) => {
 
   const balance = useMemo(() => {
     if (ticket.token === 0) {
-      return convertTezos(ticket.tezos);
+      return convertToTezos(ticket.tezos);
     } else {
       return convertToken(ticket.amount);
     }

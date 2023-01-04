@@ -19,3 +19,15 @@ export const requestSign = (
   };
   return wallet.client.requestSignPayload(payload);
 };
+
+export const convertToTezos = (mutez) => {
+  return mutez / 1000000;
+};
+
+export const convertToMutez = (mutez) => {
+  return mutez * 1000000;
+};
+
+export const convertToken = (token) => {
+  return token / 1000000000000;
+};
