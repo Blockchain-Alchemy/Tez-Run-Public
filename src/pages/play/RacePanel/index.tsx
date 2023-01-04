@@ -4,18 +4,19 @@ import { toast } from "react-hot-toast";
 import moment from "moment";
 import { Box, Button, Card } from "@mui/material";
 
-import useTezrun from "hooks/useTezrun";
-import useBeacon from "hooks/useBeacon";
-import { defaultHorses } from "../horses";
-import { finishRace, getBalance, getRewards } from "services";
-import { Mainnet } from "configs";
+import { useWallet } from "contexts/WalletProvider";
+import { useTezrun } from "hooks/useTezrun";
+import { useIndexer } from "hooks/useIndexer";
+import { finishRace } from "services";
 import { setLoading } from "slices/play";
 import { RaceState } from "../types";
+import { defaultHorses } from "../horses";
 
 const RacePanel = ({ status, unityContext }) => {
   const dispatch = useDispatch();
-  const { indexer, address } = useBeacon();
+  const { address } = useWallet();
   const { takeReward } = useTezrun();
+  const { getBalance, getRewards } = useIndexer();
   const [resultHorses, setResultHorses] = useState<any[]>([]);
   const { addEventListener, removeEventListener } = unityContext;
 
@@ -62,13 +63,13 @@ const RacePanel = ({ status, unityContext }) => {
       }
       dispatch(setLoading(true));
 
-      const rewards = await getRewards(indexer, address);      
+      const rewards = await getRewards(address);
       if (rewards <= 0) {
         toast.success("There is no rewards");
         return;
       }
 
-      const balance = await getBalance(indexer, Mainnet.TezRun);
+      const balance = await getBalance();
       console.log("rewards", balance, rewards);
       if (balance < rewards) {
         toast.error(
@@ -81,9 +82,7 @@ const RacePanel = ({ status, unityContext }) => {
       toast.success("You got reward successfully");
     } catch (e) {
       console.error(e);
-      toast.error(
-        "Insufficient Funds to Give Reward, Please contact support"
-      );
+      toast.error("Insufficient Funds to Give Reward, Please contact support");
     } finally {
       dispatch(setLoading(false));
     }

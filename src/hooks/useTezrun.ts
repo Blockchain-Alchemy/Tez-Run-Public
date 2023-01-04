@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useNetwork } from "../contexts/NetworkProvider";
 import { useWallet } from "../contexts/WalletProvider";
 
-const useTezrun = () => {
+export const useTezrun = () => {
   const { config } = useNetwork();
   const { tezos, address } = useWallet();
   const [approval, setApproval] = useState(false);
@@ -92,5 +92,3 @@ const useTezrun = () => {
     approve,
   };
 };
-
-export default useTezrun;
