@@ -51,7 +51,6 @@ const Play = () => {
           }
         }
       }
-      console.log('game.tickets', game.tickets)
       if (address && game.tickets) {
         const tickets = game.tickets.filter((t) => t.address === address);
         dispatch(updateTickets(tickets));

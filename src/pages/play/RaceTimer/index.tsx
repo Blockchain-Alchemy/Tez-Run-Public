@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import moment from "moment";
 import { Box, Card, Typography } from "@mui/material";
 import { Race, RaceState } from "../types";
+import useInterval from "hooks/useInterval";
 
 type RaceTimerProps = {
   race: Race;
@@ -22,7 +23,7 @@ const RaceTimer = ({ race }: RaceTimerProps) => {
   }, [status, start_time]);
 
   // Start timer
-  setTimeout(() => {
+  useInterval(() => {
     if (remainTime > 0) {
       setRemainTime(remainTime - 1);
     }

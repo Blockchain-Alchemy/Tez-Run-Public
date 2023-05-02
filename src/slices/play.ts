@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, current } from "@reduxjs/toolkit";
 import { Ticket } from "pages/play/types";
 
 interface PlayState {
@@ -65,26 +65,18 @@ const slice = createSlice({
     },
     addPendingTicket(state, action: PayloadAction<Ticket>) {
       action.payload.id = getMaxTicketId(state.tickets) + 1;
-      state.tickets.push(action.payload);
-      console.log('addPendingTicket~~~~~~~~~!!!', state.tickets)
+      state.tickets.push({ ...action.payload });
     },
     updateTickets(state, action: PayloadAction<Ticket[]>) {
-      //console.log('action.payload', action.payload)
-      //console.log('state.tickets', state.tickets)
       let pendingTickets = state.tickets
         .filter((t) => !!t.pending)
         .sort((a, b) => a.id - b.id);
+
       if (pendingTickets.length > 0) {
-        const ticketId = pendingTickets[0].id;
-        const newTickets = action.payload.filter(
-          (t) => t.id >= ticketId
-        ).length;
-        console.log('newTickets', newTickets)
-        if (newTickets > 0) {
-          pendingTickets = pendingTickets.splice(0, newTickets);
-        }
+        pendingTickets = pendingTickets.filter(
+          (i) => !action.payload.find((t) => t.id === i.id)
+        );
       }
-      console.log('Final pendingTickets~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', pendingTickets.length)
       state.tickets = [...action.payload, ...pendingTickets];
     },
   },
