@@ -1,13 +1,6 @@
-import React, {
-  createContext,
-  useEffect,
-  useState,
-  useCallback,
-  ReactNode,
-} from "react";
-
+import React, { createContext, useState, useCallback, ReactNode } from "react";
 import { useIndexer } from "hooks/useIndexer";
-import { Nullable, GameContextApi, Race, RaceState } from "./types";
+import { Nullable, GameContextApi, Race } from "./types";
 
 export const GameContext = createContext<GameContextApi>({} as GameContextApi);
 
