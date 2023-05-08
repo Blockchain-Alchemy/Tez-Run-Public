@@ -20,19 +20,19 @@ import RacePanel from "./RacePanel";
 import "./styles.css";
 import { updateTickets } from "slices/play";
 
-// const unityConfig = {
-//   loaderUrl: "Build/Build.loader.js",
-//   dataUrl: "Build/Build.data",
-//   frameworkUrl: "Build/Build.framework.js",
-//   codeUrl: "Build/Build.wasm",
-// };
-
 const unityConfig = {
   loaderUrl: "Build/Build.loader.js",
-  dataUrl: "Build/Build.data.br",
-  frameworkUrl: "Build/Build.framework.js.br",
-  codeUrl: "Build/Build.wasm.br",
+  dataUrl: "Build/Build.data",
+  frameworkUrl: "Build/Build.framework.js",
+  codeUrl: "Build/Build.wasm",
 };
+
+// const unityConfig = {
+//   loaderUrl: "Build/Build.loader.js",
+//   dataUrl: "Build/Build.data.br",
+//   frameworkUrl: "Build/Build.framework.js.br",
+//   codeUrl: "Build/Build.wasm.br",
+// };
 
 const Play = () => {
   const dispatch = useDispatch();

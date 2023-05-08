@@ -18,7 +18,7 @@ const RacePanel = ({ status, unityContext }) => {
   const { takeReward } = useTezrun();
   const { getBalance, getRewards } = useIndexer();
   const [resultHorses, setResultHorses] = useState<any[]>([]);
-  const { addEventListener, removeEventListener } = unityContext;
+  const { sendMessage, addEventListener, removeEventListener } = unityContext;
 
   const onFinishRace = useCallback(
     async (name: string, time: string) => {
@@ -124,6 +124,10 @@ const RacePanel = ({ status, unityContext }) => {
     }
   };*/
 
+  const handleReady = () => {
+    sendMessage("RaceController", "Ready");
+  }
+
   const handleFinishRace = async () => {
     try {
       dispatch(setLoading(true));
@@ -147,6 +151,16 @@ const RacePanel = ({ status, unityContext }) => {
           disabled={status !== RaceState.Started}
         >
           Debug: End Race
+        </Button>
+      </Box>
+      <Box sx={{ textAlign: "center", mb: 1 }}>
+        <Button
+          variant="contained"
+          fullWidth
+          size="medium"
+          onClick={handleReady}
+        >
+          Ready
         </Button>
       </Box>
       <Box sx={{ textAlign: "center" }}>
