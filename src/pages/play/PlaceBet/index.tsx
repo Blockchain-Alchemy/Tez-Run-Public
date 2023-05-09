@@ -31,7 +31,7 @@ function PlaceBet({ race }: Props) {
 
   const nativeToken = true; //const [nativeToken, setNativeToken] = useState(true);
   const [horseId, setHorseId] = useState(0);
-  const [betAmount, setBetAmount] = useState(0.001); //(1);//(0.001);
+  const [betAmount, setBetAmount] = useState(0.1);
   const [selectedPlace, setSelectedPlace] = useState("win");
   const [payout, setPayout] = useState(0);
 
@@ -103,7 +103,9 @@ function PlaceBet({ race }: Props) {
     }
   };
 
-  const onChangeBetAmount = (betAmount) => {
+  const onChangeBetAmount = (value) => {
+    const betAmount = Number(value);
+    if (isNaN(betAmount)) return;
     setBetAmount(betAmount);
 
     const horse = defaultHorses.find((it) => it.id === horseId);
@@ -156,7 +158,7 @@ function PlaceBet({ race }: Props) {
             </Typography>
           </Grid>
           <Grid item sm={6}>
-            <Input
+            {/* <Input
               disableUnderline
               fullWidth
               placeholder="Tezos"
@@ -166,8 +168,20 @@ function PlaceBet({ race }: Props) {
                 borderColor: "divider",
               }}
               value={betAmount}
-              onChange={(e) => onChangeBetAmount(Number(e.target.value))}
-            />
+              onChange={(e) => onChangeBetAmount(e.target.value)}
+            /> */}
+            <Select
+              fullWidth
+              value={betAmount}
+              onChange={(e) => onChangeBetAmount(e.target.value)}
+            >
+              <MenuItem value={0.1}>0.1</MenuItem>
+              <MenuItem value={0.5}>0.5</MenuItem>
+              <MenuItem value={1.0}>1.0</MenuItem>
+              <MenuItem value={2.0}>2.0</MenuItem>
+              <MenuItem value={5.0}>5.0</MenuItem>
+              <MenuItem value={10.0}>10.0</MenuItem>
+            </Select>
           </Grid>
 
           <Grid item sm={6}>
