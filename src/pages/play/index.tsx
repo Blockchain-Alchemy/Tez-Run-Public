@@ -21,10 +21,10 @@ import "./styles.css";
 import { updateTickets } from "slices/play";
 
 const unityConfig = {
-  loaderUrl: "Build/Build.loader.js",
-  dataUrl: "Build/Build.data",
-  frameworkUrl: "Build/Build.framework.js",
-  codeUrl: "Build/Build.wasm",
+  loaderUrl: "Build/Public.loader.js",
+  dataUrl: "Build/Public.data",
+  frameworkUrl: "Build/Public.framework.js",
+  codeUrl: "Build/Public.wasm",
 };
 
 // const unityConfig = {

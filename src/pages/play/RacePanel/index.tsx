@@ -1,26 +1,27 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import moment from "moment";
+// import moment from "moment";
 import { Box, Button, Card } from "@mui/material";
 
 import { useWallet } from "contexts/WalletProvider";
 import { useTezrun } from "hooks/useTezrun";
 import { useIndexer } from "hooks/useIndexer";
-import { finishRace } from "services";
+// import { finishRace } from "services";
 import { setLoading } from "slices/play";
-import { RaceState } from "../types";
-import { defaultHorses } from "../horses";
+// import { RaceState } from "../types";
+// import { defaultHorses } from "../horses";
 
-const RacePanel = ({ status, unityContext }) => {
+const RacePanel = ({ status: raceStatus, unityContext }) => {
   const dispatch = useDispatch();
   const { address } = useWallet();
   const { takeReward } = useTezrun();
   const { getBalance, getRewards } = useIndexer();
-  const [resultHorses, setResultHorses] = useState<any[]>([]);
+  // const [resultHorses, setResultHorses] = useState<any[]>([]);
+  const [gameStatus, setGameStatus] = useState(0);
   const { sendMessage, addEventListener, removeEventListener } = unityContext;
 
-  const onFinishRace = useCallback(
+  /*const onFinishRace = useCallback(
     async (name: string, time: string) => {
       const index = resultHorses.findIndex((h) => h.name === name);
       if (index < 0) {
@@ -43,16 +44,26 @@ const RacePanel = ({ status, unityContext }) => {
       }
     },
     [resultHorses]
-  );
+  );*/
+
+  const onGameState = useCallback((state: string) => {
+    if (state === 'DISCONNECT') {
+      setGameStatus(0);
+    } else if (state === 'JOIN_SUCCESS') {
+      setGameStatus(2);
+    } else if (state === 'READY_SUCCESS') {
+      setGameStatus(3);
+    }
+  }, []);
 
   useEffect(() => {
     console.log("Initialize Unity Events");
-    addEventListener("FinishedRace", onFinishRace);
+    addEventListener("GameState", onGameState);
 
     return () => {
-      removeEventListener("FinishedRace", onFinishRace);
+      removeEventListener("GameState", onGameState);
     };
-  }, [addEventListener, removeEventListener, onFinishRace]);
+  }, [addEventListener, removeEventListener, onGameState]);
 
   const handleTakeReward = async () => {
     console.log("TakeReward", address);
@@ -125,10 +136,15 @@ const RacePanel = ({ status, unityContext }) => {
   };*/
 
   const handleReady = () => {
-    sendMessage("RaceController", "Ready");
-  }
+    if (gameStatus === 0) {
+      setGameStatus(1);
+      sendMessage("RaceController", "JoinGame");
+    } else if (gameStatus === 2) {
+      sendMessage("RaceController", "Ready");
+    }
+  };
 
-  const handleFinishRace = async () => {
+  /*const handleFinishRace = async () => {
     try {
       dispatch(setLoading(true));
       await finishRace();
@@ -138,20 +154,28 @@ const RacePanel = ({ status, unityContext }) => {
     } finally {
       dispatch(setLoading(false));
     }
+  };*/
+
+  const getGameStatusText = () => {
+    if (gameStatus === 0) return "Connect";
+    if (gameStatus === 1) return "Connecting";
+    if (gameStatus === 2) return "Ready";
+    if (gameStatus === 3) return "Waiting for other players";
+    return "";
   };
 
   return (
     <Card sx={{ mt: 2, px: 1, py: 2 }}>
       <Box sx={{ textAlign: "center", mb: 1 }}>
-        <Button
+        {/* <Button
           variant="contained"
           fullWidth
           size="medium"
           onClick={handleFinishRace}
-          disabled={status !== RaceState.Started}
+          disabled={raceStatus !== RaceState.Started}
         >
           Debug: End Race
-        </Button>
+        </Button> */}
       </Box>
       <Box sx={{ textAlign: "center", mb: 1 }}>
         <Button
@@ -159,8 +183,9 @@ const RacePanel = ({ status, unityContext }) => {
           fullWidth
           size="medium"
           onClick={handleReady}
+          disabled={gameStatus === 1 || gameStatus === 3}
         >
-          Ready
+          {getGameStatusText()}
         </Button>
       </Box>
       <Box sx={{ textAlign: "center" }}>
