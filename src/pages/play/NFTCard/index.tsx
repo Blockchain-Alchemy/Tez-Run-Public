@@ -1,17 +1,35 @@
-import { useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import toast from "react-hot-toast";
 import {
   Card,
   CardMedia,
   CardContent,
   CardActions,
-  Box,
   Button,
   Typography,
 } from "@mui/material";
-import styled from "@emotion/styled";
+import { useHorseCollection } from "hooks/useHorseCollection";
+import { useWallet } from "contexts/WalletProvider";
 
-const NFTCard = ({ name, imgUrl }: any) => {
+const NFTCard = ({ name, tokenId, imgUrl }: any) => {
+  const { address } = useWallet();
+  const { mintToken } = useHorseCollection();
+
+  const handleMintToken = async () => {
+    if (!address) {
+      toast.error("Please connect your wallet!");
+      return;
+    }
+
+    const toastId = toast.loading("Minting...");
+    const result = await mintToken(tokenId);
+    if (!result) {
+      toast.error("Failed to mint token!", { id: toastId });
+    } else {
+      toast.success("You has been successfully minted token!", { id: toastId });
+    }
+  };
+
   return (
     <>
       <Card sx={{ maxWidth: 345 }}>
@@ -26,7 +44,12 @@ const NFTCard = ({ name, imgUrl }: any) => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button variant="contained" fullWidth size="medium">
+          <Button
+            variant="contained"
+            fullWidth
+            size="medium"
+            onClick={handleMintToken}
+          >
             Mint
           </Button>
         </CardActions>
