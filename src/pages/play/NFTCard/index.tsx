@@ -22,11 +22,16 @@ const NFTCard = ({ name, tokenId, imgUrl }: any) => {
     }
 
     const toastId = toast.loading("Minting...");
-    const result = await mintToken(tokenId);
-    if (!result) {
+
+    try {
+      const result = await mintToken(tokenId);
+      if (!result) {
+        toast.error("Failed to mint token!", { id: toastId });
+      } else {
+        toast.success("You has been successfully minted token!", { id: toastId });
+      }
+    } catch (error) {
       toast.error("Failed to mint token!", { id: toastId });
-    } else {
-      toast.success("You has been successfully minted token!", { id: toastId });
     }
   };
 

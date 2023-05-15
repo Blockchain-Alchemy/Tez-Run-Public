@@ -15,7 +15,7 @@ const NFTCollection = () => {
         <NFTCard name="Neonz" tokenId={2} imgUrl="/h3.jpg" />
       </Grid>
       <Grid item>
-        <NFTCard name="Hic et Equum" tokenId={4} imgUrl="/h4.jpg" />
+        <NFTCard name="Hic et Equum" tokenId={3} imgUrl="/h4.jpg" />
       </Grid>
     </Grid>
   );
