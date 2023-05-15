@@ -17,6 +17,7 @@ import RaceTimer from "./RaceTimer";
 import PlaceBet from "./PlaceBet";
 import BetTicket from "./BetTicket";
 import RacePanel from "./RacePanel";
+import NFTCollection from "./NFTCollection";
 import "./styles.css";
 import { updateTickets } from "slices/play";
 
@@ -133,6 +134,9 @@ const Play = () => {
                 {ticketView}
               </Grid>
             </Grid>
+          </Box>
+          <Box sx={{ mb: 4 }}>
+            <NFTCollection />
           </Box>
         </Container>
       </Box>
