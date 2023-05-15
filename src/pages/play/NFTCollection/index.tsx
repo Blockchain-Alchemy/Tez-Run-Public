@@ -1,20 +1,21 @@
-import { useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Box, Container, Grid } from "@mui/material";
-import styled from "@emotion/styled";
+import React from "react";
+import { Grid } from "@mui/material";
 import NFTCard from "../NFTCard";
 
 const NFTCollection = () => {
   return (
     <Grid container justifyContent="space-between" spacing={2}>
       <Grid item>
-        <NFTCard name="Hottez" tokenId={0} imgUrl="/tez_run_nft.jpg" />
+        <NFTCard name="Hottez" tokenId={0} imgUrl="/h1.jpg" />
       </Grid>
       <Grid item>
-        <NFTCard name="Snazzy FKR" tokenId={1} imgUrl="/tez_run_nft.jpg" />
+        <NFTCard name="Snazzy FKR" tokenId={1} imgUrl="/h2.jpg" />
       </Grid>
       <Grid item>
-        <NFTCard name="Neonz" tokenId={2} imgUrl="/tez_run_nft.jpg" />
+        <NFTCard name="Neonz" tokenId={2} imgUrl="/h3.jpg" />
+      </Grid>
+      <Grid item>
+        <NFTCard name="Hic et Equum" tokenId={4} imgUrl="/h4.jpg" />
       </Grid>
     </Grid>
   );

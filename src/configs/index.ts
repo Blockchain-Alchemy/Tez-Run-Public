@@ -24,7 +24,7 @@ export const Networks: ConfigMap = {
     RpcUrl: "https://mainnet.api.tez.ie",
     Indexer: "https://api.tzstats.com",
     TezRun: "KT1Pn2u8gd9k5v37md7gKLbPxy9DwPzc2T4i",//"KT1SabQEuqzxrwp6caZyXPXpt98FhHoPB5NZ",
-    HorseCollection: "KT18xwoxrafyQKAgRs4XfqT189BWcsic5eG3",
+    HorseCollection: "KT1Pik6AgZBWLGw8deWS4pV2RhLXVModjMjk",
     Escrow: "KT1R2Uo6Q3o4emoPekgbEPs2eQMpqXfravSC",
     UUSD: "KT1XRPEPXbZK25r3Htzp2o1x7xdMMmfocKNW",
   },
