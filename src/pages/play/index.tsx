@@ -67,8 +67,10 @@ const Play = () => {
   }, 2000);
 
   useInterval(() => {
-    setLoadingPercent((value) => (value < 0.99 ? Math.random() / 100 : value));
-  }, 10);
+    setLoadingPercent((value) =>
+      value <= 99 ? value + Math.random() / 100 : value
+    );
+  }, 20);
 
   const ticketView = useMemo(
     () => (
@@ -110,7 +112,7 @@ const Play = () => {
                   />
                   {!isLoaded && (
                     <div className="unity-loader">
-                      <div>Loading... {(loadingPercent * 100).toFixed(2)}%</div>
+                      <div>Loading... {loadingPercent.toFixed(2)}%</div>
                     </div>
                   )}
                 </div>
