@@ -28,24 +28,22 @@ const unityConfig = {
   codeUrl: "Build/public.wasm",
 };
 
-// const unityConfig = {
-//   loaderUrl: "Build/Build.loader.js",
-//   dataUrl: "Build/Build.data.br",
-//   frameworkUrl: "Build/Build.framework.js.br",
-//   codeUrl: "Build/Build.wasm.br",
-// };
-
 const Play = () => {
   const dispatch = useDispatch();
   const { address } = useWallet();
   const { getGameState } = useIndexer();
   const { loading, tickets } = useSelector((state: RootState) => state.play);
   const unityContext = useUnityContext(unityConfig);
-  const { loadingProgression, isLoaded, sendMessage } = unityContext;
+  const { isLoaded, sendMessage } = unityContext;
   const [race, setRace] = useState<Race>({} as Race);
+  const [loadingPercent, setLoadingPercent] = useState(0);
 
   useInterval(async () => {
     try {
+      if (!isLoaded) {
+        return;
+      }
+
       const game = await getGameState();
       if (game.race) {
         setRace(game.race);
@@ -67,6 +65,10 @@ const Play = () => {
       console.error(err);
     }
   }, 2000);
+
+  useInterval(() => {
+    setLoadingPercent((value) => (value < 0.99 ? Math.random() / 100 : value));
+  }, 10);
 
   const ticketView = useMemo(
     () => (
@@ -106,11 +108,9 @@ const Play = () => {
                       background: "#555",
                     }}
                   />
-                  {!isLoaded && loadingProgression > 0 && (
+                  {!isLoaded && (
                     <div className="unity-loader">
-                      <div>
-                        Loading... {Math.round(loadingProgression * 100)}%
-                      </div>
+                      <div>Loading... {(loadingPercent * 100).toFixed(2)}%</div>
                     </div>
                   )}
                 </div>

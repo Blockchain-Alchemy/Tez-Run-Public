@@ -107,3 +107,5 @@ dist
 
 #Build
 Build
+# Local Netlify folder
+.netlify
