@@ -68,9 +68,9 @@ const Play = () => {
 
   useInterval(() => {
     setLoadingPercent((value) =>
-      value <= 99 ? value + Math.random() / 100 : value
+      value <= 99 ? value + Math.random() : value
     );
-  }, 20);
+  }, 100);
 
   const ticketView = useMemo(
     () => (
